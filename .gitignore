@@ -2,3 +2,5 @@
 .~lock*#
 public/ts/scuffle.js
 server/scuffled.js
+server/ssl/*
+!server/ssl/.gitkeep
