@@ -4,6 +4,8 @@ module Scuffle {
 
 		preload() {
 			this.bar = this.add.sprite(this.world.centerX - 400, this.world.centerY - 25, 'bar1')
+			this.bar.alpha = 0
+			var tween = this.add.tween(this.bar).to({ alpha: 1 }, 1000, Phaser.Easing.Linear.None, true);
 			this.load.setPreloadSprite(this.bar)
 			this.load.image('bar2', 'img/bar1.png')
 			this.load.image('bar3', 'img/bar1.png')
