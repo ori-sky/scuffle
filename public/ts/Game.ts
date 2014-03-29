@@ -1,11 +1,8 @@
-module Scuffle
-{
-	export class Game extends Phaser.Game
-	{
+module Scuffle {
+	export class Game extends Phaser.Game {
 		socket : Socket
 
-		constructor(socket)
-		{
+		constructor(socket) {
 			super(800, 600, Phaser.AUTO, 'content', null)
 
 			this.socket = socket

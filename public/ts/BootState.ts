@@ -1,16 +1,12 @@
-module Scuffle
-{
-	export class BootState extends Phaser.State
-	{
+module Scuffle {
+	export class BootState extends Phaser.State {
 		logo : Phaser.Sprite
 
-		preload()
-		{
+		preload() {
 			this.load.image('logo', 'img/phaser2.png')
 		}
 
-		create()
-		{
+		create() {
 			this.input.maxPointers = 1
 			this.stage.disableVisibilityChange = true
 
