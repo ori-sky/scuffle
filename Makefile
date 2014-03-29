@@ -1,16 +1,31 @@
-NGINX_DIR=/usr/share/nginx/www
-TS=$(shell find public/ts -name "*.ts" -print)
+CLIENT_OUT=public/ts/scuffle.js
+SERVER_OUT=server/scuffled.js
+CLIENT_LIB=lib/phaser.d.ts
+SERVER_LIB=lib/node.d.ts lib/socket.io.d.ts
+CLIENT_TS=$(shell find public/ts -name "*.ts" -print)
+SERVER_TS=$(shell find server -name "*.ts" -print)
+DEPLOY_DIR=/usr/share/nginx/www
+.PHONY: all client server deploy clean
 
-nginx: $(TS)
-	mkdir -p $(NGINX_DIR)/scuffle
-	mkdir -p $(NGINX_DIR)/scuffle/img
-	mkdir -p $(NGINX_DIR)/scuffle/js
-	mkdir -p $(NGINX_DIR)/scuffle/lib
-	tsc lib/phaser.d.ts public/ts/*.ts --out public/ts/scuffle.js
-	cp -rf public/html/*  $(NGINX_DIR)/scuffle
-	cp -rf public/img/*   $(NGINX_DIR)/scuffle/img
-	cp -rf public/ts/*.js $(NGINX_DIR)/scuffle/js
-	cp -rf lib/*          $(NGINX_DIR)/scuffle/lib
+all: client server
+client: $(CLIENT_OUT)
+server: $(SERVER_OUT)
+
+$(CLIENT_OUT): $(CLIENT_LIB) $(CLIENT_TS)
+	tsc $^ --out $@
+
+$(SERVER_OUT): $(SERVER_LIB) $(SERVER_TS)
+	tsc $^ --out $@
+
+deploy:
+	mkdir -p $(DEPLOY_DIR)/scuffle
+	mkdir -p $(DEPLOY_DIR)/scuffle/img
+	mkdir -p $(DEPLOY_DIR)/scuffle/js
+	mkdir -p $(DEPLOY_DIR)/scuffle/lib
+	cp -rf public/html/*  $(DEPLOY_DIR)/scuffle
+	cp -rf public/img/*   $(DEPLOY_DIR)/scuffle/img
+	cp -rf public/ts/*.js $(DEPLOY_DIR)/scuffle/js
+	cp -rf lib/*.js       $(DEPLOY_DIR)/scuffle/lib
 
 clean:
-	rm -f public/ts/scuffle.js
+	rm -f $(CLIENT_OUT) $(SERVER_OUT)
