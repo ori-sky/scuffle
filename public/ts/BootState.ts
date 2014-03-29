@@ -1,15 +1,13 @@
 module Scuffle {
 	export class BootState extends Phaser.State {
 		preload() {
-			this.load.image('bar', 'img/bar1.png')
+			this.load.image('bar1', 'img/bar1.png')
 		}
 
 		create() {
 			this.input.maxPointers = 1
 			this.stage.disableVisibilityChange = true
-
-			var bar = this.add.sprite(this.world.centerX, this.world.centerY, 'bar')
-			bar.anchor.setTo(0.5, 0.5)
+			this.game.state.start('Preload')
 
 			/*
 			var graphics = this.add.graphics(0, 0)

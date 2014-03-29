@@ -6,8 +6,8 @@ module Scuffle {
 			super(1280, 720, Phaser.AUTO, 'content', null)
 
 			this.socket = socket
-			this.state.add('Boot', BootState, false)
-			this.state.start('Boot')
+			this.state.add('Boot', BootState, true)
+			this.state.add('Preload', PreloadState)
 		}
 	}
 }
