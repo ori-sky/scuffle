@@ -1,3 +1,4 @@
 .*.swp
 .~lock*#
-public/ts/*.js
+public/ts/scuffle.js
+server/scuffled.js
