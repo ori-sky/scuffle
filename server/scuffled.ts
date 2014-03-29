@@ -8,12 +8,9 @@ var app = require('https').createServer(opts)
 var io = require('socket.io').listen(app)
 app.listen(1337)
 
-/*function handler(req : ServerRequest, res : ServerResponse)
-{
-
-}*/
-
 io.sockets.on('connection', function(socket)
 {
-	console.log('connection received')
+	socket.on('name', (name : string) => {
+		socket.emit('hello', name)
+	})
 })
