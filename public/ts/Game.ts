@@ -2,7 +2,7 @@ module Scuffle
 {
 	export class Game extends Phaser.Game
 	{
-		socket
+		socket : Socket
 
 		constructor(socket)
 		{
