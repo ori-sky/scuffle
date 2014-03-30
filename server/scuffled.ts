@@ -17,13 +17,10 @@ require('tls').createServer(opts, stream => {
 	})
 }).listen(1338)
 
+var warehouse = JSON.parse(fs.readFileSync(__dirname + '/assets/warehouse.map.json'))
+
 io.sockets.on('connection', socket => {
 	socket.on('map.get', name => {
-		var map = new Scuffle.Map(name)
-		map.pushLine(new Scuffle.Line(
-			new Scuffle.Point(100, 200),
-			new Scuffle.Point(300, 500)
-		))
-		socket.emit('map', map)
+		socket.emit('map', warehouse)
 	})
 })

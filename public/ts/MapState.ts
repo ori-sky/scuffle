@@ -20,7 +20,6 @@ module Scuffle {
 			this.game.socket.emit('map.get', this.mapName)
 			this.game.socket.on('map', (map : Scuffle.Map) => {
 				map.lines.forEach(line => {
-					console.log(line)
 					graphics.moveTo(line.a.x, line.a.y)
 					graphics.lineTo(line.b.x, line.b.y)
 				})
