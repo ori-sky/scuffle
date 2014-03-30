@@ -20,7 +20,10 @@ require('tls').createServer(opts, stream => {
 io.sockets.on('connection', socket => {
 	socket.on('map.get', name => {
 		var map = new Scuffle.Map(name)
-		map.pushLine(new Scuffle.Line(new Scuffle.Point(0, 0), new Scuffle.Point(3, 4)))
+		map.pushLine(new Scuffle.Line(
+			new Scuffle.Point(100, 200),
+			new Scuffle.Point(300, 500)
+		))
 		socket.emit('map', map)
 	})
 })
