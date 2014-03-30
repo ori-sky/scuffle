@@ -18,5 +18,9 @@ require('tls').createServer(opts, stream => {
 }).listen(1338)
 
 io.sockets.on('connection', socket => {
-	socket.on('map.get', (name : string) => socket.emit('map', {name:name}))
+	socket.on('map.get', name => {
+		var map = new Scuffle.Map(name)
+		map.pushLine(new Scuffle.Line(new Scuffle.Point(0, 0), new Scuffle.Point(3, 4)))
+		socket.emit('map', map)
+	})
 })

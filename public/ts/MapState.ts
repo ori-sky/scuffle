@@ -9,6 +9,9 @@ module Scuffle {
 			this.game.socket.emit('map.get', name)
 			this.game.socket.on('map', (map : Scuffle.Map) => {
 				console.log('name = %s', map.name)
+				map.lines.forEach(line => {
+					console.log(line)
+				})
 			})
 		}
 
