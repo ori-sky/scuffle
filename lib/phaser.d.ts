@@ -731,7 +731,7 @@ declare module PIXI {
 
     export class Sprite extends DisplayObjectContainer {
 
-        anchor: Point;
+        anchor: Phaser.Point;
         blendMode: number;
         texture: Texture;
         height: number;
@@ -2440,7 +2440,7 @@ declare module Phaser {
         removeFile(key: string, type: string): void;
         replaceInFileList(type: string, key: string, url: string, properties: Object): void;
         reset(): void;
-        script(key: string, url: String, callback: Function, callbackContext: Object): Phaser.Loader;
+        script(key: string, url: String, callback?: Function, callbackContext?: Object): Phaser.Loader;
         setPreloadSprite(sprite: Phaser.Sprite, direction?: number): void;
         spritesheet(key: string, url: string, frameWidth: number, frameHeight: number, frameMax?: number, margin?: number, spacing?: number): Phaser.Loader;
         start(): void;
