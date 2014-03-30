@@ -18,5 +18,5 @@ require('tls').createServer(opts, stream => {
 }).listen(1338)
 
 io.sockets.on('connection', socket => {
-	socket.on('name', socket.emit.bind(socket, 'hello'))
+	socket.on('map.get', (name : string) => socket.emit('map', {name:name}))
 })
