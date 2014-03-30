@@ -7,24 +7,8 @@ module Scuffle {
 			this.bar.alpha = 0
 			var tween = this.add.tween(this.bar).to({ alpha: 1 }, 1000, Phaser.Easing.Linear.None, true);
 			this.load.setPreloadSprite(this.bar)
-			this.load.image('bar2', 'img/bar1.png')
-			this.load.image('bar3', 'img/bar1.png')
-			this.load.image('bar4', 'img/bar1.png')
-			this.load.image('bar5', 'img/bar1.png')
-			this.load.image('bar6', 'img/bar1.png')
-			this.load.image('bar7', 'img/bar1.png')
-			this.load.image('bar8', 'img/bar1.png')
-			this.load.image('bar9', 'img/bar1.png')
-			this.load.image('bar10', 'img/bar1.png')
-			this.load.image('bar11', 'img/bar1.png')
-			this.load.image('bar12', 'img/bar1.png')
-			this.load.image('bar13', 'img/bar1.png')
-			this.load.image('bar14', 'img/bar1.png')
-			this.load.image('bar15', 'img/bar1.png')
-			this.load.image('bar16', 'img/bar1.png')
-			this.load.image('bar17', 'img/bar1.png')
-			this.load.image('bar18', 'img/bar1.png')
-			this.load.image('bar19', 'img/bar1.png')
+			for(var i=2; i<50; ++i)
+				this.load.image('bar' + i, 'img/bar1.png')
 			this.load.image('logo', 'img/phaser2.png')
 		}
 
