@@ -1,5 +1,3 @@
-declare var WebFontConfig
-
 module Scuffle {
 	export class PreloadState extends Phaser.State {
 		group : Phaser.Group
