@@ -21,6 +21,6 @@ var warehouse = JSON.parse(fs.readFileSync(__dirname + '/assets/warehouse.map.js
 
 io.sockets.on('connection', socket => {
 	socket.on('map.get', name => {
-		socket.emit('map', warehouse)
+		socket.emit('map.get', warehouse)
 	})
 })

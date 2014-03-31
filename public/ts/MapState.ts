@@ -17,7 +17,7 @@ module Scuffle {
 		create() {
 
 			this.game.socket.emit('map.get', this.mapName)
-			this.game.socket.on('map', (map : Scuffle.Map) => {
+			this.game.socket.on('map.get', (map : Scuffle.Map) => {
 				map.lines.forEach(line => {
 					var group = this.add.group(this.group)
 					group.alpha = 0

@@ -1,0 +1,13 @@
+----------------
+client => server
+----------------
+
+map.get
+	(string) map name
+
+----------------
+server => client
+----------------
+
+map.get
+	(Scuffle.Map) map
