@@ -15,7 +15,6 @@ module Scuffle {
 		}
 
 		create() {
-
 			this.game.socket.emit('map.get', this.mapName)
 			this.game.socket.on('map.get', (map : Scuffle.Map) => {
 				map.lines.forEach(line => {
