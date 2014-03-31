@@ -20,8 +20,8 @@ require('tls').createServer(opts, stream => {
 var warehouse = JSON.parse(fs.readFileSync(__dirname + '/assets/warehouse.map.json'))
 
 io.sockets.on('connection', socket => {
+	socket.on('map.change', socket.emit.bind(socket, 'map.change'))
 	socket.on('map.get', name => {
 		socket.emit('map.get', warehouse)
 	})
-	socket.emit('map.change', 'warehouse')
 })
