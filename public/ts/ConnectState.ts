@@ -18,12 +18,14 @@ module Scuffle {
 			tween.onComplete.add(() => {
 				if(this.game.socket === undefined)
 					this.game.socket = io.connect('http://yellow.shockk.co.uk:1337')
+				else
+					this.game.socket.removeAllListeners()
 
 				this.game.socket.once('connect', () => {
 					var tween = this.add.tween(group).to({ alpha: 0 }, 500, Phaser.Easing.Linear.None, true)
 					tween.onComplete.add(() => this.game.state.start('Preload'))
 				})
-				this.game.socket.on('disconnect', () => this.game.state.start('Connect'))
+				this.game.socket.once('disconnect', () => this.game.state.start('Connect'))
 			})
 		}
 	}
