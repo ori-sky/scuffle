@@ -9,6 +9,12 @@ module Scuffle {
 				})
 				this.game.socket.emit('map.get', mapName)
 			})
+			this.game.socket.on('reset', () => {
+				this.game.socket.disconnect()
+				this.game.socket.socket.reconnect()
+			})
+
+			this.game.socket.emit('map.change', 'warehouse')
 		}
 	}
 }
