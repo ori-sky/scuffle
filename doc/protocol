@@ -2,6 +2,9 @@
 client => server
 ----------------
 
+map.change
+	(string) map name
+	requests a map change from the server
 map.get
 	(string) map name
 	requests a map from the server
