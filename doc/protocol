@@ -10,12 +10,12 @@ map.get
 server => client
 ----------------
 
-map.get
-	(Scuffle.Map) map
-	sends a map to the client
 map.change
 	(string) map name
 	tells the client to change map
+map.get
+	(Scuffle.Map) map
+	sends a map to the client
 reset
 	tells the client to reset the game
 refresh
