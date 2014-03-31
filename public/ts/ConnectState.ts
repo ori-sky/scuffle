@@ -7,7 +7,8 @@ module Scuffle {
 			group.alpha = 0
 
 			var text = this.add.text(this.world.centerX, this.world.centerY,
-				'Connecting', undefined, group)
+				this.game.socket === undefined ? 'Connecting' : 'Reconnecting',
+				undefined, group)
 			text.anchor.setTo(0.5, 0.5)
 			text.font = 'Iceland'
 			text.fontSize = 60
