@@ -8,6 +8,7 @@ module Scuffle {
 			this.state.add('Boot', BootState, true)
 			this.state.add('Connect', ConnectState)
 			this.state.add('Preload', PreloadState)
+			this.state.add('Protocol', ProtocolState)
 			this.state.add('Map', MapState)
 		}
 	}

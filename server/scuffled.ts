@@ -23,4 +23,5 @@ io.sockets.on('connection', socket => {
 	socket.on('map.get', name => {
 		socket.emit('map.get', warehouse)
 	})
+	socket.emit('map.change', 'warehouse')
 })
