@@ -3,7 +3,10 @@ declare var io : {
 }
 
 interface Socket {
+	socket : any
+	disconnect() : Socket
 	on(event : string, callback : (data : any) => void)
 	once(event : string, callback : (data : any) => void)
 	emit(event : string, data : any)
+	removeAllListeners(event? : string)
 }
