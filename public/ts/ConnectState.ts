@@ -23,7 +23,7 @@ module Scuffle {
 
 				this.game.socket.once('connect', () => {
 					var tween = this.add.tween(group).to({ alpha: 0 }, 500, Phaser.Easing.Linear.None, true)
-					tween.onComplete.add(() => this.game.state.start('Preload'))
+					tween.onComplete.add(() => this.game.state.start('Protocol'))
 				})
 				this.game.socket.once('disconnect', () => this.game.state.start('Connect'))
 			})

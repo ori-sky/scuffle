@@ -7,7 +7,7 @@ module Scuffle {
 		create() {
 			this.input.maxPointers = 1
 			this.stage.disableVisibilityChange = true
-			this.game.state.start('Connect')
+			this.game.state.start('Preload')
 		}
 	}
 }
