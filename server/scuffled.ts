@@ -3,6 +3,7 @@ var net = require('net')
 
 var app = require('http').createServer()
 var io = require('socket.io').listen(app)
+//io.set('log level', 1)
 app.listen(1337)
 
 var opts = {
