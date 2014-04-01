@@ -7,6 +7,7 @@ module Scuffle {
 	export class Line {
 		a : Point
 		b : Point
+		width : number
 	}
 
 	export class Sprite {
