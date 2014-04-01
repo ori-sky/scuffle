@@ -25,7 +25,7 @@ module Scuffle {
 
 				var graphics = this.add.graphics(0, 0, group)
 				graphics.lineStyle(line.width || this.map.lineWidth || 2,
-				                   line.color || this.map.lineColor || 0xffffff, 1)
+				                   parseInt(line.color) || parseInt(this.map.lineColor) || 0xffffff, 1)
 				graphics.moveTo(line.a.x, line.a.y)
 				graphics.lineTo(line.b.x, line.b.y)
 			})
