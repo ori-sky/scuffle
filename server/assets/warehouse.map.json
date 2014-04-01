@@ -1,5 +1,12 @@
 {
 	"name": "warehouse",
+	"sprites": [
+		{
+			"source": "crate1",
+			"pos":  { "x":  225, "y":  350 },
+			"size": { "x":  125, "y":  125 }
+		}
+	],
 	"lines": [
 		{
 			"a": { "x":   50, "y":  350 },
