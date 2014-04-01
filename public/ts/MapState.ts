@@ -24,7 +24,8 @@ module Scuffle {
 				this.add.tween(group).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
 
 				var graphics = this.add.graphics(0, 0, group)
-				graphics.lineStyle(line.width || 2, 0xffffff, 1)
+				graphics.lineStyle(line.width || this.map.lineWidth || 2,
+				                   line.color || this.map.lineColor || 0xffffff, 1)
 				graphics.moveTo(line.a.x, line.a.y)
 				graphics.lineTo(line.b.x, line.b.y)
 			})

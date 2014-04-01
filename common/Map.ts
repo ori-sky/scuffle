@@ -8,6 +8,7 @@ module Scuffle {
 		a : Point
 		b : Point
 		width : number
+		color : number
 	}
 
 	export class Sprite {
@@ -20,5 +21,7 @@ module Scuffle {
 		name : string
 		sprites : Sprite[]
 		lines : Line[]
+		lineWidth : number
+		lineColor : number
 	}
 }
