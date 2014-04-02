@@ -47,5 +47,12 @@ module Scuffle {
 			})
 			this.game.socket.emit('map.ready')
 		}
+
+		shutdown() {
+			this.socket.removeAllListeners('player.add')
+			this.socket.removeAllListeners('player.remove')
+			this.socket.removeAllListeners('player.move')
+			this.socket.removeAllListeners('player.you')
+		}
 	}
 }
