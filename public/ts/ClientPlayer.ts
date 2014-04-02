@@ -12,5 +12,9 @@ module Scuffle {
 			this.player.pos = pos
 			this.sprite.reset(pos.x, pos.y)
 		}
+
+		destroy() {
+			this.sprite.destroy()
+		}
 	}
 }

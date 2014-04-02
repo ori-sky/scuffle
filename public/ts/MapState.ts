@@ -41,6 +41,10 @@ module Scuffle {
 
 				this.players[player.id] = new ClientPlayer(player, s)
 			})
+			this.game.socket.on('player.remove', (id : string) => {
+				this.players[id].destroy()
+				delete this.players[id]
+			})
 			this.game.socket.on('player.move', (args : any[]) => {
 				if(this.players[args[0]] !== undefined)
 					this.players[args[0]].move(args[1])
