@@ -5,9 +5,16 @@ client => server
 map.change
 	(string) map name
 	requests a map change from the server
+		map.change
 map.get
 	(string) map name
 	requests a map from the server
+		map.get
+map.init
+	(void)
+	requests initial data from the server
+		player.add
+		player.you
 
 ----------------
 server => client
