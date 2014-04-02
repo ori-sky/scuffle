@@ -32,9 +32,9 @@ io.sockets.on('connection', socket => {
 			var player = new Scuffle.Player((++idCounter).toString())
 			var spawnIndex = Math.floor(Math.random() * warehouse.spawns.length)
 			player.pos = warehouse.spawns[spawnIndex]
-			socket.emit('player.add',  player)
+			socket.emit('player.add', player)
 			players.push(player)
 		}
-		socket.emit('player.move', [0, {x:0,y:0}])
+		socket.emit('player.move', [idCounter.toString(), {x:0,y:0}])
 	})
 })
