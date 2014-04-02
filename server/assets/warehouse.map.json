@@ -1,5 +1,10 @@
 {
 	"name": "warehouse",
+	"spawns": [
+		{ "x":  100, "y":  550 },
+		{ "x":  300, "y":  525 },
+		{ "x":  350, "y":  800 }
+	],
 	"sprites": [
 		{
 			"source": "crate1",
