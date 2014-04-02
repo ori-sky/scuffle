@@ -25,4 +25,10 @@ io.sockets.on('connection', socket => {
 	socket.on('map.get', name => {
 		socket.emit('map.get', warehouse)
 	})
+	socket.on('map.ready', () => {
+		var player = new Scuffle.Player()
+		var spawnIndex = Math.floor(Math.random() * warehouse.spawns.length)
+		player.pos = warehouse.spawns[spawnIndex]
+		socket.emit('player.add',  player)
+	})
 })
