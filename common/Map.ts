@@ -1,27 +1,10 @@
 module Scuffle {
-	export class Point {
-		x : number
-		y : number
-	}
-
-	export class Line {
-		a : Point
-		b : Point
-		width : number
-		color : string
-	}
-
-	export class Sprite {
-		source : string
-		pos : Point
-		size : Point
-	}
-
 	export class Map {
 		name : string
+		spawns: Point[]
 		sprites : Sprite[]
-		lines : Line[]
 		lineWidth : number
 		lineColor : string
+		lines : Line[]
 	}
 }
