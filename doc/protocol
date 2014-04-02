@@ -19,6 +19,15 @@ map.change
 map.get
 	(Scuffle.Map) map
 	sends a map to the client
+player.add
+	(Player) player
+	adds a player to the map
+player.remove
+	(string) player id
+	removes a player from the map
+player.you
+	(string) player id
+	tells the client which player they are
 reset
 	tells the client to reset the game
 refresh
