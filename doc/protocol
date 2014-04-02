@@ -10,9 +10,9 @@ map.get
 	(string) map name
 	requests a map from the server
 		map.get
-map.init
+map.ready
 	(void)
-	requests initial data from the server
+	tells the server the client is ready to receive map events
 		player.add
 		player.you
 
