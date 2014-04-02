@@ -2,6 +2,7 @@ module Scuffle {
 	export class MapState extends Phaser.State {
 		game : Game
 		group : Phaser.Group
+		cursorKeys : any
 		map : Scuffle.Map
 		players : any
 
@@ -30,6 +31,8 @@ module Scuffle {
 		}
 
 		create() {
+			this.cursorKeys = this.game.input.keyboard.createCursorKeys()
+
 			this.game.socket.on('player.add', (player : Player) => {
 				var group = this.add.group(this.group)
 				group.alpha = 0
@@ -53,6 +56,17 @@ module Scuffle {
 					this.players[args[0]].move(args[1])
 			})
 			this.game.socket.emit('map.ready')
+		}
+
+		update() {
+			if(this.cursorKeys.left.isDown)
+				this.game.socket.emit('player.moveBy', new Point(-1,  0))
+			if(this.cursorKeys.right.isDown)
+				this.game.socket.emit('player.moveBy', new Point( 1,  0))
+			if(this.cursorKeys.up.isDown)
+				this.game.socket.emit('player.moveBy', new Point( 0, -1))
+			if(this.cursorKeys.down.isDown)
+				this.game.socket.emit('player.moveBy', new Point( 0,  1))
 		}
 
 		shutdown() {
