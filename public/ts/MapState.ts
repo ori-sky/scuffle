@@ -1,11 +1,13 @@
 module Scuffle {
 	export class MapState extends Phaser.State {
 		game : Game
-		map : Scuffle.Map
 		group : Phaser.Group
+		map : Scuffle.Map
+		players : any
 
 		init(map : Scuffle.Map) {
 			this.map = map
+			this.players = {}
 		}
 
 		preload() {
@@ -36,9 +38,12 @@ module Scuffle {
 				var s = this.add.sprite(player.pos.x, player.pos.y, 'phaser2logo', 0, group)
 				s.anchor.setTo(0.5, 0.5)
 				s.scale.setTo(0.05, 0.05)
+
+				this.players[player.id] = new ClientPlayer(player, s)
 			})
-			this.game.socket.on('player.move', (args : []) => {
-				// TODO
+			this.game.socket.on('player.move', (args : any[]) => {
+				if(this.players[args[0]] !== undefined)
+					this.players[args[0]].move(args[1])
 			})
 			this.game.socket.emit('map.ready')
 		}
