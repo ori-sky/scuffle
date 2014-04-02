@@ -19,6 +19,8 @@ require('tls').createServer(opts, stream => {
 }).listen(1338)
 
 var warehouse = JSON.parse(fs.readFileSync(__dirname + '/assets/warehouse.map.json'))
+var players = []
+var idCounter = 0
 
 io.sockets.on('connection', socket => {
 	socket.on('map.change', socket.emit.bind(socket, 'map.change'))
@@ -26,9 +28,13 @@ io.sockets.on('connection', socket => {
 		socket.emit('map.get', warehouse)
 	})
 	socket.on('map.ready', () => {
-		var player = new Scuffle.Player()
-		var spawnIndex = Math.floor(Math.random() * warehouse.spawns.length)
-		player.pos = warehouse.spawns[spawnIndex]
-		socket.emit('player.add',  player)
+		for(var i=0; i<5; ++i) {
+			var player = new Scuffle.Player((++idCounter).toString())
+			var spawnIndex = Math.floor(Math.random() * warehouse.spawns.length)
+			player.pos = warehouse.spawns[spawnIndex]
+			socket.emit('player.add',  player)
+			players.push(player)
+		}
+		socket.emit('player.move', [0, {x:0,y:0}])
 	})
 })

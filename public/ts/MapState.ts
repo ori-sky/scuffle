@@ -28,13 +28,17 @@ module Scuffle {
 		}
 
 		create() {
-			this.game.socket.on('player.add', (player) => {
-				var group = this.add.group()
+			this.game.socket.on('player.add', (player : Player) => {
+				var group = this.add.group(this.group)
 				group.alpha = 0
 				this.add.tween(group).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
+
 				var s = this.add.sprite(player.pos.x, player.pos.y, 'phaser2logo', 0, group)
 				s.anchor.setTo(0.5, 0.5)
 				s.scale.setTo(0.05, 0.05)
+			})
+			this.game.socket.on('player.move', (args : []) => {
+				// TODO
 			})
 			this.game.socket.emit('map.ready')
 		}
