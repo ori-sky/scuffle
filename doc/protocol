@@ -32,6 +32,9 @@ player.add
 player.remove
 	(string) player id
 	removes a player from the map
+player.move
+	(string) player id
+	moves a player
 player.you
 	(string) player id
 	tells the client which player they are
