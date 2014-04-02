@@ -49,10 +49,10 @@ module Scuffle {
 		}
 
 		shutdown() {
-			this.socket.removeAllListeners('player.add')
-			this.socket.removeAllListeners('player.remove')
-			this.socket.removeAllListeners('player.move')
-			this.socket.removeAllListeners('player.you')
+			this.game.socket.removeAllListeners('player.add')
+			this.game.socket.removeAllListeners('player.remove')
+			this.game.socket.removeAllListeners('player.move')
+			this.game.socket.removeAllListeners('player.you')
 		}
 	}
 }
