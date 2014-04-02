@@ -41,4 +41,12 @@ io.sockets.on('connection', socket => {
 		socket.emit('player.you', idCounter.toString())
 		//socket.emit('player.move', [idCounter.toString(), {x:0,y:0}])
 	})
+	socket.on('disconnect', () => {
+		socket.get('id', (err, id) => {
+			if(id !== null) {
+				delete players[id]
+				socket.broadcast.emit('player.remove', id)
+			}
+		})
+	})
 })

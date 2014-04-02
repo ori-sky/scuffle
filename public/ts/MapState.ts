@@ -42,7 +42,10 @@ module Scuffle {
 				this.players[player.id] = new ClientPlayer(player, s)
 			})
 			this.game.socket.on('player.remove', (id : string) => {
-				this.players[id].destroy()
+				var tween = this.add.tween(this.players[id].sprite).to({ alpha: 0 },
+						400, Phaser.Easing.Linear.None, true)
+				var p = this.players[id]
+				tween.onComplete.add(() => p.destroy())
 				delete this.players[id]
 			})
 			this.game.socket.on('player.move', (args : any[]) => {
