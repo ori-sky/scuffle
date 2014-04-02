@@ -13,6 +13,10 @@ module Scuffle {
 				this.game.socket.disconnect()
 				this.game.socket.socket.reconnect()
 			})
+			this.game.socket.on('refresh', () => {
+				this.game.destroy()
+				location.reload(true)
+			})
 
 			this.game.socket.emit('map.change', 'warehouse')
 		}
