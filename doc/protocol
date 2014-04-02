@@ -34,7 +34,8 @@ player.remove
 	removes a player from the map
 player.move
 	(string) player id
-	moves a player
+	(Point) new position
+	moves a player to a new position
 player.you
 	(string) player id
 	tells the client which player they are
