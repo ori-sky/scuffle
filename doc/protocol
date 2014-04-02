@@ -16,8 +16,8 @@ map.ready
 		player.add
 		player.you
 player.moveBy
-	(Point) distance
-	asks the server to move our player by a distance
+	(Point) move vector
+	asks the server to move our player by a move vector
 
 ----------------
 server => client
