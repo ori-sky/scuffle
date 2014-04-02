@@ -15,6 +15,9 @@ map.ready
 	tells the server the client is ready to receive map events
 		player.add
 		player.you
+player.moveBy
+	(Point) distance
+	asks the server to move our player by a distance
 
 ----------------
 server => client
