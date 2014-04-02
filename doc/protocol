@@ -36,6 +36,8 @@ player.you
 	(string) player id
 	tells the client which player they are
 reset
+	(void)
 	tells the client to reset the game
 refresh
+	(void)
 	tells the client to refresh the page
