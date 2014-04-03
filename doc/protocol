@@ -2,12 +2,12 @@
 client => server
 ----------------
 
-key.down
-	(string) key id
-	tells the server a key has been pressed
-key.up
-	(string) key id
-	tells the server a key has been released
+state.on
+	(string) state name
+	tells the server to enable a state
+state.off
+	(string) state name
+	tells the server to disable a state
 map.change
 	(string) map name
 	requests a map change from the server
