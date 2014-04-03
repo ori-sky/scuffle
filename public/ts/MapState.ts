@@ -31,8 +31,6 @@ module Scuffle {
 		}
 
 		create() {
-			this.cursorKeys = this.game.input.keyboard.createCursorKeys()
-
 			this.game.socket.on('player.add', (player : Player) => {
 				var group = this.add.group(this.group)
 				group.alpha = 0
@@ -56,17 +54,20 @@ module Scuffle {
 					this.players[args[0]].move(args[1])
 			})
 			this.game.socket.emit('map.ready')
+
+			this.cursorKeys = this.game.input.keyboard.createCursorKeys()
+			this.cursorKeys.left .onDown.add(() => this.game.socket.emit('state.on', 'key.left'))
+			this.cursorKeys.right.onDown.add(() => this.game.socket.emit('state.on', 'key.right'))
+			this.cursorKeys.up   .onDown.add(() => this.game.socket.emit('state.on', 'key.up'))
+			this.cursorKeys.down .onDown.add(() => this.game.socket.emit('state.on', 'key.down'))
+			this.cursorKeys.left. onUp.add  (() => this.game.socket.emit('state.off', 'key.left'))
+			this.cursorKeys.right.onUp.add  (() => this.game.socket.emit('state.off', 'key.right'))
+			this.cursorKeys.up   .onUp.add  (() => this.game.socket.emit('state.off', 'key.up'))
+			this.cursorKeys.down .onUp.add  (() => this.game.socket.emit('state.off', 'key.down'))
 		}
 
 		update() {
-			if(this.cursorKeys.left.isDown)
-				this.game.socket.emit('player.moveBy', new Point(-1.5,  0.0))
-			if(this.cursorKeys.right.isDown)
-				this.game.socket.emit('player.moveBy', new Point( 1.5,  0.0))
-			if(this.cursorKeys.up.isDown)
-				this.game.socket.emit('player.moveBy', new Point( 0.0, -1.5))
-			if(this.cursorKeys.down.isDown)
-				this.game.socket.emit('player.moveBy', new Point( 0.0,  1.5))
+
 		}
 
 		shutdown() {
