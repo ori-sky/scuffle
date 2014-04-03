@@ -20,9 +20,12 @@ require('tls').createServer(opts, stream => {
 
 var warehouse = JSON.parse(fs.readFileSync(__dirname + '/assets/warehouse.map.json'))
 var players = {}
+var state = {}
 var idCounter = 0
 
 io.sockets.on('connection', socket => {
+	socket.on('state.on', name => state[name] = true)
+	socket.on('state.off', name => state[name] = false)
 	socket.on('map.change', socket.emit.bind(socket, 'map.change'))
 	socket.on('map.get', name => {
 		socket.emit('map.get', warehouse)
