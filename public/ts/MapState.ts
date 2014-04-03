@@ -60,13 +60,13 @@ module Scuffle {
 
 		update() {
 			if(this.cursorKeys.left.isDown)
-				this.game.socket.emit('player.moveBy', new Point(-1,  0))
+				this.game.socket.emit('player.moveBy', new Point(-1.5,  0.0))
 			if(this.cursorKeys.right.isDown)
-				this.game.socket.emit('player.moveBy', new Point( 1,  0))
+				this.game.socket.emit('player.moveBy', new Point( 1.5,  0.0))
 			if(this.cursorKeys.up.isDown)
-				this.game.socket.emit('player.moveBy', new Point( 0, -1))
+				this.game.socket.emit('player.moveBy', new Point( 0.0, -1.5))
 			if(this.cursorKeys.down.isDown)
-				this.game.socket.emit('player.moveBy', new Point( 0,  1))
+				this.game.socket.emit('player.moveBy', new Point( 0.0,  1.5))
 		}
 
 		shutdown() {
