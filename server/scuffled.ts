@@ -40,15 +40,6 @@ io.sockets.on('connection', socket => {
 			socket.emit('player.add', players[id])
 		socket.emit('player.you', idCounter.toString())
 	})
-	socket.on('player.moveBy', moveVector => {
-		socket.get('id', (err, id) => {
-			if(id !== null) {
-				Scuffle.Point.prototype.add.call(players[id].pos, moveVector)
-				socket.emit('player.move', [id, players[id].pos])
-				socket.broadcast.emit('player.move', [id, players[id].pos])
-			}
-		})
-	})
 	socket.on('disconnect', () => {
 		socket.get('id', (err, id) => {
 			if(id !== null) {

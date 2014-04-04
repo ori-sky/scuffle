@@ -21,9 +21,6 @@ map.ready
 	tells the server the client is ready to receive map events
 		player.add
 		player.you
-player.moveBy
-	(Point) move vector
-	asks the server to move our player by a move vector
 
 ----------------
 server => client
