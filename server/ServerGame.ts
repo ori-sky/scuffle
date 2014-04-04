@@ -25,7 +25,7 @@ module Scuffle {
 				socket.on('map.change', socket.emit.bind(socket, 'map.change'))
 				socket.on('map.get', name => socket.emit('map.get', this.maps[name]))
 				socket.on('map.ready', () => {
-					for(var id=0; this.players[id]===undefined; ++id)
+					for(var id=0; this.players[id]!==undefined; ++id)
 					var player = new Scuffle.Player(id.toString())
 					var spawnIndex = Math.floor(Math.random() * this.maps['warehouse'].spawns.length)
 					player.pos = this.maps['warehouse'].spawns[spawnIndex]
