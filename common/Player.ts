@@ -1,9 +1,9 @@
 module Scuffle {
 	export class Player {
-		id : string
+		id : number
 		pos : Point
 
-		constructor(id : string) {
+		constructor(id : number) {
 			this.id = id
 		}
 	}

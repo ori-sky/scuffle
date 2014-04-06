@@ -13,7 +13,7 @@ module Scuffle {
 			map$get: (name : string) => this.socket.emit('map.get', this.game.maps[name]),
 			map$ready: () => {
 				if(this.map !== undefined) {
-					this.player = new Scuffle.Player(this.game.firstAvailableID().toString())
+					this.player = new Scuffle.Player(this.game.firstAvailableID())
 					this.game.players[this.player.id] = this.player
 
 					var spawnIndex = Math.floor(Math.random() * this.game.maps[this.map].spawns.length)
