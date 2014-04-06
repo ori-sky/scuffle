@@ -19,46 +19,18 @@ module Scuffle {
 		}
 
 		protocol(io) {
-			io.sockets.on('connection', socket => {
-				//socket.on('state.on', name => state[name] = true)
-				//socket.on('state.off', name => state[name] = false)
-				socket.on('map.change', name => {
-					socket.set('map', name)
-					socket.emit('map.change', name)
-				})
-				socket.on('map.get', name => socket.emit('map.get', this.maps[name]))
-				socket.on('map.ready', () => {
-					socket.get('map', (err, name) => {
-						if(name !== null) {
-							for(var id=0; this.players[id]!==undefined; ++id) {}
-							var player = new Scuffle.Player(id.toString())
-							var spawnIndex = Math.floor(Math.random() * this.maps[name].spawns.length)
-							player.pos = this.maps[name].spawns[spawnIndex]
-							this.players[player.id] = player
-
-							socket.set('id', id)
-							socket.broadcast.emit('player.add', player)
-							for(var id in this.players)
-								socket.emit('player.add', this.players[id])
-							socket.emit('player.you', id)
-						}
-					})
-				})
-				socket.on('disconnect', () => {
-					socket.get('id', (err, id) => {
-						if(id !== null) {
-							delete this.players[id]
-							socket.broadcast.emit('player.remove', id)
-						}
-					})
-				})
-			})
+			io.sockets.on('connection', socket => new Client(this, socket))
 			this.io = io
 		}
 
 		start(io) {
 			this.preload()
 			this.protocol(io)
+		}
+
+		firstAvailableID() {
+			for(var id=0; this.players[id]!==undefined; ++id) {}
+			return id
 		}
 	}
 }
