@@ -22,7 +22,6 @@ module Scuffle {
 			io.sockets.on('connection', socket => {
 				//socket.on('state.on', name => state[name] = true)
 				//socket.on('state.off', name => state[name] = false)
-				socket.on('map.change', socket.emit.bind(socket, 'map.change'))
 				socket.on('map.change', name => {
 					socket.set('map', name)
 					socket.emit('map.change', name)
