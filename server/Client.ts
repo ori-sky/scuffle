@@ -13,27 +13,28 @@ module Scuffle {
 			map$get: (name : string) => this.socket.emit('map.get', this.game.maps[name]),
 			map$ready: () => {
 				if(this.map !== undefined) {
-					this.player = new Scuffle.Player(this.game.firstAvailableID())
-					this.game.players[this.player.id] = this.player
+					this.instance = this.game.instances[0]
+					this.player = this.instance.newPlayer()
 
 					var spawnIndex = Math.floor(Math.random() * this.game.maps[this.map].spawns.length)
 					this.player.pos = this.game.maps[this.map].spawns[spawnIndex]
 
 					this.socket.broadcast.emit('player.add', this.player)
-					for(var id in this.game.players)
-						this.socket.emit('player.add', this.game.players[id])
+					for(var id in this.instance.players)
+						this.socket.emit('player.add', this.instance.players[id])
 					this.socket.emit('player.you', this.player.id)
 				}
 			},
 			disconnect: () => {
 				if(this.player !== undefined) {
 					this.socket.broadcast.emit('player.remove', this.player.id)
-					delete this.game.players[this.player.id]
+					delete this.instance.players[this.player.id]
 					delete this.player
 				}
 			}
 		}
 		map : string
+		instance : Instance
 		player : Player
 
 		constructor(game : ServerGame, socket) {
