@@ -1,11 +1,13 @@
 module Scuffle {
 	export class Instance {
 		game : ServerGame
+		id : number
 		map : Map
 		players : { [k : number] : Player }
 
-		constructor(game : ServerGame) {
+		constructor(game : ServerGame, id : number) {
 			this.game = game
+			this.id = id
 			this.players = {}
 		}
 

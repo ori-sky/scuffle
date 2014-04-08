@@ -1,7 +1,7 @@
 module Scuffle {
 	export class ServerGame {
-		maps : { [k : string] : Map }
-		instances : Instance[]
+		maps      : { [k : string] : Map }
+		instances : { [k : number] : Instance }
 		io : any
 
 		constructor() {
@@ -27,9 +27,8 @@ module Scuffle {
 			this.preload()
 			this.protocol(io)
 
-			var inst = new Instance(this)
-			inst.map = this.maps['warehouse']
-			this.instances.push(inst)
+			this.instances[0] = new Instance(this, 0)
+			this.instances[0].map = this.maps['warehouse']
 		}
 	}
 }
