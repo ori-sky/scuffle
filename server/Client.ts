@@ -9,19 +9,21 @@ module Scuffle {
 			map$get: (name : string) => this.socket.emit('map.get', this.game.maps[name]),
 			instance$join: (id : string) => {
 				this.instance = this.game.instances[parseInt(id)]
-				this.socket.emit('instance.join', id)
 				this.socket.join(id)
+				this.socket.emit('instance.join', id)
+				this.socket.emit('instance.map.change', this.instance.map.name)
 			},
 			instance$ready: () => {
 				if(this.instance !== undefined) {
 					this.player = this.instance.newPlayer()
 					this.socket.broadcast.to(this.instance.id).emit('instance.player.add', this.player)
 					this.instance.forEach(player => this.socket.emit('instance.player.add', player))
-					this.socket.emit('player.you', this.player.id)
+					this.socket.emit('instance.player.you', this.player.id)
+					this.instance.respawn(this.player.id)
 				}
 			},
 			disconnect: () => {
-				if(this.instance !== undefined) {
+				if(this.instance !== undefined && this.player !== undefined) {
 					this.socket.broadcast.to(this.instance.id).emit('instance.player.remove', this.player.id)
 					this.instance.removePlayer(this.player.id)
 					this.instance = undefined

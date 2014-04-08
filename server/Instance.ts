@@ -16,6 +16,11 @@ module Scuffle {
 			return id
 		}
 
+		forEach(fn : Function) {
+			for(var k in this.players)
+				fn(this.players[k], k, this.players)
+		}
+
 		newPlayer() {
 			var id = this.firstAvailableID()
 			return (this.players[id] = new Player(id))
@@ -25,9 +30,10 @@ module Scuffle {
 			delete this.players[id]
 		}
 
-		forEach(fn : Function) {
-			for(var k in this.players)
-				fn(this.players[k], k, this.players)
+		respawn(id) {
+			var spawnIndex = Math.floor(Math.random() * this.map.spawns.length)
+			this.players[id].pos = this.map.spawns[spawnIndex]
+			this.game.io.sockets.in(this.id).emit('instance.player.move', id, this.players[id].pos)
 		}
 	}
 }
