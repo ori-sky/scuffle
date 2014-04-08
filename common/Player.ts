@@ -5,6 +5,7 @@ module Scuffle {
 
 		constructor(id : number) {
 			this.id = id
+			this.pos = new Point(0, 0)
 		}
 	}
 }
