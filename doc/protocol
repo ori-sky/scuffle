@@ -8,41 +8,44 @@ state.on
 state.off
 	(string) state name
 	tells the server to disable a state
-map.change
-	(string) map name
-	requests a map change from the server
-		map.change
 map.get
 	(string) map name
 	requests a map from the server
 		map.get
-map.ready
+instance.join
+	(string) instance id
+	asks the server to join an instance
+		instance.join
+instance.ready
 	(void)
-	tells the server the client is ready to receive map events
-		player.add
-		player.you
+	tells the server we are ready to receive instance events
+		instance.player.add
+		instance.you
 
 ----------------
 server => client
 ----------------
 
-map.change
-	(string) map name
-	tells the client to change map
 map.get
 	(Scuffle.Map) map
-	sends a map to the client
-player.add
+	sends map data to the client
+instance.join
+	(string) instance id
+	tells the client it has joined an instance
+instance.map.change
+	(string) map name
+	tells the client the instance has changed map
+instance.player.add
 	(Player) player
-	adds a player to the map
-player.remove
+	tells the client a player has been added to the instance
+instance.player.remove
 	(string) player id
-	removes a player from the map
-player.move
+	tells the client a player has been removed from the instance
+instance.player.move
 	(string) player id
 	(Point) new position
-	moves a player to a new position
-player.you
+	tells the client a player has moved position
+instance.player.you
 	(string) player id
 	tells the client which player they are
 reset
