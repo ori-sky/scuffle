@@ -4,8 +4,8 @@ module Scuffle {
 		socket : any
 		protocol : any = {
 			// $ is used as separator due to being a valid identifier character
-			//socket.on('state.on', name => state[name] = true)
-			//socket.on('state.off', name => state[name] = false)
+			state$on: (name : string) => this.state[name] = true,
+			state$off: (name : string) => this.state[name] = false,
 			map$get: (name : string) => this.socket.emit('map.get', this.game.maps[name]),
 			instance$join: (id : string) => {
 				this.instance = this.game.instances[parseInt(id)]
@@ -31,12 +31,14 @@ module Scuffle {
 				}
 			}
 		}
+		state : { [ k : string] : boolean }
 		instance : Instance
 		player : Player
 
 		constructor(game : ServerGame, socket) {
 			this.game = game
 			this.socket = socket
+			this.state = {}
 
 			for(var fk in this.protocol) {
 				var fv= this.protocol[fk]
