@@ -71,6 +71,10 @@ module Scuffle {
 		}
 
 		shutdown() {
+			this.game.input.keyboard.removeKey(Phaser.Keyboard.UP)
+			this.game.input.keyboard.removeKey(Phaser.Keyboard.DOWN)
+			this.game.input.keyboard.removeKey(Phaser.Keyboard.LEFT)
+			this.game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT)
 			this.game.socket.removeAllListeners('player.add')
 			this.game.socket.removeAllListeners('player.remove')
 			this.game.socket.removeAllListeners('player.move')
