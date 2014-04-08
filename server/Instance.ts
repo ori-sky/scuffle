@@ -11,14 +11,23 @@ module Scuffle {
 			this.players = {}
 		}
 
+		firstAvailableID() {
+			for(var id=0; this.players[id]!==undefined; ++id) {}
+			return id
+		}
+
 		newPlayer() {
 			var id = this.firstAvailableID()
 			return (this.players[id] = new Player(id))
 		}
 
-		firstAvailableID() {
-			for(var id=0; this.players[id]!==undefined; ++id) {}
-			return id
+		removePlayer(id) {
+			delete this.players[id]
+		}
+
+		forEach(fn : Function) {
+			for(var k in this.players)
+				fn(this.players[k], k, this.players)
 		}
 	}
 }

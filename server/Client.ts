@@ -6,34 +6,29 @@ module Scuffle {
 			// $ is used as separator due to being a valid identifier character
 			//socket.on('state.on', name => state[name] = true)
 			//socket.on('state.off', name => state[name] = false)
-			map$change: (name : string) => {
-				this.map = name
-				this.socket.emit('map.change', name)
-			},
 			map$get: (name : string) => this.socket.emit('map.get', this.game.maps[name]),
-			map$ready: () => {
-				if(this.map !== undefined) {
-					this.instance = this.game.instances[0]
+			instance$join: (id : string) => {
+				this.instance = this.game.instances[parseInt(id)]
+				this.socket.emit('instance.join', id)
+				this.socket.join(id)
+			},
+			instance$ready: () => {
+				if(this.instance !== undefined) {
 					this.player = this.instance.newPlayer()
-
-					var spawnIndex = Math.floor(Math.random() * this.game.maps[this.map].spawns.length)
-					this.player.pos = this.game.maps[this.map].spawns[spawnIndex]
-
-					this.socket.broadcast.emit('player.add', this.player)
-					for(var id in this.instance.players)
-						this.socket.emit('player.add', this.instance.players[id])
+					this.socket.broadcast.to(this.instance.id).emit('instance.player.add', this.player)
+					this.instance.forEach(player => this.socket.emit('instance.player.add', player))
 					this.socket.emit('player.you', this.player.id)
 				}
 			},
 			disconnect: () => {
-				if(this.player !== undefined) {
-					this.socket.broadcast.emit('player.remove', this.player.id)
-					delete this.instance.players[this.player.id]
-					delete this.player
+				if(this.instance !== undefined) {
+					this.socket.broadcast.to(this.instance.id).emit('instance.player.remove', this.player.id)
+					this.instance.removePlayer(this.player.id)
+					this.instance = undefined
+					this.player = undefined
 				}
 			}
 		}
-		map : string
 		instance : Instance
 		player : Player
 
