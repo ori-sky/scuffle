@@ -13,8 +13,8 @@ module Scuffle {
 			fs.readdirSync(__dirname + '/assets').filter((filename : string) =>
 				filename.indexOf('.map.json', filename.length - '.map.json'.length) !== -1
 			).forEach((filename : string) => {
-				var contents = fs.readFileSync(__dirname + '/assets/' + filename)
-				this.maps[filename.split('.')[0]] = JSON.parse(contents)
+				var map = JSON.parse(fs.readFileSync(__dirname + '/assets/' + filename))
+				this.maps[map.name] = map
 			})
 		}
 
