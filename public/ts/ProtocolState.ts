@@ -3,8 +3,8 @@ module Scuffle {
 		game : Game
 
 		create() {
-			this.game.socket.on('map.change', (mapName : string) => {
-				this.game.socket.once('map.get', (map : Scuffle.Map) => {
+			this.game.socket.on('instance.map.change', (mapName : string) => {
+				this.game.socket.once('map.get', (map : Map) => {
 					this.game.state.start('Map', true, false, map)
 				})
 				this.game.socket.emit('map.get', mapName)
@@ -18,7 +18,7 @@ module Scuffle {
 				location.reload(true)
 			})
 
-			this.game.socket.emit('map.change', 'warehouse')
+			this.game.socket.emit('instance.join', 0)
 		}
 	}
 }

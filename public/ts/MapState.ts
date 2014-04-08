@@ -31,7 +31,7 @@ module Scuffle {
 		}
 
 		create() {
-			this.game.socket.on('player.add', (player : Player) => {
+			this.game.socket.on('instance.player.add', (player : Player) => {
 				var group = this.add.group(this.group)
 				group.alpha = 0
 				this.add.tween(group).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
@@ -42,18 +42,18 @@ module Scuffle {
 
 				this.players[player.id] = new ClientPlayer(player, s)
 			})
-			this.game.socket.on('player.remove', (id : string) => {
+			this.game.socket.on('instance.player.remove', (id : string) => {
 				var tween = this.add.tween(this.players[id].sprite).to({ alpha: 0 },
 						400, Phaser.Easing.Linear.None, true)
 				var p = this.players[id]
 				tween.onComplete.add(() => p.destroy())
 				delete this.players[id]
 			})
-			this.game.socket.on('player.move', (args : any[]) => {
-				if(this.players[args[0]] !== undefined)
-					this.players[args[0]].move(args[1])
+			this.game.socket.on('instance.player.move', (id : string, pos : Point) => {
+				if(this.players[id] !== undefined)
+					this.players[id].move(pos)
 			})
-			this.game.socket.emit('map.ready')
+			this.game.socket.emit('instance.ready')
 
 			this.cursorKeys = this.game.input.keyboard.createCursorKeys()
 			this.cursorKeys.left .onDown.add(() => this.game.socket.emit('state.on', 'key.left'))
