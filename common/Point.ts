@@ -24,6 +24,10 @@ module Scuffle {
 			return Point.prototype.addedTo.call(this, p.x, p.y)
 		}
 
+		angleTo(p : Point) {
+			return Math.atan2(p.y, p.x) - Math.atan2(this.y, this.x)
+		}
+
 		zero() {
 			this.x = 0
 			this.y = 0

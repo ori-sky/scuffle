@@ -10,6 +10,22 @@ module Scuffle {
 			this.b = b
 		}
 
+		vector() {
+			return new Point(this.b.x - this.a.x, this.b.y - this.a.y)
+		}
+
+		normal() {
+			var p = new Point(this.a.y - this.b.y, this.b.x - this.a.x)
+			p.normalize()
+			return p
+		}
+
+		oppositeNormal() {
+			var p = new Point(this.b.y - this.a.y, this.a.x - this.b.x)
+			p.normalize()
+			return p
+		}
+
 		intersectsLineOf(a : Point, b : Point) {
 			var onSegment = (p : Point, q : Point, r : Point) => {
 				if(q.x <= Math.max(p.x, r.x) && q.x >= Math.min(p.x, r.x)
