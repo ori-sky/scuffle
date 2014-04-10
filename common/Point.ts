@@ -8,9 +8,17 @@ module Scuffle {
 			this.y = y
 		}
 
-		add(v : Point) {
-			this.x += v.x
-			this.y += v.y
+		isZero() {
+			return this.x == 0 && this.y == 0
+		}
+
+		add(x : number, y : number) {
+			this.x += x
+			this.y += y
+		}
+
+		addPoint(p : Point) {
+			Point.prototype.add.call(this, p.x, p.y)
 		}
 	}
 }
