@@ -67,8 +67,15 @@ module Scuffle {
 					if(client.player.velocity.length() < 0.05)
 						client.player.velocity.zero()
 
-					Point.prototype.addPoint.call(client.player.pos, client.player.velocity)
-					this.game.io.sockets.in(this.id).emit('instance.player.move', id, client.player.pos)
+					var newPos = client.player.velocity.addedToPoint(client.player.pos)
+					var intersects = this.map.lines.some((line : Line) => {
+						return Line.prototype.intersectsLineOf.call(line, client.player.pos, newPos)
+					})
+
+					if(!intersects) {
+						client.player.pos = newPos
+						this.game.io.sockets.in(this.id).emit('instance.player.move', id, client.player.pos)
+					}
 				}
 			})
 		}
