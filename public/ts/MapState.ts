@@ -56,14 +56,17 @@ module Scuffle {
 			this.game.socket.emit('instance.ready')
 
 			this.cursorKeys = this.game.input.keyboard.createCursorKeys()
-			this.cursorKeys.left .onDown.add(() => this.game.socket.emit('state.on', 'key.left'))
-			this.cursorKeys.right.onDown.add(() => this.game.socket.emit('state.on', 'key.right'))
-			this.cursorKeys.up   .onDown.add(() => this.game.socket.emit('state.on', 'key.up'))
-			this.cursorKeys.down .onDown.add(() => this.game.socket.emit('state.on', 'key.down'))
-			this.cursorKeys.left. onUp.add  (() => this.game.socket.emit('state.off', 'key.left'))
-			this.cursorKeys.right.onUp.add  (() => this.game.socket.emit('state.off', 'key.right'))
-			this.cursorKeys.up   .onUp.add  (() => this.game.socket.emit('state.off', 'key.up'))
-			this.cursorKeys.down .onUp.add  (() => this.game.socket.emit('state.off', 'key.down'))
+			this.cursorKeys.left .onDown.add(() => this.game.socket.emit('state.on',  'key.left'))
+			this.cursorKeys.right.onDown.add(() => this.game.socket.emit('state.on',  'key.right'))
+			this.cursorKeys.up   .onDown.add(() => this.game.socket.emit('state.on',  'key.up'))
+			this.cursorKeys.down .onDown.add(() => this.game.socket.emit('state.on',  'key.down'))
+			this.cursorKeys.left .onUp  .add(() => this.game.socket.emit('state.off', 'key.left'))
+			this.cursorKeys.right.onUp  .add(() => this.game.socket.emit('state.off', 'key.right'))
+			this.cursorKeys.up   .onUp  .add(() => this.game.socket.emit('state.off', 'key.up'))
+			this.cursorKeys.down .onUp  .add(() => this.game.socket.emit('state.off', 'key.down'))
+			var kShift = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT)
+			kShift.onDown.add(() => this.game.socket.emit('state.on',  'key.shift'))
+			kShift.onUp  .add(() => this.game.socket.emit('state.off', 'key.shift'))
 		}
 
 		update() {
@@ -71,10 +74,11 @@ module Scuffle {
 		}
 
 		shutdown() {
-			this.game.input.keyboard.removeKey(Phaser.Keyboard.UP)
-			this.game.input.keyboard.removeKey(Phaser.Keyboard.DOWN)
 			this.game.input.keyboard.removeKey(Phaser.Keyboard.LEFT)
 			this.game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT)
+			this.game.input.keyboard.removeKey(Phaser.Keyboard.UP)
+			this.game.input.keyboard.removeKey(Phaser.Keyboard.DOWN)
+			this.game.input.keyboard.removeKey(Phaser.Keyboard.SHIFT)
 			this.game.socket.removeAllListeners('player.add')
 			this.game.socket.removeAllListeners('player.remove')
 			this.game.socket.removeAllListeners('player.move')

@@ -56,7 +56,9 @@ module Scuffle {
 
 				if(!moveVector.isZero()) {
 					moveVector.normalize()
-					moveVector.scale(0.04 * time)
+					moveVector.scale(0.03 * time)
+					if(client.state['key.shift'])
+						moveVector.scale(1 / 2)
 					client.player.velocity.addPoint(moveVector)
 				}
 
