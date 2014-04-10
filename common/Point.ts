@@ -12,6 +12,15 @@ module Scuffle {
 			return this.x == 0 && this.y == 0
 		}
 
+		length() {
+			return Math.sqrt(this.x * this.x + this.y * this.y)
+		}
+
+		zero() {
+			this.x = 0
+			this.y = 0
+		}
+
 		add(x : number, y : number) {
 			this.x += x
 			this.y += y
@@ -19,6 +28,19 @@ module Scuffle {
 
 		addPoint(p : Point) {
 			Point.prototype.add.call(this, p.x, p.y)
+		}
+
+		scale(s : number) {
+			this.x *= s
+			this.y *= s
+		}
+
+		normalizeTo(n : number) {
+			Point.prototype.scale.call(this, n / this.length())
+		}
+
+		normalize() {
+			Point.prototype.normalizeTo.call(this, 1)
 		}
 	}
 }
