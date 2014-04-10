@@ -56,14 +56,14 @@ module Scuffle {
 
 				if(!moveVector.isZero()) {
 					moveVector.normalize()
-					moveVector.scale(0.03 * time)
+					moveVector.scale(0.035 * time)
 					if(client.state['key.shift'])
 						moveVector.scale(1 / 2)
 					client.player.velocity.addPoint(moveVector)
 				}
 
 				if(!client.player.velocity.isZero()) {
-					client.player.velocity.scale(1 - 0.012 * time)
+					client.player.velocity.scale(1 - 0.011 * time)
 					if(client.player.velocity.length() < 0.05)
 						client.player.velocity.zero()
 
