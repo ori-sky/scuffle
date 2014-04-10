@@ -67,10 +67,24 @@ module Scuffle {
 					if(client.player.velocity.length() < 0.05)
 						client.player.velocity.zero()
 
-					var newPos = client.player.velocity.addedToPoint(client.player.pos)
-					var intersects = this.map.lines.some((line : Line) => {
-						return Line.prototype.intersectsLineOf.call(line, client.player.pos, newPos)
-					})
+					var newPos : Point
+					var intersects = true
+					for(var i=0; intersects && i<5; ++i) {
+						newPos = client.player.velocity.addedToPoint(client.player.pos)
+
+						var line : Line
+						intersects = this.map.lines.some((l : Line) => {
+							line = l
+							return Line.prototype.intersectsLineOf.call(l, client.player.pos, newPos)
+						})
+
+						if(intersects) {
+							var radians = Line.prototype.normal.call(line).angleTo(client.player.velocity)
+							var length = client.player.velocity.length()
+							client.player.velocity = Line.prototype.vector.call(line)
+							client.player.velocity.normalizeTo(-Math.sin(radians) * length)
+						}
+					}
 
 					if(!intersects) {
 						client.player.pos = newPos
