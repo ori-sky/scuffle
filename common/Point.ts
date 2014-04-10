@@ -16,6 +16,14 @@ module Scuffle {
 			return Math.sqrt(this.x * this.x + this.y * this.y)
 		}
 
+		addedTo(x : number, y : number) {
+			return new Point(this.x + x, this.y + y)
+		}
+
+		addedToPoint(p : Point) {
+			return Point.prototype.addedTo.call(this, p.x, p.y)
+		}
+
 		zero() {
 			this.x = 0
 			this.y = 0
