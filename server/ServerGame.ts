@@ -3,6 +3,11 @@ module Scuffle {
 		maps      : { [k : string] : Map }
 		instances : { [k : number] : Instance }
 		io : any
+		tickCount : number
+
+		private previousTime : number[]
+		private currentTime : number[]
+		private accumulator : number
 
 		constructor() {
 			this.maps = {}
@@ -23,13 +28,41 @@ module Scuffle {
 			this.io = io
 		}
 
+		init() {
+			this.tickCount = 0
+			this.previousTime = process.hrtime()
+			this.currentTime = this.previousTime
+			this.accumulator = 0
+		}
+
 		iterate() {
+			this.previousTime = this.currentTime
+			this.currentTime = process.hrtime()
+			this.accumulator += (this.currentTime[0] - this.previousTime[0]) * 1000
+			                  + (this.currentTime[1] - this.previousTime[1]) / 1000000
+			if(this.accumulator > 1000)
+				this.accumulator = 1000
+
+			var timestep = 10
+			while(this.accumulator >= timestep) {
+				this.tick(timestep)
+				this.accumulator -= timestep
+			}
+
 			setTimeout(this.iterate.bind(this), 5)
+		}
+
+		tick(time : number) {
+			++this.tickCount
+			console.log('tick %d', this.tickCount)
+			for(var k in this.instances)
+				this.instances[k].tick(time)
 		}
 
 		start(io) {
 			this.preload()
 			this.protocol(io)
+			this.init()
 			setImmediate(this.iterate.bind(this))
 
 			this.instances[0] = new Instance(this, 0)

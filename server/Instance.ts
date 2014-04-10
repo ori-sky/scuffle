@@ -11,6 +11,10 @@ module Scuffle {
 			this.players = {}
 		}
 
+		tick(time : number) {
+
+		}
+
 		firstAvailableID() {
 			for(var id=0; this.players[id]!==undefined; ++id) {}
 			return id
