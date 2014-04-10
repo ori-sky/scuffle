@@ -55,7 +55,17 @@ module Scuffle {
 					moveVector.add( 0,  1)
 
 				if(!moveVector.isZero()) {
-					Point.prototype.addPoint.call(client.player.pos, moveVector)
+					moveVector.normalize()
+					moveVector.scale(0.04 * time)
+					client.player.velocity.addPoint(moveVector)
+				}
+
+				if(!client.player.velocity.isZero()) {
+					client.player.velocity.scale(1 - 0.012 * time)
+					if(client.player.velocity.length() < 0.05)
+						client.player.velocity.zero()
+
+					Point.prototype.addPoint.call(client.player.pos, client.player.velocity)
 					this.game.io.sockets.in(this.id).emit('instance.player.move', id, client.player.pos)
 				}
 			})
