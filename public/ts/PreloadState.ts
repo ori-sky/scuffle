@@ -10,8 +10,6 @@ module Scuffle {
 			var bar = this.add.sprite(this.world.centerX - 400, this.world.centerY + 60, 'bar1', 0, this.group)
 			this.load.setPreloadSprite(bar)
 
-			for(var i=2; i<50; ++i)
-				this.load.image('bar' + i, 'img/bar' + i + '.png')
 			this.load.image('crate1', 'img/crate1.png')
 			this.load.image('phaser2logo', 'img/phaser2.png')
 
