@@ -54,7 +54,6 @@ module Scuffle {
 
 		tick(time : number) {
 			++this.tickCount
-			console.log('tick %d', this.tickCount)
 			for(var k in this.instances)
 				this.instances[k].tick(time)
 		}
