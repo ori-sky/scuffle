@@ -23,9 +23,14 @@ module Scuffle {
 			this.io = io
 		}
 
+		iterate() {
+			setTimeout(this.iterate.bind(this), 5)
+		}
+
 		start(io) {
 			this.preload()
 			this.protocol(io)
+			setImmediate(this.iterate.bind(this))
 
 			this.instances[0] = new Instance(this, 0)
 			this.instances[0].map = this.maps['warehouse']
