@@ -15,9 +15,11 @@ module Scuffle {
 			},
 			instance$ready: () => {
 				if(this.instance !== undefined) {
-					this.player = this.instance.newPlayer()
+					this.instance.newPlayer(this)
 					this.socket.broadcast.to(this.instance.id).emit('instance.player.add', this.player)
-					this.instance.forEach(player => this.socket.emit('instance.player.add', player))
+					this.instance.forEach((client : Client) => {
+						this.socket.emit('instance.player.add', client.player)
+					})
 					this.socket.emit('instance.player.you', this.player.id)
 					this.instance.respawn(this.player.id)
 				}
