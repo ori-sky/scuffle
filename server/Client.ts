@@ -49,7 +49,12 @@ module Scuffle {
 		}
 
 		tick(time : number) {
+			this.tickMouse(time)
 			this.tickMovement(time)
+		}
+
+		tickMouse(time : number) {
+
 		}
 
 		tickMovement(time : number) {
