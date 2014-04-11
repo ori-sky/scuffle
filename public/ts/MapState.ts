@@ -89,6 +89,11 @@ module Scuffle {
 						break
 				}
 			}
+			this.input.mouse.mouseMoveCallback = e => {
+				var mx = e.movementX || e.mozMovementX || e.webkitMovementX || 0
+				var my = e.movementY || e.mozMovementY || e.webkitMovementY || 0
+				console.log("%d, %d", mx, my)
+			}
 		}
 
 		update() {
