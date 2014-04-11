@@ -67,6 +67,19 @@ module Scuffle {
 			var kShift = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT)
 			kShift.onDown.add(() => this.game.socket.emit('state.on',  'key.shift'))
 			kShift.onUp  .add(() => this.game.socket.emit('state.off', 'key.shift'))
+
+			this.input.mouse.mouseDownCallback = e => {
+				console.log(e)
+				switch(e.button) {
+					case Phaser.Mouse.LEFT_BUTTON:
+						this.game.socket.emit('state.on', 'mouse.left')
+						break
+					case Phaser.Mouse.RIGHT_BUTTON:
+						this.game.socket.emit('state.on', 'mouse.right')
+						break
+				}
+				this.input.mouse.requestPointerLock()
+			}
 		}
 
 		update() {
