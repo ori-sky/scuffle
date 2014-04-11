@@ -49,6 +49,10 @@ module Scuffle {
 		}
 
 		tick(time : number) {
+			this.tickMovement(time)
+		}
+
+		tickMovement(time : number) {
 			var moveVector = new Point(0, 0)
 			if(this.state['key.left'])
 				moveVector.add(-1,  0)
