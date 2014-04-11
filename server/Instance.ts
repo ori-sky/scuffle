@@ -43,54 +43,8 @@ module Scuffle {
 		}
 
 		tick(time : number) {
-			this.forEach((client : Client, id : number) => {
-				var moveVector = new Point(0, 0)
-				if(client.state['key.left'])
-					moveVector.add(-1,  0)
-				if(client.state['key.right'])
-					moveVector.add( 1,  0)
-				if(client.state['key.up'])
-					moveVector.add( 0, -1)
-				if(client.state['key.down'])
-					moveVector.add( 0,  1)
-
-				if(!moveVector.isZero()) {
-					moveVector.normalize()
-					moveVector.scale(0.035 * time)
-					if(client.state['key.shift'])
-						moveVector.scale(1 / 2)
-					client.player.velocity.addPoint(moveVector)
-				}
-
-				if(!client.player.velocity.isZero()) {
-					client.player.velocity.scale(1 - 0.011 * time)
-					if(client.player.velocity.length() < 0.05)
-						client.player.velocity.zero()
-
-					var newPos : Point
-					var intersects = true
-					for(var i=0; intersects && i<5; ++i) {
-						newPos = client.player.velocity.addedToPoint(client.player.pos)
-
-						var line : Line
-						intersects = this.map.lines.some((l : Line) => {
-							line = l
-							return Line.prototype.intersectsLineOf.call(l, client.player.pos, newPos)
-						})
-
-						if(intersects) {
-							var radians = Line.prototype.normal.call(line).angleTo(client.player.velocity)
-							var length = client.player.velocity.length()
-							client.player.velocity = Line.prototype.vector.call(line)
-							client.player.velocity.normalizeTo(-Math.sin(radians) * length)
-						}
-					}
-
-					if(!intersects) {
-						client.player.pos = newPos
-						this.game.io.sockets.in(this.id).emit('instance.player.move', id, client.player.pos)
-					}
-				}
+			this.forEach((client : Client) => {
+				client.tick(time)
 			})
 		}
 	}
