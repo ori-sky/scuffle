@@ -59,13 +59,13 @@ module Scuffle {
 
 		tickMovement(time : number) {
 			var moveVector = new Point(0, 0)
-			if(this.state['key.left'])
+			if(this.state['key.a'])
 				moveVector.add(-1,  0)
-			if(this.state['key.right'])
+			if(this.state['key.d'])
 				moveVector.add( 1,  0)
-			if(this.state['key.up'])
+			if(this.state['key.w'])
 				moveVector.add( 0, -1)
-			if(this.state['key.down'])
+			if(this.state['key.s'])
 				moveVector.add( 0,  1)
 
 			if(!moveVector.isZero()) {
