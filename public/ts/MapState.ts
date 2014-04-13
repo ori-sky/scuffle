@@ -2,9 +2,9 @@ module Scuffle {
 	export class MapState extends Phaser.State {
 		game : Game
 		group : Phaser.Group
-		cursorKeys : any
 		map : Scuffle.Map
 		players : any
+		me : string
 
 		init(map : Scuffle.Map) {
 			this.map = map
@@ -42,6 +42,7 @@ module Scuffle {
 
 				this.players[player.id] = new ClientPlayer(player, s)
 			})
+			this.game.socket.on('instance.player.you', (id : string) => this.me = id)
 			this.game.socket.on('instance.player.remove', (id : string) => {
 				var tween = this.add.tween(this.players[id].sprite).to({ alpha: 0 },
 						400, Phaser.Easing.Linear.None, true)
@@ -55,15 +56,15 @@ module Scuffle {
 			})
 			this.game.socket.emit('instance.ready')
 
-			this.cursorKeys = this.game.input.keyboard.createCursorKeys()
-			this.cursorKeys.left .onDown.add(() => this.game.socket.emit('state.on',  'key.left'))
-			this.cursorKeys.right.onDown.add(() => this.game.socket.emit('state.on',  'key.right'))
-			this.cursorKeys.up   .onDown.add(() => this.game.socket.emit('state.on',  'key.up'))
-			this.cursorKeys.down .onDown.add(() => this.game.socket.emit('state.on',  'key.down'))
-			this.cursorKeys.left .onUp  .add(() => this.game.socket.emit('state.off', 'key.left'))
-			this.cursorKeys.right.onUp  .add(() => this.game.socket.emit('state.off', 'key.right'))
-			this.cursorKeys.up   .onUp  .add(() => this.game.socket.emit('state.off', 'key.up'))
-			this.cursorKeys.down .onUp  .add(() => this.game.socket.emit('state.off', 'key.down'))
+			var cursorKeys = this.game.input.keyboard.createCursorKeys()
+			cursorKeys.left .onDown.add(() => this.game.socket.emit('state.on',  'key.left'))
+			cursorKeys.right.onDown.add(() => this.game.socket.emit('state.on',  'key.right'))
+			cursorKeys.up   .onDown.add(() => this.game.socket.emit('state.on',  'key.up'))
+			cursorKeys.down .onDown.add(() => this.game.socket.emit('state.on',  'key.down'))
+			cursorKeys.left .onUp  .add(() => this.game.socket.emit('state.off', 'key.left'))
+			cursorKeys.right.onUp  .add(() => this.game.socket.emit('state.off', 'key.right'))
+			cursorKeys.up   .onUp  .add(() => this.game.socket.emit('state.off', 'key.up'))
+			cursorKeys.down .onUp  .add(() => this.game.socket.emit('state.off', 'key.down'))
 			var kShift = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT)
 			kShift.onDown.add(() => this.game.socket.emit('state.on',  'key.shift'))
 			kShift.onUp  .add(() => this.game.socket.emit('state.off', 'key.shift'))
