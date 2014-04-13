@@ -124,8 +124,7 @@ module Scuffle {
 			this.input.mouse.mouseMoveCallback = e => {
 				var mx = e.movementX || e.mozMovementX || e.webkitMovementX || 0
 				var my = e.movementY || e.mozMovementY || e.webkitMovementY || 0
-				console.log("%d, %d", mx, my)
-				this.lineOfSight.angle = Math.atan2(my, mx) * 180 / Math.PI
+				this.lineOfSight.angle += mx - my
 			}
 		}
 
