@@ -70,7 +70,7 @@ module Scuffle {
 
 			if(!moveVector.isZero()) {
 				moveVector.normalize()
-				moveVector.scale(0.035 * time)
+				moveVector.scale(0.025 * time)
 				if(this.state['key.shift'])
 					moveVector.scale(1 / 2)
 				this.player.velocity.addPoint(moveVector)
