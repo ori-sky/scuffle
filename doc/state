@@ -3,5 +3,9 @@ key.right
 key.up
 key.down
 key.shift
+key.w
+key.a
+key.s
+key.d
 mouse.left
 mouse.right
