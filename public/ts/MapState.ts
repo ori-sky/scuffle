@@ -121,10 +121,15 @@ module Scuffle {
 						break
 				}
 			}
+			var px, py
 			this.input.mouse.mouseMoveCallback = e => {
-				var mx = e.movementX || e.mozMovementX || e.webkitMovementX || 0
-				var my = e.movementY || e.mozMovementY || e.webkitMovementY || 0
+				var mx = e.movementX || e.mozMovementX || e.webkitMovementX
+					|| (px !== undefined ? e.layerX - px : 0)
+				var my = e.movementY || e.mozMovementY || e.webkitMovementY
+					|| (py !== undefined ? e.layerY - py : 0)
 				this.lineOfSight.angle += (mx - my) * 2 / Math.PI
+				px = e.layerX
+				py = e.layerY
 			}
 		}
 
