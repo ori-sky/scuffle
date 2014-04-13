@@ -5,6 +5,8 @@ module Scuffle {
 		map : Scuffle.Map
 		players : any
 		me : string
+		lineOfSight : Phaser.Graphics
+		lineOfSightG : Phaser.Group
 
 		init(map : Scuffle.Map) {
 			this.map = map
@@ -31,6 +33,13 @@ module Scuffle {
 		}
 
 		create() {
+			this.lineOfSightG = this.add.group(this.group)
+			this.lineOfSightG.alpha = 0
+			this.lineOfSight = this.add.graphics(0, 0, this.lineOfSightG)
+			this.lineOfSight.lineStyle(1, 0xaaccff, 1)
+			this.lineOfSight.moveTo(0, 0)
+			this.lineOfSight.lineTo(80, 0)
+
 			this.game.socket.on('instance.player.add', (player : Player) => {
 				var group = this.add.group(this.group)
 				group.alpha = 0
@@ -42,7 +51,12 @@ module Scuffle {
 
 				this.players[player.id] = new ClientPlayer(player, s)
 			})
-			this.game.socket.on('instance.player.you', (id : string) => this.me = id)
+			this.game.socket.on('instance.player.you', (id : string) => {
+				this.me = id
+				this.lineOfSightG.alpha = 1
+				this.lineOfSight.position.x = this.players[id].sprite.position.x
+				this.lineOfSight.position.y = this.players[id].sprite.position.y
+			})
 			this.game.socket.on('instance.player.remove', (id : string) => {
 				var tween = this.add.tween(this.players[id].sprite).to({ alpha: 0 },
 						400, Phaser.Easing.Linear.None, true)
@@ -51,8 +65,13 @@ module Scuffle {
 				delete this.players[id]
 			})
 			this.game.socket.on('instance.player.move', (id : string, pos : Point) => {
-				if(this.players[id] !== undefined)
+				if(this.players[id] !== undefined) {
 					this.players[id].move(pos)
+					if(id === this.me) {
+						this.lineOfSight.position.x = pos.x
+						this.lineOfSight.position.y = pos.y
+					}
+				}
 			})
 			this.game.socket.emit('instance.ready')
 
