@@ -128,6 +128,7 @@ module Scuffle {
 				var my = e.movementY || e.mozMovementY || e.webkitMovementY
 					|| (py !== undefined ? e.layerY - py : 0)
 				this.lineOfSight.angle += (mx - my) * 2 / Math.PI
+				this.game.socket.emit('instance.player.me.look', this.lineOfSight.angle)
 				px = e.layerX
 				py = e.layerY
 			}
@@ -149,6 +150,7 @@ module Scuffle {
 			this.game.input.keyboard.removeKey(Phaser.Keyboard.D)
 			this.input.mouse.mouseDownCallback = undefined
 			this.input.mouse.mouseUpCallback = undefined
+			this.input.mouse.mouseMoveCallback = undefined
 			this.input.mouse.releasePointerLock()
 			this.game.socket.removeAllListeners('player.add')
 			this.game.socket.removeAllListeners('player.remove')
