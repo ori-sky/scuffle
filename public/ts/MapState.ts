@@ -127,10 +127,12 @@ module Scuffle {
 					|| (px !== undefined ? e.layerX - px : 0)
 				var my = e.movementY || e.mozMovementY || e.webkitMovementY
 					|| (py !== undefined ? e.layerY - py : 0)
-				this.lineOfSight.angle += (mx - my) * 2 / Math.PI
-				this.game.socket.emit('instance.player.me.look', this.lineOfSight.angle)
 				px = e.layerX
 				py = e.layerY
+				this.lineOfSight.angle += (mx - my) * 2 / Math.PI
+				// clamp angle to range 0:360
+				this.lineOfSight.angle -= 360 * Math.floor(this.lineOfSight.angle / 360)
+				this.game.socket.emit('instance.player.me.look', this.lineOfSight.angle * Math.PI / 180)
 			}
 		}
 
