@@ -57,7 +57,11 @@ module Scuffle {
 		}
 
 		tickMouse(time : number) {
-
+			if(this.state['mouse.left']) {
+				var bullet = this.instance.newBullet(this.player.id)
+				bullet.pos = Point.prototype.copy.call(this.player.pos)
+				this.socket.emit('instance.bullet.add', bullet)
+			}
 		}
 
 		tickMovement(time : number) {
