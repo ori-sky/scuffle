@@ -3,8 +3,9 @@ module Scuffle {
 		game : Game
 		group : Phaser.Group
 		map : Scuffle.Map
-		players : any
-		me : string
+		players : { [k : number] : ClientPlayer }
+		bullets : { [k : number] : Bullet }
+		me : number
 		lineOfSight : Phaser.Graphics
 		lineOfSightG : Phaser.Group
 
@@ -51,20 +52,20 @@ module Scuffle {
 
 				this.players[player.id] = new ClientPlayer(player, s)
 			})
-			this.game.socket.on('instance.player.you', (id : string) => {
+			this.game.socket.on('instance.player.you', (id : number) => {
 				this.me = id
 				this.lineOfSightG.alpha = 1
 				this.lineOfSight.position.x = this.players[id].sprite.position.x
 				this.lineOfSight.position.y = this.players[id].sprite.position.y
 			})
-			this.game.socket.on('instance.player.remove', (id : string) => {
+			this.game.socket.on('instance.player.remove', (id : number) => {
 				var tween = this.add.tween(this.players[id].sprite).to({ alpha: 0 },
 						400, Phaser.Easing.Linear.None, true)
 				var p = this.players[id]
 				tween.onComplete.add(() => p.destroy())
 				delete this.players[id]
 			})
-			this.game.socket.on('instance.player.move', (id : string, pos : Point) => {
+			this.game.socket.on('instance.player.move', (id : number, pos : Point) => {
 				if(this.players[id] !== undefined) {
 					this.players[id].move(pos)
 					if(id === this.me) {
@@ -72,6 +73,9 @@ module Scuffle {
 						this.lineOfSight.position.y = pos.y
 					}
 				}
+			})
+			this.game.socket.on('instance.bullet.add', (bullet : Bullet) => {
+
 			})
 			this.game.socket.emit('instance.ready')
 
@@ -154,10 +158,13 @@ module Scuffle {
 			this.input.mouse.mouseUpCallback = undefined
 			this.input.mouse.mouseMoveCallback = undefined
 			this.input.mouse.releasePointerLock()
-			this.game.socket.removeAllListeners('player.add')
-			this.game.socket.removeAllListeners('player.remove')
-			this.game.socket.removeAllListeners('player.move')
-			this.game.socket.removeAllListeners('player.you')
+			this.game.socket.removeAllListeners('instance.player.add')
+			this.game.socket.removeAllListeners('instance.player.remove')
+			this.game.socket.removeAllListeners('instance.player.move')
+			this.game.socket.removeAllListeners('instance.player.you')
+			this.game.socket.removeAllListeners('instance.bullet.add')
+			this.game.socket.removeAllListeners('instance.bullet.remove')
+			this.game.socket.removeAllListeners('instance.bullet.move')
 		}
 	}
 }
