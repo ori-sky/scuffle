@@ -10,6 +10,7 @@ module Scuffle {
 			this.game = game
 			this.id = id
 			this.clients = {}
+			this.bullets = {}
 		}
 
 		firstAvailablePlayerID() {
@@ -22,7 +23,7 @@ module Scuffle {
 			return id
 		}
 
-		forEach(fn : Function) {
+		forEachClient(fn : Function) {
 			for(var k in this.clients)
 				fn(this.clients[k], k, this.clients)
 		}
@@ -30,6 +31,11 @@ module Scuffle {
 		forEachPlayer(fn : Function) {
 			for(var k in this.clients)
 				fn(this.clients[k].player, k, this.clients)
+		}
+
+		forEachBullet(fn : Function) {
+			for(var k in this.bullets)
+				fn(this.bullets[k], k, this.bullets)
 		}
 
 		newPlayer(client : Client) {
@@ -58,7 +64,7 @@ module Scuffle {
 		}
 
 		tick(time : number) {
-			this.forEach((client : Client) => {
+			this.forEachClient((client : Client) => {
 				client.tick(time)
 			})
 		}
