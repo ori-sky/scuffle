@@ -62,6 +62,7 @@ module Scuffle {
 				bullet.pos = Point.prototype.copy.call(this.player.pos)
 				bullet.velocity.x = Math.cos(this.player.angle)
 				bullet.velocity.y = Math.sin(this.player.angle)
+				bullet.velocity.scale(5)
 				this.game.io.sockets.in(this.instance.id).emit('instance.bullet.add', bullet)
 			}
 		}
