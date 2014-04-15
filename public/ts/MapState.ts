@@ -4,7 +4,7 @@ module Scuffle {
 		group : Phaser.Group
 		map : Scuffle.Map
 		players : { [k : number] : ClientPlayer }
-		bullets : { [k : number] : Bullet }
+		bullets : { [k : number] : ClientBullet }
 		me : number
 		lineOfSight : Phaser.Graphics
 		lineOfSightG : Phaser.Group
@@ -12,6 +12,7 @@ module Scuffle {
 		init(map : Scuffle.Map) {
 			this.map = map
 			this.players = {}
+			this.bullets = {}
 		}
 
 		preload() {
@@ -75,7 +76,20 @@ module Scuffle {
 				}
 			})
 			this.game.socket.on('instance.bullet.add', (bullet : Bullet) => {
-
+				var g = this.add.graphics(bullet.pos.x, bullet.pos.y, this.group)
+				g.beginFill(0x00ff00, 0.8)
+				g.drawCircle(0, 0, bullet.radius)
+				g.endFill()
+				this.bullets[bullet.id] = new ClientBullet(bullet, g)
+			})
+			this.game.socket.on('instance.bullet.remove', (id : number) => {
+				this.bullets[id].destroy()
+				delete this.bullets[id]
+			})
+			this.game.socket.on('instance.bullet.move', (id : number, pos : Point) => {
+				if(this.bullets[id] !== undefined) {
+					this.bullets[id].move(pos)
+				}
 			})
 			this.game.socket.emit('instance.ready')
 
