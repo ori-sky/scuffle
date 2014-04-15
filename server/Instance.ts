@@ -67,6 +67,20 @@ module Scuffle {
 			this.forEachClient((client : Client) => {
 				client.tick(time)
 			})
+			this.forEachBullet((bullet : Bullet, id : number) => {
+				var newPos = bullet.velocity.addedToPoint(bullet.pos)
+				var hitsWall = this.map.lines.some((l : Line) => {
+					return Line.prototype.intersectsLineOf.call(l, bullet.pos, newPos)
+				})
+				if(hitsWall) {
+					this.game.io.sockets.in(this.id).emit('instance.bullet.remove', id)
+					this.removeBullet(id)
+				}
+				else {
+					bullet.pos = newPos
+					this.game.io.sockets.in(this.id).emit('instance.bullet.move', id, bullet.pos)
+				}
+			})
 		}
 	}
 }
