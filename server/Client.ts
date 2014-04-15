@@ -24,6 +24,9 @@ module Scuffle {
 					this.instance.respawn(this.player.id)
 				}
 			},
+			instance$player$me$look: (angle : number) => {
+				this.player.angle = angle
+			},
 			disconnect: () => {
 				if(this.instance !== undefined && this.player !== undefined) {
 					this.socket.broadcast.to(this.instance.id).emit('instance.player.remove', this.player.id)
