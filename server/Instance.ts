@@ -4,6 +4,7 @@ module Scuffle {
 		id : number
 		map : Map
 		clients : { [k : number] : Client }
+		bullets : { [k : number] : Bullet }
 
 		constructor(game : ServerGame, id : number) {
 			this.game = game
@@ -11,8 +12,13 @@ module Scuffle {
 			this.clients = {}
 		}
 
-		firstAvailableID() {
+		firstAvailablePlayerID() {
 			for(var id=0; this.clients[id]!==undefined; ++id) {}
+			return id
+		}
+
+		firstAvailableBulletID() {
+			for(var id=0; this.bullets[id]!==undefined; ++id) {}
 			return id
 		}
 
@@ -27,16 +33,25 @@ module Scuffle {
 		}
 
 		newPlayer(client : Client) {
-			var id = this.firstAvailableID()
+			var id = this.firstAvailablePlayerID()
 			this.clients[id] = client
 			return (this.clients[id].player = new Player(id))
 		}
 
-		removePlayer(id) {
+		removePlayer(id : number) {
 			delete this.clients[id]
 		}
 
-		respawn(id) {
+		newBullet(owner : number) {
+			var id = this.firstAvailableBulletID()
+			return (this.bullets[id] = new Bullet(id, owner))
+		}
+
+		removeBullet(id : number) {
+			delete this.bullets[id]
+		}
+
+		respawn(id : number) {
 			var spawnIndex = Math.floor(Math.random() * this.map.spawns.length)
 			this.clients[id].player.pos = this.map.spawns[spawnIndex]
 			this.game.io.sockets.in(this.id).emit('instance.player.move', id, this.clients[id].player.pos)
