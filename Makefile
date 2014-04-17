@@ -1,4 +1,4 @@
-CLIENT_OUT=public/ts/scuffle.js
+CLIENT_OUT=public/js/scuffle.js
 SERVER_OUT=server/scuffled.js
 CLIENT_LIB=lib/phaser.d.ts lib/socket.io.client.d.ts
 SERVER_LIB=lib/node.d.ts lib/socket.io.d.ts
@@ -24,11 +24,11 @@ deploy:
 	mkdir -p $(DEPLOY_DIR)/scuffle/img
 	mkdir -p $(DEPLOY_DIR)/scuffle/js
 	mkdir -p $(DEPLOY_DIR)/scuffle/lib
-	cp -rf public/html/*  $(DEPLOY_DIR)/scuffle
-	cp -rf public/css/*   $(DEPLOY_DIR)/scuffle/css
-	cp -rf public/img/*   $(DEPLOY_DIR)/scuffle/img
-	cp -rf public/ts/*.js $(DEPLOY_DIR)/scuffle/js
-	cp -rf lib/*.js       $(DEPLOY_DIR)/scuffle/lib
+	cp -rf public/html/* $(DEPLOY_DIR)/scuffle
+	cp -rf public/css/*  $(DEPLOY_DIR)/scuffle/css
+	cp -rf public/img/*  $(DEPLOY_DIR)/scuffle/img
+	cp -rf public/js/*   $(DEPLOY_DIR)/scuffle/js
+	cp -rf public/lib/*  $(DEPLOY_DIR)/scuffle/lib
 
 clean:
 	rm -f $(CLIENT_OUT) $(SERVER_OUT)
