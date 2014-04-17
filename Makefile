@@ -1,6 +1,6 @@
 CLIENT_OUT=public/ts/scuffle.js
 SERVER_OUT=server/scuffled.js
-CLIENT_LIB=lib/phaser.d.ts
+CLIENT_LIB=lib/phaser.d.ts lib/socket.io.client.d.ts
 SERVER_LIB=lib/node.d.ts lib/socket.io.d.ts
 COMMON_TS=common/*.ts
 CLIENT_TS=$(shell find public/ts -name "*.ts" -print)
