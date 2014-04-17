@@ -41,13 +41,11 @@ module Scuffle {
 			this.lineOfSight.lineTo(80, 0)
 
 			this.game.socket.on('instance$player$add', (player : Player) => {
-				var group = this.add.group(this.group)
-				group.alpha = 0
-				this.add.tween(group).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
-
-				var s = this.add.sprite(player.pos.x, player.pos.y, 'phaser2logo', 0, group)
+				var s = this.add.sprite(player.pos.x, player.pos.y, 'phaser2logo', 0, this.group)
 				s.anchor.setTo(0.5, 0.5)
 				s.scale.setTo(0.05, 0.05)
+				s.alpha = 0
+				this.add.tween(s).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
 
 				this.players[player.id] = new ClientPlayer(player, s)
 			})
@@ -58,19 +56,16 @@ module Scuffle {
 				this.lineOfSight.position.y = this.players[id].sprite.position.y
 			})
 			this.game.socket.on('instance$player$remove', (id : number) => {
-				var tween = this.add.tween(this.players[id].sprite).to({ alpha: 0 },
-						400, Phaser.Easing.Linear.None, true)
 				var p = this.players[id]
-				tween.onComplete.add(() => p.destroy())
+				this.add.tween(this.players[id].sprite).to({ alpha: 0 }, 400, Phaser.Easing.Linear.None, true)
+					.onComplete.add(() => p.destroy())
 				delete this.players[id]
 			})
 			this.game.socket.on('instance$player$move', (id : number, pos : Point) => {
-				if(this.players[id] !== undefined) {
-					this.players[id].move(pos)
-					if(id === this.me) {
-						this.lineOfSight.position.x = pos.x
-						this.lineOfSight.position.y = pos.y
-					}
+				this.players[id].move(pos)
+				if(id === this.me) {
+					this.lineOfSight.position.x = pos.x
+					this.lineOfSight.position.y = pos.y
 				}
 			})
 			this.game.socket.on('instance$bullet$add', (bullet : Bullet) => {
@@ -85,9 +80,7 @@ module Scuffle {
 				delete this.bullets[id]
 			})
 			this.game.socket.on('instance$bullet$move', (id : number, pos : Point) => {
-				if(this.bullets[id] !== undefined) {
-					this.bullets[id].move(pos)
-				}
+				this.bullets[id].move(pos)
 			})
 			this.game.socket.emit('instance$ready')
 
