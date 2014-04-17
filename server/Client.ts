@@ -62,6 +62,7 @@ module Scuffle {
 			if(this.state['mouse.left']) {
 				if(this.accumBullet >= 250) {
 					var bullet = this.instance.newBullet(this.player.id)
+					bullet.color = 0xaaccff
 					bullet.pos = Point.prototype.copy.call(this.player.pos)
 					bullet.velocity.x = Math.cos(this.player.angle)
 					bullet.velocity.y = Math.sin(this.player.angle)
