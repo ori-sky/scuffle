@@ -24,6 +24,9 @@ instance.ready
 instance.player.me.look
 	(number) direction angle in radians
 	tells the server the player has changed direction
+batch
+	(Event[]) events
+	batches several events into one
 
 ----------------
 server => client
@@ -67,3 +70,6 @@ reset
 refresh
 	(void)
 	tells the client to refresh the page
+batch
+	(Event[]) events
+	batches several events into one
