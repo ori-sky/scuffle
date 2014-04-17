@@ -1898,6 +1898,7 @@ declare module Phaser {
 
         constructor(game: Phaser.Game, x: number, y: number);
 
+        alpha: number;
         angle: number;
         cameraOffset: Phaser.Point;
         exists: boolean;
