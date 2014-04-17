@@ -60,8 +60,7 @@ module Scuffle {
 		tickMouse(time : number) {
 			this.accumBullet += time
 			if(this.state['mouse.left']) {
-				var timestep = 100
-				if(this.accumBullet >= timestep) {
+				if(this.accumBullet >= 250) {
 					var bullet = this.instance.newBullet(this.player.id)
 					bullet.pos = Point.prototype.copy.call(this.player.pos)
 					bullet.velocity.x = Math.cos(this.player.angle)
