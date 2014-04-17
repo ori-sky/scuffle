@@ -15,7 +15,7 @@ module Scuffle {
 			this.bullets = {}
 		}
 
-		preload() {
+		create() {
 			this.group = this.add.group()
 			this.group.alpha = 0
 			this.add.tween(this.group).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
@@ -32,9 +32,7 @@ module Scuffle {
 				graphics.moveTo(line.a.x, line.a.y)
 				graphics.lineTo(line.b.x, line.b.y)
 			})
-		}
 
-		create() {
 			this.lineOfSightG = this.add.group(this.group)
 			this.lineOfSightG.alpha = 0
 			this.lineOfSight = this.add.graphics(0, 0, this.lineOfSightG)
