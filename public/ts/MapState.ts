@@ -69,7 +69,7 @@ module Scuffle {
 			})
 			this.game.socket.on('instance$bullet$add', (bullet : Bullet) => {
 				var g = this.add.graphics(bullet.pos.x, bullet.pos.y, this.group)
-				g.beginFill(0x00ff00, 0.8)
+				g.beginFill(bullet.color, 0.8)
 				g.drawCircle(0, 0, bullet.radius)
 				g.endFill()
 				this.bullets[bullet.id] = new ClientBullet(bullet, g)
