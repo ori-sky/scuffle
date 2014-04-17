@@ -1,13 +1,12 @@
 module Scuffle {
 	export class MapState extends Phaser.State {
 		game : Game
-		group : Phaser.Group
 		map : Scuffle.Map
 		players : { [k : number] : ClientPlayer }
 		bullets : { [k : number] : ClientBullet }
 		me : number
+		group : Phaser.Group
 		lineOfSight : Phaser.Graphics
-		gLOS : Phaser.Group
 
 		init(map : Scuffle.Map) {
 			this.map = map
@@ -20,10 +19,10 @@ module Scuffle {
 			this.group.alpha = 0
 			this.add.tween(this.group).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
 
-			this.gLOS = this.add.group(this.group)
-			this.gLOS.alpha = 0
-			this.lineOfSight = this.add.graphics(0, 0, this.gLOS)
+			this.lineOfSight = this.add.graphics(0, 0, this.group)
+			this.lineOfSight.alpha = 0
 			this.lineOfSight.lineStyle(1, 0xff2222, 1)
+			this.lineOfSight.moveTo(0, 0)
 			this.lineOfSight.lineTo(80, 0)
 
 			this.map.sprites.forEach(sprite => {
@@ -52,7 +51,7 @@ module Scuffle {
 				this.me = id
 				this.lineOfSight.position.x = this.players[id].sprite.position.x
 				this.lineOfSight.position.y = this.players[id].sprite.position.y
-				this.gLOS.alpha = 1
+				this.lineOfSight.alpha = 1
 			})
 			this.game.socket.on('instance$player$remove', (id : number) => {
 				var p = this.players[id]
@@ -83,27 +82,6 @@ module Scuffle {
 			})
 			this.game.socket.emit('instance$ready')
 
-			this.input.mouse.mouseDownCallback = e => {
-				switch(e.button) {
-					case Phaser.Mouse.LEFT_BUTTON:
-						this.game.socket.emit('state$on', 'mouse.left')
-						break
-					case Phaser.Mouse.RIGHT_BUTTON:
-						this.game.socket.emit('state$on', 'mouse.right')
-						break
-				}
-				this.input.mouse.requestPointerLock()
-			}
-			this.input.mouse.mouseUpCallback = e => {
-				switch(e.button) {
-					case Phaser.Mouse.LEFT_BUTTON:
-						this.game.socket.emit('state$off', 'mouse.left')
-						break
-					case Phaser.Mouse.RIGHT_BUTTON:
-						this.game.socket.emit('state$off', 'mouse.right')
-						break
-				}
-			}
 			var px, py
 			this.input.mouse.mouseMoveCallback = e => {
 				var mx = e.movementX || e.mozMovementX || e.webkitMovementX
@@ -120,8 +98,6 @@ module Scuffle {
 		}
 
 		shutdown() {
-			this.input.mouse.mouseDownCallback = undefined
-			this.input.mouse.mouseUpCallback = undefined
 			this.input.mouse.mouseMoveCallback = undefined
 			this.input.mouse.releasePointerLock()
 			this.game.socket.removeAllListeners('instance$player$add')
