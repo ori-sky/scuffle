@@ -35,14 +35,16 @@ module Scuffle {
 				}
 			}
 		}
-		state : { [ k : string] : boolean }
 		instance : Instance
 		player : Player
+		state : { [ k : string] : boolean }
+		accumBullet : number
 
 		constructor(game : ServerGame, socket) {
 			this.game = game
 			this.socket = socket
 			this.state = {}
+			this.accumBullet = 0
 
 			for(var fk in this.protocol) {
 				var fv= this.protocol[fk]
@@ -56,13 +58,18 @@ module Scuffle {
 		}
 
 		tickMouse(time : number) {
+			this.accumBullet += time
 			if(this.state['mouse.left']) {
-				var bullet = this.instance.newBullet(this.player.id)
-				bullet.pos = Point.prototype.copy.call(this.player.pos)
-				bullet.velocity.x = Math.cos(this.player.angle)
-				bullet.velocity.y = Math.sin(this.player.angle)
-				bullet.velocity.scale(5)
-				this.game.io.sockets.in(this.instance.id).emit('instance$bullet$add', bullet)
+				var timestep = 100
+				if(this.accumBullet >= timestep) {
+					var bullet = this.instance.newBullet(this.player.id)
+					bullet.pos = Point.prototype.copy.call(this.player.pos)
+					bullet.velocity.x = Math.cos(this.player.angle)
+					bullet.velocity.y = Math.sin(this.player.angle)
+					bullet.velocity.scale(5)
+					this.game.io.sockets.in(this.instance.id).emit('instance$bullet$add', bullet)
+					this.accumBullet = 0
+				}
 			}
 		}
 
