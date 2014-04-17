@@ -55,7 +55,8 @@ module Scuffle {
 			})
 			this.game.socket.on('instance$player$remove', (id : number) => {
 				var p = this.players[id]
-				this.add.tween(this.players[id].sprite).to({ alpha: 0 }, 400, Phaser.Easing.Linear.None, true)
+				this.add.tween(this.players[id].sprite)
+					.to({ alpha: 0 }, 400, Phaser.Easing.Linear.None, true)
 					.onComplete.add(() => p.destroy())
 				delete this.players[id]
 			})
@@ -84,10 +85,8 @@ module Scuffle {
 
 			var px, py
 			this.input.mouse.mouseMoveCallback = e => {
-				var mx = e.movementX || e.mozMovementX || e.webkitMovementX
-					|| (px !== undefined ? e.layerX - px : 0)
-				var my = e.movementY || e.mozMovementY || e.webkitMovementY
-					|| (py !== undefined ? e.layerY - py : 0)
+				var mx = e.movementX || e.mozMovementX || e.webkitMovementX || (px ? e.layerX - px : 0)
+				var my = e.movementY || e.mozMovementY || e.webkitMovementY || (py ? e.layerY - py : 0)
 				px = e.layerX
 				py = e.layerY
 				this.lineOfSight.angle += (mx - my) * 2 / Math.PI
