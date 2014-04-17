@@ -2,26 +2,26 @@
 client => server
 ----------------
 
-state.on
+state$on
 	(string) state name
 	tells the server to enable a state
-state.off
+state$off
 	(string) state name
 	tells the server to disable a state
-map.get
+map$get
 	(string) map name
 	requests a map from the server
-		map.get
-instance.join
+		map$get
+instance$join
 	(string) instance id
 	asks the server to join an instance
-		instance.join
-instance.ready
+		instance$join
+instance$ready
 	(void)
 	tells the server we are ready to receive instance events
-		instance.player.add
-		instance.you
-instance.player.me.look
+		instance$player$add
+		instance$you
+instance$player$me$look
 	(number) direction angle in radians
 	tells the server the player has changed direction
 batch
@@ -32,35 +32,35 @@ batch
 server => client
 ----------------
 
-map.get
-	(Scuffle.Map) map
+map$get
+	(Map) map
 	sends map data to the client
-instance.join
+instance$join
 	(string) instance id
 	tells the client it has joined an instance
-instance.map.change
+instance$map$change
 	(string) map name
 	tells the client the instance has changed map
-instance.player.add
+instance$player$add
 	(Player) player
 	tells the client a player has been added to the instance
-instance.player.remove
+instance$player$remove
 	(string) player id
 	tells the client a player has been removed from the instance
-instance.player.move
+instance$player$move
 	(string) player id
 	(Point) new position
 	tells the client a player has moved position
-instance.player.you
+instance$player$you
 	(string) player id
 	tells the client which player they are
-instance.bullet.add
+instance$bullet$add
 	(Bullet) bullet
 	tells the client a bullet has been added to the instance
-instance.bullet.remove
+instance$bullet$remove
 	(string) bullet id
 	tells the client a bullet has been removed from the instance
-instance.bullet.move
+instance$bullet$move
 	(string) bullet id
 	(Point) new position
 	tells the client a bullet has moved position
