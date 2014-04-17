@@ -39,23 +39,24 @@ module Scuffle {
 			})
 
 			this.game.socket.on('instance$player$add', (player : Player) => {
-				var s = this.add.sprite(player.pos.x, player.pos.y, 'phaser2logo', 0, this.group)
-				s.anchor.setTo(0.5, 0.5)
-				s.scale.setTo(0.05, 0.05)
-				s.alpha = 0
-				this.add.tween(s).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
+				var g = this.add.graphics(player.pos.x, player.pos.y, this.group)
+				g.beginFill(player.color, player.alpha)
+				g.drawCircle(0, 0, player.radius)
+				g.endFill()
+				g.alpha = 0
+				this.add.tween(g).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
 
-				this.players[player.id] = new ClientPlayer(player, s)
+				this.players[player.id] = new ClientPlayer(player, g)
 			})
 			this.game.socket.on('instance$player$you', (id : number) => {
 				this.me = id
-				this.lineOfSight.position.x = this.players[id].sprite.position.x
-				this.lineOfSight.position.y = this.players[id].sprite.position.y
+				this.lineOfSight.position.x = this.players[id].graphics.position.x
+				this.lineOfSight.position.y = this.players[id].graphics.position.y
 				this.lineOfSight.alpha = 1
 			})
 			this.game.socket.on('instance$player$remove', (id : number) => {
 				var p = this.players[id]
-				this.add.tween(this.players[id].sprite)
+				this.add.tween(this.players[id].graphics)
 					.to({ alpha: 0 }, 400, Phaser.Easing.Linear.None, true)
 					.onComplete.add(() => p.destroy())
 				delete this.players[id]

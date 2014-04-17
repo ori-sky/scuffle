@@ -1,20 +1,21 @@
 module Scuffle {
 	export class ClientPlayer {
 		player : Player
-		sprite : Phaser.Sprite
+		graphics : Phaser.Graphics
 
-		constructor(player : Player, sprite : Phaser.Sprite) {
+		constructor(player : Player, graphics : Phaser.Graphics) {
 			this.player = player
-			this.sprite = sprite
+			this.graphics = graphics
 		}
 
 		move(pos : Point) {
 			this.player.pos = pos
-			this.sprite.reset(pos.x, pos.y)
+			this.graphics.position.x = pos.x
+			this.graphics.position.y = pos.y
 		}
 
 		destroy() {
-			this.sprite.destroy()
+			this.graphics.destroy()
 		}
 	}
 }
