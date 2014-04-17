@@ -100,13 +100,7 @@ module Scuffle {
 		shutdown() {
 			this.input.mouse.mouseMoveCallback = undefined
 			this.input.mouse.releasePointerLock()
-			this.game.socket.removeAllListeners('instance$player$add')
-			this.game.socket.removeAllListeners('instance$player$remove')
-			this.game.socket.removeAllListeners('instance$player$move')
-			this.game.socket.removeAllListeners('instance$player$you')
-			this.game.socket.removeAllListeners('instance$bullet$add')
-			this.game.socket.removeAllListeners('instance$bullet$remove')
-			this.game.socket.removeAllListeners('instance$bullet$move')
+			this.game.socket.removeAllListeners()
 		}
 	}
 }
