@@ -60,7 +60,7 @@ module Scuffle {
 		respawn(id : number) {
 			var spawnIndex = Math.floor(Math.random() * this.map.spawns.length)
 			this.clients[id].player.pos = this.map.spawns[spawnIndex]
-			this.game.io.sockets.in(this.id).emit('instance.player.move', id, this.clients[id].player.pos)
+			this.game.io.sockets.in(this.id).emit('instance$player$move', id, this.clients[id].player.pos)
 		}
 
 		tick(time : number) {
@@ -73,12 +73,12 @@ module Scuffle {
 					return Line.prototype.intersectsLineOf.call(l, bullet.pos, newPos)
 				})
 				if(hitsWall) {
-					this.game.io.sockets.in(this.id).emit('instance.bullet.remove', id)
+					this.game.io.sockets.in(this.id).emit('instance$bullet$remove', id)
 					this.removeBullet(id)
 				}
 				else {
 					bullet.pos = newPos
-					this.game.io.sockets.in(this.id).emit('instance.bullet.move', id, bullet.pos)
+					this.game.io.sockets.in(this.id).volatile.emit('instance$bullet$move', id, bullet.pos)
 				}
 			})
 		}
