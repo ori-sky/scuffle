@@ -47,7 +47,18 @@ module Scuffle {
 		newPlayer(client : Client) {
 			var id = this.firstAvailablePlayerID()
 			this.clients[id] = client
-			return (this.clients[id].player = new Player(id))
+			this.clients[id].player = new Player(id)
+			var colors = [
+				0xff0000,
+				0xff8800,
+				0xffff00,
+				0x00ff00,
+				0x55aaff,
+				0xff00ff,
+				0x5500ff
+			]
+			this.clients[id].player.color = colors[Math.floor(Math.random() * colors.length)]
+			return this.clients[id].player
 		}
 
 		removePlayer(id : number) {
