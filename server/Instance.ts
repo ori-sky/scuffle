@@ -60,6 +60,7 @@ module Scuffle {
 		}
 
 		removeBullet(id : number) {
+			this.game.io.sockets.in(this.id).emit('instance$bullet$remove', id)
 			delete this.bullets[id]
 		}
 
@@ -78,10 +79,8 @@ module Scuffle {
 				var hitsWall = this.map.lines.some((ln : Line) => {
 					return Line.prototype.intersectsLineOf.call(ln, bullet.pos, newPos)
 				})
-				if(hitsWall) {
-					this.game.io.sockets.in(this.id).emit('instance$bullet$remove', id)
+				if(hitsWall)
 					this.removeBullet(id)
-				}
 				else {
 					bullet.pos = newPos
 					this.game.io.sockets.in(this.id).volatile.emit('instance$bullet$move', id, bullet.pos)
