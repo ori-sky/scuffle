@@ -11,11 +11,15 @@ module Scuffle {
 				else
 					this.socket.emit('map$notfound', name)
 			},
-			instance$join: (id : string) => {
-				this.instance = this.game.instances[parseInt(id)]
-				this.socket.join(id)
-				this.socket.emit('instance$join', id)
-				this.socket.emit('instance$map$change', this.instance.map.name)
+			instance$join: (id : number) => {
+				if(this.game.instances[id] !== undefined) {
+					this.instance = this.game.instances[id]
+					this.socket.join(id)
+					this.socket.emit('instance$join', id)
+					this.socket.emit('instance$map$change', this.instance.map.name)
+				}
+				else
+					this.socket.emit('instance$notfound', id)
 			},
 			instance$ready: () => {
 				if(this.instance !== undefined) {
