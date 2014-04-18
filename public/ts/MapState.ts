@@ -93,6 +93,7 @@ module Scuffle {
 		}
 
 		shutdown() {
+			this.lineOfSight.parent = undefined
 			this.input.mouse.mouseMoveCallback = undefined
 			this.game.socket.removeAllListeners()
 		}
