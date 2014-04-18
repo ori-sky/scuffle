@@ -34,10 +34,14 @@ module Scuffle {
 					this.socket.emit('instance$player$you', this.player.id)
 					this.instance.respawn(this.player.id)
 				}
+				else
+					this.socket.emit('instance$none')
 			},
 			instance$player$me$look: (angle : number) => {
 				if(this.instance !== undefined)
 					this.player.angle = angle
+				else
+					this.socket.emit('instance$none')
 			},
 			disconnect: () => {
 				if(this.instance !== undefined && this.player !== undefined) {
