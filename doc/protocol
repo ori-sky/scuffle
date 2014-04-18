@@ -40,10 +40,13 @@ map$notfound
 	tells the client a map does not exist
 instance$join
 	(string) instance id
-	tells the client it has joined an instance
+	tells the client they have joined an instance
 instance$notfound
 	(string) instance id
 	tells the client an instance does not exist
+instance$in
+	(string) instance id
+	tells the client which instance they are in
 instance$map$change
 	(string) map name
 	tells the client the instance has changed map
