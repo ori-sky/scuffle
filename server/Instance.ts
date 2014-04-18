@@ -69,8 +69,8 @@ module Scuffle {
 			})
 			this.forEachBullet((bullet : Bullet, id : number) => {
 				var newPos = bullet.velocity.addedToPoint(bullet.pos)
-				var hitsWall = this.map.lines.some((l : Line) => {
-					return Line.prototype.intersectsLineOf.call(l, bullet.pos, newPos)
+				var hitsWall = this.map.lines.some((ln : Line) => {
+					return Line.prototype.intersectsLineOf.call(ln, bullet.pos, newPos)
 				})
 				if(hitsWall) {
 					this.game.io.sockets.in(this.id).emit('instance$bullet$remove', id)
