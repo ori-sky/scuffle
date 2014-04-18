@@ -21,7 +21,7 @@ module Scuffle {
 
 			this.lineOfSight = this.add.graphics(0, 0, this.group)
 			this.lineOfSight.alpha = 0
-			this.lineOfSight.lineStyle(1, 0xff2222, 1)
+			this.lineOfSight.lineStyle(1, 0xaa0000, 1)
 			this.lineOfSight.moveTo(0, 0)
 			this.lineOfSight.lineTo(80, 0)
 
