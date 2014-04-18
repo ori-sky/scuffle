@@ -64,8 +64,31 @@ module Scuffle {
 			return false
 		}
 
-		intersects(l : Line) {
+		intersectsLine(l : Line) {
 			return Line.prototype.intersectsLineOf.call(this, l.a, l.b)
+		}
+
+		intersectsCircleOf(p : Point, r : number) {
+			var dir = Point.prototype.addedToPoint.call(this.b,
+							Point.prototype.scaledBy.call(this.a, -1))
+			var vec = Point.prototype.addedToPoint.call(this.a,
+							Point.prototype.scaledBy.call(p, -1))
+			var a = dir.dot(dir)
+			var b = vec.dot(dir)
+			var c = vec.dot(vec) - r * r
+			var disc = b * b - a * c
+
+			if(disc < 0)
+				return false
+
+			var sqrtDisc = Math.sqrt(disc)
+			var invA = 1 / a
+			var par1 = (-b - sqrtDisc) * invA
+			var par2 = (-b + sqrtDisc) * invA
+			var lenD = dir.length()
+			var int1 = !(par1 < 0 || par1 > 1)
+			var int2 = !(par2 < 0 || par2 > 1)
+			return int1 || int2
 		}
 	}
 }
