@@ -25,17 +25,23 @@ module Scuffle {
 
 		forEachClient(fn : Function) {
 			for(var k in this.clients)
-				fn(this.clients[k], k, this.clients)
+				if(fn(this.clients[k], k, this.clients) === false)
+					return false
+			return true
 		}
 
 		forEachPlayer(fn : Function) {
 			for(var k in this.clients)
-				fn(this.clients[k].player, k, this.clients)
+				if(fn(this.clients[k].player, k, this.clients) === false)
+					return false
+			return true
 		}
 
 		forEachBullet(fn : Function) {
 			for(var k in this.bullets)
-				fn(this.bullets[k], k, this.bullets)
+				if(fn(this.bullets[k], k, this.bullets) === false)
+					return false
+			return true
 		}
 
 		newPlayer(client : Client) {
