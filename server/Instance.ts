@@ -82,8 +82,18 @@ module Scuffle {
 				if(hitsWall)
 					this.removeBullet(id)
 				else {
-					bullet.pos = newPos
-					this.game.io.sockets.in(this.id).volatile.emit('instance$bullet$move', id, bullet.pos)
+					var ln = new Line(bullet.pos, newPos)
+					var hitsPlayer = this.forEachPlayer((pl : Player, idPl : number) => {
+						// != used to coerce string and number
+						if(idPl != bullet.owner) {
+							if(Line.prototype.intersectsCircleOf.call(ln, pl.pos, pl.radius))
+								this.removeBullet(id)
+						}
+					})
+					if(!hitsPlayer) {
+						bullet.pos = newPos
+						this.game.io.sockets.in(this.id).volatile.emit('instance$bullet$move', id, bullet.pos)
+					}
 				}
 			})
 		}
