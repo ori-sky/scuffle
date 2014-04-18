@@ -50,8 +50,7 @@ module Scuffle {
 			})
 			this.game.socket.on('instance$player$you', (id : number) => {
 				this.me = id
-				this.lineOfSight.position.x = this.players[id].graphics.position.x
-				this.lineOfSight.position.y = this.players[id].graphics.position.y
+				this.lineOfSight.parent = this.players[id].graphics
 				this.lineOfSight.alpha = 1
 			})
 			this.game.socket.on('instance$player$remove', (id : number) => {
@@ -63,10 +62,6 @@ module Scuffle {
 			})
 			this.game.socket.on('instance$player$move', (id : number, pos : Point) => {
 				this.players[id].move(pos)
-				if(id === this.me) {
-					this.lineOfSight.position.x = pos.x
-					this.lineOfSight.position.y = pos.y
-				}
 			})
 			this.game.socket.on('instance$bullet$add', (bullet : Bullet) => {
 				var g = this.add.graphics(bullet.pos.x, bullet.pos.y, this.group)
