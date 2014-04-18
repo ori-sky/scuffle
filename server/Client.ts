@@ -12,14 +12,17 @@ module Scuffle {
 					this.socket.emit('map$notfound', name)
 			},
 			instance$join: (id : number) => {
-				if(this.game.instances[id] !== undefined) {
-					this.instance = this.game.instances[id]
-					this.socket.join(id)
-					this.socket.emit('instance$join', id)
-					this.socket.emit('instance$map$change', this.instance.map.name)
-				}
+				if(this.instance === undefined)
+					if(this.game.instances[id] !== undefined) {
+						this.instance = this.game.instances[id]
+						this.socket.join(id)
+						this.socket.emit('instance$join', id)
+						this.socket.emit('instance$map$change', this.instance.map.name)
+					}
+					else
+						this.socket.emit('instance$notfound', id)
 				else
-					this.socket.emit('instance$notfound', id)
+					this.socket.emit('instance$in', this.instance.id)
 			},
 			instance$ready: () => {
 				if(this.instance !== undefined) {
@@ -33,7 +36,8 @@ module Scuffle {
 				}
 			},
 			instance$player$me$look: (angle : number) => {
-				this.player.angle = angle
+				if(this.instance !== undefined)
+					this.player.angle = angle
 			},
 			disconnect: () => {
 				if(this.instance !== undefined && this.player !== undefined) {
