@@ -85,7 +85,6 @@ module Scuffle {
 			var invA = 1 / a
 			var par1 = (-b - sqrtDisc) * invA
 			var par2 = (-b + sqrtDisc) * invA
-			var lenD = dir.length()
 			var int1 = !(par1 < 0 || par1 > 1)
 			var int2 = !(par2 < 0 || par2 > 1)
 			return int1 || int2
