@@ -105,7 +105,7 @@ module Scuffle {
 								if(pl.health > 0)
 									this.game.io.sockets.in(this.id).emit('instance$player$hurt', idPl)
 								else {
-									this.game.io.sockets.in(this.id).emit('instance$player$kill', idPl)
+									this.game.io.sockets.in(this.id).emit('instance$player$die', idPl)
 									this.respawn(idPl)
 								}
 								this.removeBullet(id)
