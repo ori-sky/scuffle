@@ -17,7 +17,7 @@ module Scuffle {
 			this.radius = 1
 			this.pos = new Point(0, 0)
 			this.velocity = new Point(0, 0)
-			this.damage = 10
+			this.damage = 25
 		}
 	}
 }
