@@ -102,8 +102,12 @@ module Scuffle {
 						if(idPl != bullet.owner)
 							if(Line.prototype.intersectsCircleOf.call(ln, pl.pos, pl.radius)) {
 								pl.health -= bullet.damage
-								if(pl.health <= 0)
+								if(pl.health > 0)
+									this.game.io.sockets.in(this.id).emit('instance$player$hurt', idPl)
+								else {
+									this.game.io.sockets.in(this.id).emit('instance$player$kill', idPl)
 									this.respawn(idPl)
+								}
 								this.removeBullet(id)
 								hitsPlayer = true
 								break
