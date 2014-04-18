@@ -99,7 +99,6 @@ module Scuffle {
 
 		shutdown() {
 			this.input.mouse.mouseMoveCallback = undefined
-			this.input.mouse.releasePointerLock()
 			this.game.socket.removeAllListeners()
 		}
 	}
