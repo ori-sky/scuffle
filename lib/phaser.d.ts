@@ -1910,13 +1910,13 @@ declare module Phaser {
         type: number;
         world: Phaser.Point;
         z: number;
-        parent: any;
 
         destroy(): void;
         drawPolygon(poly: any): void;
         postUpdate(): void;
         preUpdate(): void;
         update(): void;
+        addChild(child: any): void;
 
     }
 

@@ -50,7 +50,7 @@ module Scuffle {
 			})
 			this.game.socket.on('instance$player$you', (id : number) => {
 				this.me = id
-				this.lineOfSight.parent = this.players[id].graphics
+				this.players[id].graphics.addChild(this.lineOfSight)
 				this.lineOfSight.alpha = 1
 			})
 			this.game.socket.on('instance$player$remove', (id : number) => {
@@ -93,7 +93,6 @@ module Scuffle {
 		}
 
 		shutdown() {
-			this.lineOfSight.parent = undefined
 			this.input.mouse.mouseMoveCallback = undefined
 			this.game.socket.removeAllListeners()
 		}
