@@ -35,6 +35,9 @@ server => client
 map$get
 	(Map) map
 	sends map data to the client
+map$notfound
+	(string) map name
+	tells the client a map does not exist
 instance$join
 	(string) instance id
 	tells the client it has joined an instance
