@@ -67,6 +67,7 @@ module Scuffle {
 		respawn(id : number) {
 			var spawnIndex = Math.floor(Math.random() * this.map.spawns.length)
 			this.clients[id].player.pos = this.map.spawns[spawnIndex]
+			this.clients[id].player.health = 100
 			this.game.io.sockets.in(this.id).emit('instance$player$move', id, this.clients[id].player.pos)
 		}
 
@@ -83,13 +84,21 @@ module Scuffle {
 					this.removeBullet(id)
 				else {
 					var ln = new Line(bullet.pos, newPos)
-					var hitsPlayer = this.forEachPlayer((pl : Player, idPl : number) => {
+					var hitsPlayer = false
+					for(var idPl in this.clients) {
+						var pl = this.clients[idPl].player
 						// != used to coerce string and number
-						if(idPl != bullet.owner) {
-							if(Line.prototype.intersectsCircleOf.call(ln, pl.pos, pl.radius))
+						if(idPl != bullet.owner)
+							if(Line.prototype.intersectsCircleOf.call(ln, pl.pos, pl.radius)) {
+								pl.health -= bullet.damage
+								if(pl.health <= 0)
+									this.respawn(idPl)
 								this.removeBullet(id)
-						}
-					})
+								hitsPlayer = true
+								break
+							}
+					}
+
 					if(!hitsPlayer) {
 						bullet.pos = newPos
 						this.game.io.sockets.in(this.id).volatile.emit('instance$bullet$move', id, bullet.pos)
