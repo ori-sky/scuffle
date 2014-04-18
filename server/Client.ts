@@ -92,13 +92,13 @@ module Scuffle {
 
 		tickMovement(time : number) {
 			var moveVector = new Point(0, 0)
-			if(this.state['key.a'])
+			if(this.state['key.a'] || this.state['key.left'])
 				moveVector.add(-1,  0)
-			if(this.state['key.d'])
+			if(this.state['key.d'] || this.state['key.right'])
 				moveVector.add( 1,  0)
-			if(this.state['key.w'])
+			if(this.state['key.w'] || this.state['key.up'])
 				moveVector.add( 0, -1)
-			if(this.state['key.s'])
+			if(this.state['key.s'] || this.state['key.down'])
 				moveVector.add( 0,  1)
 
 			if(!moveVector.isZero()) {
