@@ -5,7 +5,12 @@ module Scuffle {
 		protocol : any = {
 			state$on: (name : string) => this.state[name] = true,
 			state$off: (name : string) => this.state[name] = false,
-			map$get: (name : string) => this.socket.emit('map$get', this.game.maps[name]),
+			map$get: (name : string) => {
+				if(this.game.maps[name] !== undefined)
+					this.socket.emit('map$get', this.game.maps[name])
+				else
+					this.socket.emit('map$notfound', name)
+			},
 			instance$join: (id : string) => {
 				this.instance = this.game.instances[parseInt(id)]
 				this.socket.join(id)
