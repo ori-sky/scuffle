@@ -103,9 +103,9 @@ module Scuffle {
 					newPos = this.player.velocity.addedToPoint(this.player.pos)
 
 					var line : Line
-					intersects = this.instance.map.lines.some((l : Line) => {
-						line = l
-						return Line.prototype.intersectsLineOf.call(l, this.player.pos, newPos)
+					intersects = this.instance.map.lines.some((ln : Line) => {
+						line = ln
+						return Line.prototype.intersectsCircleOf.call(ln, newPos, this.player.radius)
 					})
 
 					if(intersects) {
