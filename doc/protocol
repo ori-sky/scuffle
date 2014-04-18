@@ -44,6 +44,9 @@ instance$join
 instance$notfound
 	(string) instance id
 	tells the client an instance does not exist
+instance$none
+	(void)
+	tells the client they are not in an instance
 instance$in
 	(string) instance id
 	tells the client which instance they are in
