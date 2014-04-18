@@ -77,7 +77,7 @@ module Scuffle {
 		tickMouse(time : number) {
 			this.accumBullet += time
 			if(this.state['mouse.left']) {
-				if(this.accumBullet >= 250) {
+				if(this.accumBullet >= 150) {
 					var bullet = this.instance.newBullet(this.player.id)
 					bullet.color = 0xaaccff
 					bullet.pos = Point.prototype.copy.call(this.player.pos)
