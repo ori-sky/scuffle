@@ -20,12 +20,20 @@ module Scuffle {
 			return Math.sqrt(this.x * this.x + this.y * this.y)
 		}
 
+		dot(p : Point) {
+			return this.x * p.x + this.y * p.y
+		}
+
 		addedTo(x : number, y : number) {
 			return new Point(this.x + x, this.y + y)
 		}
 
 		addedToPoint(p : Point) {
 			return Point.prototype.addedTo.call(this, p.x, p.y)
+		}
+
+		scaledBy(s : number) {
+			return new Point(this.x * s, this.y * s)
 		}
 
 		angleTo(p : Point) {
