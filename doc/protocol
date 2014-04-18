@@ -41,6 +41,9 @@ map$notfound
 instance$join
 	(string) instance id
 	tells the client it has joined an instance
+instance$notfound
+	(string) instance id
+	tells the client an instance does not exist
 instance$map$change
 	(string) map name
 	tells the client the instance has changed map
