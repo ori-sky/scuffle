@@ -19,5 +19,9 @@ module Scuffle {
 			this.angle = 0
 			this.health = 100
 		}
+
+		isAlive() {
+			return health > 0
+		}
 	}
 }
