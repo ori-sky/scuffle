@@ -95,12 +95,11 @@ module Scuffle {
 			})
 			this.game.socket.emit('instance$ready')
 
-			var px, py
+			var px = 0, py = 0
+			var pmx = 0, pmy = 0
 			this.input.mouse.mouseMoveCallback = e => {
 				var mx = e.movementX || e.mozMovementX || e.webkitMovementX || (px ? e.layerX - px : 0)
 				var my = e.movementY || e.mozMovementY || e.webkitMovementY || (py ? e.layerY - py : 0)
-				px = e.layerX
-				py = e.layerY
 
 				var radians
 
@@ -108,7 +107,7 @@ module Scuffle {
 					var rad = this.lineOfSight.angle * Math.PI / 180
 					var compX = -Math.sin(rad)
 					var compY = Math.cos(rad)
-					this.lineOfSight.angle += (mx * compX + my * compY) / 3
+					this.lineOfSight.angle += (mx * compX + pmx * compX / 2 + my * compY + pmy * compY / 2) / 3
 					radians = this.lineOfSight.angle * Math.PI / 180
 				}
 				else {
@@ -120,6 +119,11 @@ module Scuffle {
 				// clamp angle to range 0:360
 				this.lineOfSight.angle -= 360 * Math.floor(this.lineOfSight.angle / 360)
 				this.game.socket.emit('instance$player$me$look', radians)
+
+				px = e.layerX
+				py = e.layerY
+				pmx = mx
+				pmy = my
 			}
 		}
 
