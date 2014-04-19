@@ -69,6 +69,10 @@ instance$player$hurt
 instance$player$die
 	(string) player id
 	tells the client a player has died
+instance$player$spawn
+	(string) player id
+	(Point) spawn position
+	tells the client a player has spawned
 instance$player$you
 	(string) player id
 	tells the client which player they are
