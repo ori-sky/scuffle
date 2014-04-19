@@ -66,7 +66,7 @@ instance$player$move
 instance$player$hurt
 	(string) player id
 	tells the client a player has been hurt
-instance$player$die
+instance$player$kill
 	(string) player id
 	tells the client a player has died
 instance$player$spawn
