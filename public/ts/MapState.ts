@@ -105,7 +105,7 @@ module Scuffle {
 				var radians
 
 				if(this.input.mouse.locked) {
-					this.lineOfSight.angle += (mx - my) / 2
+					this.lineOfSight.angle += mx / 3
 					radians = this.lineOfSight.angle * Math.PI / 180
 				}
 				else {
