@@ -76,10 +76,12 @@ module Scuffle {
 		}
 
 		spawn(id : number) {
-			var spawnIndex = Math.floor(Math.random() * this.map.spawns.length)
-			this.clients[id].player.pos = this.map.spawns[spawnIndex]
-			this.clients[id].player.health = 100
-			this.game.io.sockets.in(this.id).emit('instance$player$spawn', this.clients[id].player)
+			if(this.clients[id]) {
+				var spawnIndex = Math.floor(Math.random() * this.map.spawns.length)
+				this.clients[id].player.pos = this.map.spawns[spawnIndex]
+				this.clients[id].player.health = 100
+				this.game.io.sockets.in(this.id).emit('instance$player$spawn', this.clients[id].player)
+			}
 		}
 
 		kill(id : number, idKiller : number) {
@@ -88,7 +90,7 @@ module Scuffle {
 
 		respawn(id : number, idKiller : number) {
 			this.kill(id, idKiller)
-			setTimeout(() => { this.spawn(id) }, 1000)
+			setTimeout(() => { this.spawn(id) }, 2000)
 		}
 
 		tick(time : number) {
