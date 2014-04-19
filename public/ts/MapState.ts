@@ -40,12 +40,13 @@ module Scuffle {
 
 			this.game.socket.on('instance$player$add', (player : Player) => {
 				var g = this.add.graphics(player.pos.x, player.pos.y, this.group)
-				g.beginFill(player.color, player.alpha)
-				g.drawCircle(0, 0, player.radius)
-				g.endFill()
-				g.alpha = 0
-				this.add.tween(g).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
-
+				if(Player.prototype.isAlive.call(player)) {
+					g.beginFill(player.color, player.alpha)
+					g.drawCircle(0, 0, player.radius)
+					g.endFill()
+					g.alpha = 0
+					this.add.tween(g).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
+				}
 				this.players[player.id] = new ClientPlayer(player, g)
 			})
 			this.game.socket.on('instance$player$you', (id : number) => {
@@ -54,14 +55,24 @@ module Scuffle {
 				this.lineOfSight.alpha = 1
 			})
 			this.game.socket.on('instance$player$remove', (id : number) => {
-				var p = this.players[id]
-				this.add.tween(this.players[id].graphics)
-					.to({ alpha: 0 }, 400, Phaser.Easing.Linear.None, true)
-					.onComplete.add(() => p.destroy())
+				var pl = this.players[id]
+				this.add.tween(pl.graphics).to({ alpha: 0 }, 400, Phaser.Easing.Linear.None, true)
+					.onComplete.add(() => pl.destroy())
 				delete this.players[id]
 			})
 			this.game.socket.on('instance$player$move', (id : number, pos : Point) => {
 				this.players[id].move(pos)
+			})
+			this.game.socket.on('instance$player$spawn', (player : Player) => {
+				var pl = this.players[player.id]
+				pl.player = player
+				pl.move(player.pos)
+				pl.graphics.clear()
+				pl.graphics.beginFill(player.color, player.alpha)
+				pl.graphics.drawCircle(0, 0, player.radius)
+				pl.graphics.endFill()
+				pl.graphics.alpha = 0
+				this.add.tween(pl.graphics).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
 			})
 			this.game.socket.on('instance$bullet$add', (bullet : Bullet) => {
 				var g = this.add.graphics(bullet.pos.x, bullet.pos.y, this.group)
