@@ -112,7 +112,7 @@ module Scuffle {
 							if(Line.prototype.intersectsCircleOf.call(ln, pl.pos, pl.radius)) {
 								pl.health -= bullet.damage
 								if(pl.isAlive())
-									this.game.io.sockets.in(this.id).emit('instance$player$hurt', idPl)
+									this.game.io.sockets.in(this.id).emit('instance$player$hurt', idPl, pl.health)
 								else
 									this.respawn(idPl, bullet.owner)
 								this.removeBullet(id)
