@@ -101,10 +101,22 @@ module Scuffle {
 				var my = e.movementY || e.mozMovementY || e.webkitMovementY || (py ? e.layerY - py : 0)
 				px = e.layerX
 				py = e.layerY
-				this.lineOfSight.angle += (mx - my) * 2 / Math.PI
+
+				var radians
+
+				if(this.input.mouse.locked) {
+					this.lineOfSight.angle += (mx - my) / 2
+					radians = this.lineOfSight.angle * Math.PI / 180
+				}
+				else {
+					radians = Math.atan2(e.layerY - this.players[this.me].player.pos.y,
+					                     e.layerX - this.players[this.me].player.pos.x)
+					this.lineOfSight.angle = radians * 180 / Math.PI
+				}
+
 				// clamp angle to range 0:360
 				this.lineOfSight.angle -= 360 * Math.floor(this.lineOfSight.angle / 360)
-				this.game.socket.emit('instance$player$me$look', this.lineOfSight.angle * Math.PI / 180)
+				this.game.socket.emit('instance$player$me$look', radians)
 			}
 		}
 
