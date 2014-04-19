@@ -74,6 +74,11 @@ module Scuffle {
 				pl.graphics.alpha = 0
 				this.add.tween(pl.graphics).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
 			})
+			this.game.socket.on('instance$player$kill', (id : number) => {
+				var pl = this.players[id]
+				pl.player.health = 0
+				this.add.tween(pl.graphics).to({ alpha: 0 }, 400, Phaser.Easing.Linear.None, true)
+			})
 			this.game.socket.on('instance$bullet$add', (bullet : Bullet) => {
 				var g = this.add.graphics(bullet.pos.x, bullet.pos.y, this.group)
 				g.beginFill(bullet.color, bullet.alpha)
