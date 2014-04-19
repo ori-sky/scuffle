@@ -17,11 +17,11 @@ module Scuffle {
 			this.pos = new Point(0, 0)
 			this.velocity = new Point(0, 0)
 			this.angle = 0
-			this.health = 100
+			this.health = 0
 		}
 
 		isAlive() {
-			return health > 0
+			return this.health > 0
 		}
 	}
 }
