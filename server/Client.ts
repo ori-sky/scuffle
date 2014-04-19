@@ -71,23 +71,24 @@ module Scuffle {
 
 		tick(time : number) {
 			this.tickMouse(time)
-			this.tickMovement(time)
+			if(this.player.isAlive())
+				this.tickMovement(time)
 		}
 
 		tickMouse(time : number) {
 			this.accumBullet += time
-			if(this.state['mouse.left']) {
-				if(this.accumBullet >= 150) {
-					var bullet = this.instance.newBullet(this.player.id)
-					bullet.color = 0xaaccff
-					bullet.pos = Point.prototype.copy.call(this.player.pos)
-					bullet.velocity.x = Math.cos(this.player.angle)
-					bullet.velocity.y = Math.sin(this.player.angle)
-					bullet.velocity.scale(5)
-					this.game.io.sockets.in(this.instance.id).emit('instance$bullet$add', bullet)
-					this.accumBullet = 0
-				}
-			}
+			if(this.player.isAlive())
+				if(this.state['mouse.left'])
+					if(this.accumBullet >= 150) {
+						var bullet = this.instance.newBullet(this.player.id)
+						bullet.color = 0xaaccff
+						bullet.pos = Point.prototype.copy.call(this.player.pos)
+						bullet.velocity.x = Math.cos(this.player.angle)
+						bullet.velocity.y = Math.sin(this.player.angle)
+						bullet.velocity.scale(5)
+						this.game.io.sockets.in(this.instance.id).emit('instance$bullet$add', bullet)
+						this.accumBullet = 0
+					}
 		}
 
 		tickMovement(time : number) {
