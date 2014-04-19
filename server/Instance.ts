@@ -76,6 +76,7 @@ module Scuffle {
 		}
 
 		respawn(id : number) {
+			this.game.io.sockets.in(this.id).emit('instance$player$die', id)
 			var spawnIndex = Math.floor(Math.random() * this.map.spawns.length)
 			this.clients[id].player.pos = this.map.spawns[spawnIndex]
 			this.clients[id].player.health = 100
@@ -104,10 +105,8 @@ module Scuffle {
 								pl.health -= bullet.damage
 								if(pl.health > 0)
 									this.game.io.sockets.in(this.id).emit('instance$player$hurt', idPl)
-								else {
-									this.game.io.sockets.in(this.id).emit('instance$player$die', idPl)
+								else
 									this.respawn(idPl)
-								}
 								this.removeBullet(id)
 								hitsPlayer = true
 								break
