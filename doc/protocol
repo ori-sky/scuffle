@@ -66,9 +66,14 @@ instance$player$move
 instance$player$spawn
 	(Player) player
 	tells the client a player has spawned
+instance$player$heal
+	(string) player id
+	(number) new health
+	tells the client a player has gained health
 instance$player$hurt
 	(string) player id
-	tells the client a player has been hurt
+	(number) new health
+	tells the client a player has lost health
 instance$player$kill
 	(string) player id
 	(string) killer player id
