@@ -82,12 +82,12 @@ module Scuffle {
 			this.game.io.sockets.in(this.id).emit('instance$player$spawn', this.clients[id].player)
 		}
 
-		kill(id : number) {
-			this.game.io.sockets.in(this.id).emit('instance$player$kill', id)
+		kill(id : number, idKiller : number) {
+			this.game.io.sockets.in(this.id).emit('instance$player$kill', id, idKiller)
 		}
 
-		respawn(id : number) {
-			this.kill(id)
+		respawn(id : number, idKiller : number) {
+			this.kill(id, idKiller)
 			setTimeout(() => { this.spawn(id) }, 1000)
 		}
 
@@ -114,7 +114,7 @@ module Scuffle {
 								if(pl.isAlive())
 									this.game.io.sockets.in(this.id).emit('instance$player$hurt', idPl)
 								else
-									this.respawn(idPl)
+									this.respawn(idPl, bullet.owner)
 								this.removeBullet(id)
 								hitsPlayer = true
 								break
