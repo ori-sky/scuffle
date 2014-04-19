@@ -32,7 +32,7 @@ module Scuffle {
 						this.socket.emit('instance$player$add', player)
 					})
 					this.socket.emit('instance$player$you', this.player.id)
-					this.instance.respawn(this.player.id)
+					this.instance.spawn(this.player.id)
 				}
 				else
 					this.socket.emit('instance$none')
