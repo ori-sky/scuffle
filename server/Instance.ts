@@ -88,7 +88,7 @@ module Scuffle {
 
 		respawn(id : number) {
 			this.kill(id)
-			this.spawn(id)
+			setTimeout(() => { this.spawn(id) }, 1000)
 		}
 
 		tick(time : number) {
@@ -108,7 +108,7 @@ module Scuffle {
 					for(var idPl in this.clients) {
 						var pl = this.clients[idPl].player
 						// != used to coerce string and number
-						if(idPl != bullet.owner)
+						if(idPl != bullet.owner && pl.isAlive())
 							if(Line.prototype.intersectsCircleOf.call(ln, pl.pos, pl.radius)) {
 								pl.health -= bullet.damage
 								if(pl.isAlive())
