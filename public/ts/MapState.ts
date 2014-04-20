@@ -98,6 +98,9 @@ module Scuffle {
 			var px = 0, py = 0
 			var pmx = 0, pmy = 0
 			this.input.mouse.mouseMoveCallback = e => {
+				if(this.me === undefined)
+					return
+
 				var mx = e.movementX || e.mozMovementX || e.webkitMovementX || (px ? e.layerX - px : 0)
 				var my = e.movementY || e.mozMovementY || e.webkitMovementY || (py ? e.layerY - py : 0)
 				pmx = mx + pmx / 1.5
