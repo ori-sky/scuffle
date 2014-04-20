@@ -20,6 +20,15 @@ module Scuffle {
 			return Math.sqrt(this.x * this.x + this.y * this.y)
 		}
 
+		normalizedTo(n : number) {
+			var factor = n / Point.prototype.length.call(this)
+			return Point.prototype.scaledBy.call(this, factor)
+		}
+
+		normalized() {
+			return Point.prototype.normalizedTo.call(this, 1)
+		}
+
 		dot(p : Point) {
 			return this.x * p.x + this.y * p.y
 		}
@@ -68,7 +77,7 @@ module Scuffle {
 		}
 
 		normalizeTo(n : number) {
-			Point.prototype.scale.call(this, n / this.length())
+			Point.prototype.scale.call(this, n / Point.prototype.length.call(this))
 		}
 
 		normalize() {
