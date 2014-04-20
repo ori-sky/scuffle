@@ -87,5 +87,17 @@ module Scuffle {
 			var int2 = !(par2 < 0 || par2 > 1)
 			return int1 || int2
 		}
+
+		intersectsMovingCircleOf(a : Point, b : Point, r : number) {
+			var vAB = Point.prototype.subtractedFromPoint.call(a, b)
+			var numSegs = Math.floor(vAB.length() / r)
+			var vSeg = vAB.normalizedTo(r)
+			var vTmp = Point.prototype.copy.call(a)
+			var intersects = false
+			for(var i=0; !intersects && i<numSegs; vTmp.addPoint(vSeg), ++i) {
+				intersects = Line.prototype.intersectsCircleOf.call(this, vTmp, r)
+			}
+			return intersects ? intersects : Line.prototype.intersectsCircleOf.call(this, b, r)
+		}
 	}
 }
