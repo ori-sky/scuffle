@@ -79,7 +79,7 @@ module Scuffle {
 			if(this.clients[id]) {
 				var spawnIndex = Math.floor(Math.random() * this.map.spawns.length)
 				this.clients[id].player.pos = this.map.spawns[spawnIndex]
-				this.clients[id].player.health = 100
+				this.clients[id].player.health = this.clients[id].player.baseHealth
 				this.game.io.sockets.in(this.id).emit('instance$player$spawn', this.clients[id].player)
 			}
 		}

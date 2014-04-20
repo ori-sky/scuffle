@@ -7,6 +7,7 @@ module Scuffle {
 		pos : Point
 		velocity : Point
 		angle : number
+		baseHealth : number
 		health : number
 
 		constructor(id : number) {
@@ -17,6 +18,7 @@ module Scuffle {
 			this.pos = new Point(0, 0)
 			this.velocity = new Point(0, 0)
 			this.angle = 0
+			this.baseHealth = 100
 			this.health = 0
 		}
 
