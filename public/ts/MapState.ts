@@ -74,6 +74,11 @@ module Scuffle {
 				pl.graphics.alpha = 0
 				this.add.tween(pl.graphics).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
 			})
+			this.game.socket.on('instance$player$hurt', (id : number, hp : number) => {
+				if(id == this.me) {
+					console.log('%d/%d', hp, this.players[id].player.baseHealth)
+				}
+			})
 			this.game.socket.on('instance$player$kill', (id : number) => {
 				var pl = this.players[id]
 				pl.player.health = 0
