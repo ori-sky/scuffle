@@ -9,6 +9,7 @@ module Scuffle {
 		angle : number
 		baseHealth : number
 		health : number
+		score : number
 
 		constructor(id : number) {
 			this.id = id
@@ -20,6 +21,7 @@ module Scuffle {
 			this.angle = 0
 			this.baseHealth = 100
 			this.health = 0
+			this.score = 0
 		}
 
 		isAlive() {
