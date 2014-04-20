@@ -32,6 +32,14 @@ module Scuffle {
 			return Point.prototype.addedTo.call(this, p.x, p.y)
 		}
 
+		subtractedFrom(x : number, y : number) {
+			return new Point(x - this.x, y - this.y)
+		}
+
+		subtractedFromPoint(p : Point) {
+			return Point.prototype.subtractedFrom.call(this, p.x, p.y)
+		}
+
 		scaledBy(s : number) {
 			return new Point(this.x * s, this.y * s)
 		}
