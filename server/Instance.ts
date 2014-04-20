@@ -100,7 +100,7 @@ module Scuffle {
 			this.forEachBullet((bullet : Bullet, id : number) => {
 				var newPos = bullet.velocity.addedToPoint(bullet.pos)
 				var hitsWall = this.map.lines.some((ln : Line) => {
-					return Line.prototype.intersectsCircleOf.call(ln, bullet.pos, bullet.radius)
+					return Line.prototype.intersectsMovingCircleOf.call(ln, bullet.pos, newPos, bullet.radius)
 				})
 				if(hitsWall)
 					this.removeBullet(id)
