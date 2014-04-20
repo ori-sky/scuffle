@@ -110,7 +110,7 @@ module Scuffle {
 						var pl = this.clients[idPl].player
 						// != used to coerce string and number
 						if(idPl != bullet.owner && pl.isAlive())
-							if(circlesIntersect(newPos, bullet.radius, pl.pos, pl.radius)) {
+							if(movingCirclesIntersect(bullet.pos, newPos, bullet.radius, pl.pos, pl.radius)) {
 								pl.health -= bullet.damage
 								if(pl.isAlive())
 									this.game.io.sockets.in(this.id).emit('instance$player$hurt', idPl, pl.health)
