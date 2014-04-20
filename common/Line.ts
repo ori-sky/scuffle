@@ -69,10 +69,8 @@ module Scuffle {
 		}
 
 		intersectsCircleOf(p : Point, r : number) {
-			var dir = Point.prototype.addedToPoint.call(this.b,
-							Point.prototype.scaledBy.call(this.a, -1))
-			var vec = Point.prototype.addedToPoint.call(this.a,
-							Point.prototype.scaledBy.call(p, -1))
+			var dir = Point.prototype.subtractedFromPoint.call(this.a, this.b)
+			var vec = Point.prototype.subtractedFromPoint.call(p, this.a)
 			var a = dir.dot(dir)
 			var b = vec.dot(dir)
 			var c = vec.dot(vec) - r * r
