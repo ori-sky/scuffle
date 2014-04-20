@@ -57,7 +57,7 @@ module Scuffle {
 				0xff00ff,
 				0x5500ff
 			]
-			this.clients[id].player.color = colors[Math.floor(Math.random() * colors.length)]
+			this.clients[id].player.color = colors[id] || 0xffffff
 			return this.clients[id].player
 		}
 
