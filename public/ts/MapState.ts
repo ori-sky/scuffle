@@ -7,6 +7,7 @@ module Scuffle {
 		me : number
 		group : Phaser.Group
 		lineOfSight : Phaser.Graphics
+		ownHealth : Phaser.Graphics
 
 		init(map : Scuffle.Map) {
 			this.map = map
@@ -24,6 +25,8 @@ module Scuffle {
 			this.lineOfSight.lineStyle(1, 0xaa0000, 1)
 			this.lineOfSight.moveTo(0, 0)
 			this.lineOfSight.lineTo(80, 0)
+
+			this.ownHealth = this.add.graphics(0, 0, this.group)
 
 			this.map.sprites.forEach(sprite => {
 				var image : any = this.cache.getImage(sprite.source)
@@ -52,6 +55,7 @@ module Scuffle {
 			this.game.socket.on('instance$player$you', (id : number) => {
 				this.me = id
 				this.players[id].graphics.addChild(this.lineOfSight)
+				this.players[id].graphics.addChild(this.ownHealth)
 				this.lineOfSight.alpha = 1
 			})
 			this.game.socket.on('instance$player$remove', (id : number) => {
@@ -65,18 +69,35 @@ module Scuffle {
 			})
 			this.game.socket.on('instance$player$spawn', (player : Player) => {
 				var pl = this.players[player.id]
+				var r = player.radius
 				pl.player = player
 				pl.move(player.pos)
 				pl.graphics.clear()
 				pl.graphics.beginFill(player.color, player.alpha)
-				pl.graphics.drawCircle(0, 0, player.radius)
+				pl.graphics.drawCircle(0, 0, r)
 				pl.graphics.endFill()
 				pl.graphics.alpha = 0
 				this.add.tween(pl.graphics).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
+				if(player.id == this.me) {
+					this.ownHealth.clear()
+					this.ownHealth.beginFill(0x52ff52, 0.8)
+					this.ownHealth.drawRect(-r * 2, r + 4, r * 4, 2)
+					this.ownHealth.endFill()
+				}
 			})
 			this.game.socket.on('instance$player$hurt', (id : number, hp : number) => {
 				if(id == this.me) {
+					var r = this.players[id].player.radius
+					var green = (hp / this.players[id].player.baseHealth) * r * 4
+					var red = r * 4 - green
 					console.log('%d/%d', hp, this.players[id].player.baseHealth)
+					this.ownHealth.clear()
+					this.ownHealth.beginFill(0x52ff52, 0.8)
+					this.ownHealth.drawRect(-r * 2, r + 4, green, 2)
+					this.ownHealth.endFill()
+					this.ownHealth.beginFill(0xff5252, 0.8)
+					this.ownHealth.drawRect(-r * 2 + green, r + 4, red, 2)
+					this.ownHealth.endFill()
 				}
 			})
 			this.game.socket.on('instance$player$kill', (id : number) => {
