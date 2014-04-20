@@ -93,7 +93,7 @@ module Scuffle {
 						]
 						bullet.color = colors[Math.floor(Math.random() * colors.length)]
 						bullet.pos = Point.prototype.copy.call(this.player.pos)
-						var angle = this.player.angle + (Math.random() - 0.5) / 10
+						var angle = this.player.angle// + (Math.random() - 0.5) / 10
 						bullet.velocity.x = Math.cos(angle)
 						bullet.velocity.y = Math.sin(angle)
 						bullet.velocity.scale(5)
