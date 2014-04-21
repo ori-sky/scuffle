@@ -105,7 +105,7 @@ module Scuffle {
 				pl.player.health = 0
 				this.add.tween(pl.graphics).to({ alpha: 0 }, 400, Phaser.Easing.Linear.None, true)
 			})
-			this.game.socket.on('instance$bullet$add', (bullet : any) => {
+			this.game.socket.on(50, (bullet : any) => {
 				bullet = Bullet.uncompress(bullet)
 				var g = this.add.graphics(bullet.pos.x, bullet.pos.y, this.group)
 				g.beginFill(bullet.color, bullet.alpha)
@@ -113,7 +113,7 @@ module Scuffle {
 				g.endFill()
 				this.bullets[bullet.id] = new ClientBullet(bullet, g)
 			})
-			this.game.socket.on('instance$bullet$remove', (id : number) => {
+			this.game.socket.on(52, (id : number) => {
 				this.bullets[id].destroy()
 				delete this.bullets[id]
 			})

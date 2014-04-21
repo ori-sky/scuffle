@@ -97,7 +97,7 @@ module Scuffle {
 						bullet.velocity.x = Math.cos(angle)
 						bullet.velocity.y = Math.sin(angle)
 						bullet.velocity.scale(0.5)
-						this.game.io.sockets.in(this.instance.id).emit('instance$bullet$add', bullet.compress(4))
+						this.game.io.sockets.in(this.instance.id).emit(50, bullet.compress(4))
 						this.accumBullet = 0
 					}
 		}

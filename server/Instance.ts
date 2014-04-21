@@ -71,7 +71,7 @@ module Scuffle {
 		}
 
 		removeBullet(id : number) {
-			this.game.io.sockets.in(this.id).emit('instance$bullet$remove', id)
+			this.game.io.sockets.in(this.id).emit(52, id)
 			delete this.bullets[id]
 		}
 
