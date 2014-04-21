@@ -16,9 +16,15 @@ module Scuffle {
 		}
 
 		create() {
+			this.camera.bounds.x = -Infinity
+			this.camera.bounds.y = -Infinity
+			this.camera.bounds.width = Infinity
+			this.camera.bounds.height = Infinity
+
 			this.group = this.add.group()
+			this.group.scale.setTo(2, 2)
 			this.group.alpha = 0
-			this.add.tween(this.group).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
+			this.add.tween(this.group).to({alpha: 1}, 400, Phaser.Easing.Linear.None, true)
 
 			this.lineOfSight = this.add.graphics(0, 0, this.group)
 			this.lineOfSight.alpha = 0
@@ -65,7 +71,10 @@ module Scuffle {
 				delete this.players[id]
 			})
 			this.game.socket.on('instance$player$move', (id : number, pos : any) => {
-				this.players[id].move(Point.uncompress(pos))
+				pos = Point.uncompress(pos)
+				this.players[id].move(pos)
+				if(id == this.me)
+					this.camera.focusOnXY(pos.x * this.group.scale.x, pos.y * this.group.scale.y)
 			})
 			this.game.socket.on('instance$player$spawn', (player : Player) => {
 				var pl = this.players[player.id]
@@ -79,6 +88,7 @@ module Scuffle {
 				pl.graphics.alpha = 0
 				this.add.tween(pl.graphics).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
 				if(player.id == this.me) {
+					this.camera.focusOnXY(player.pos.x * this.group.scale.x, player.pos.y * this.group.scale.y)
 					this.ownHealth.clear()
 					this.ownHealth.beginFill(0x52ff52, 0.8)
 					this.ownHealth.drawRect(-r * 2, r + 4, r * 4, 2)
@@ -143,8 +153,7 @@ module Scuffle {
 					var radians = this.lineOfSight.angle * Math.PI / 180
 				}
 				else {
-					var radians = Math.atan2(e.layerY - this.players[this.me].player.pos.y,
-					                         e.layerX - this.players[this.me].player.pos.x)
+					var radians = Math.atan2(e.layerY - this.game.height / 2, e.layerX - this.game.width / 2)
 					this.lineOfSight.angle = radians * 180 / Math.PI
 				}
 
@@ -162,6 +171,7 @@ module Scuffle {
 		}
 
 		shutdown() {
+			this.camera.setBoundsToWorld()
 			this.input.mouse.mouseMoveCallback = undefined
 			this.game.socket.removeAllListeners()
 		}
