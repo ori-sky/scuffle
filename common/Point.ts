@@ -8,6 +8,18 @@ module Scuffle {
 			this.y = y
 		}
 
+		compress(quality? : number) {
+			if(quality !== undefined)
+				return [+this.x.toFixed(quality), +this.y.toFixed(quality)]
+			else
+				return [this.x, this.y]
+		}
+
+		static uncompress(obj : any) {
+			expectLength(obj, 2)
+			return new Point(obj[0], obj[1])
+		}
+
 		copy() {
 			return new Point(this.x, this.y)
 		}
