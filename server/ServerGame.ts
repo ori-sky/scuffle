@@ -48,8 +48,6 @@ module Scuffle {
 				this.tick(timestep)
 				this.accumulator -= timestep
 			}
-
-			setTimeout(this.iterate.bind(this), 10)
 		}
 
 		tick(time : number) {
@@ -62,7 +60,7 @@ module Scuffle {
 			this.preload()
 			this.protocol(io)
 			this.init()
-			setImmediate(this.iterate.bind(this))
+			setInterval(this.iterate.bind(this), 10)
 
 			this.instances[0] = new Instance(this, 0)
 			this.instances[0].map = this.maps['warehouse']
