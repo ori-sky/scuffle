@@ -34,11 +34,12 @@ module Scuffle {
 
 		normalizedTo(n : number) {
 			var factor = n / Point.prototype.length.call(this)
-			return Point.prototype.scaledBy.call(this, factor)
+			return new Point(this.x * factor, this.y * factor)
 		}
 
 		normalized() {
-			return Point.prototype.normalizedTo.call(this, 1)
+			var factor = 1 / Point.prototype.length.call(this)
+			return new Point(this.x * factor, this.y * factor)
 		}
 
 		dot(p : Point) {
@@ -46,11 +47,11 @@ module Scuffle {
 		}
 
 		addedTo(x : number, y : number) {
-			return new Point(this.x + x, this.y + y)
+			return new Point(x + this.x, y + this.y)
 		}
 
 		addedToPoint(p : Point) {
-			return Point.prototype.addedTo.call(this, p.x, p.y)
+			return new Point(p.x + this.x, p.y + this.y)
 		}
 
 		subtractedFrom(x : number, y : number) {
@@ -58,7 +59,7 @@ module Scuffle {
 		}
 
 		subtractedFromPoint(p : Point) {
-			return Point.prototype.subtractedFrom.call(this, p.x, p.y)
+			return new Point(p.x - this.x, p.y - this.y)
 		}
 
 		scaledBy(s : number) {
@@ -80,7 +81,8 @@ module Scuffle {
 		}
 
 		addPoint(p : Point) {
-			Point.prototype.add.call(this, p.x, p.y)
+			this.x += p.x
+			this.y += p.y
 		}
 
 		scale(s : number) {
@@ -89,11 +91,15 @@ module Scuffle {
 		}
 
 		normalizeTo(n : number) {
-			Point.prototype.scale.call(this, n / Point.prototype.length.call(this))
+			var factor = n / Point.prototype.length.call(this)
+			this.x *= factor
+			this.y *= factor
 		}
 
 		normalize() {
-			Point.prototype.normalizeTo.call(this, 1)
+			var factor = 1 / Point.prototype.length.call(this)
+			this.x *= factor
+			this.y *= factor
 		}
 	}
 }
