@@ -105,7 +105,8 @@ module Scuffle {
 				pl.player.health = 0
 				this.add.tween(pl.graphics).to({ alpha: 0 }, 400, Phaser.Easing.Linear.None, true)
 			})
-			this.game.socket.on('instance$bullet$add', (bullet : Bullet) => {
+			this.game.socket.on('instance$bullet$add', (bullet : any) => {
+				bullet = Bullet.uncompress(bullet)
 				var g = this.add.graphics(bullet.pos.x, bullet.pos.y, this.group)
 				g.beginFill(bullet.color, bullet.alpha)
 				g.drawCircle(0, 0, bullet.radius)
@@ -150,6 +151,13 @@ module Scuffle {
 				// clamp angle to range 0:360
 				this.lineOfSight.angle -= 360 * Math.floor(this.lineOfSight.angle / 360)
 				this.game.socket.emit('instance$player$me$look', radians)
+			}
+		}
+
+		update() {
+			for(var k in this.bullets) {
+				var vel = this.bullets[k].bullet.velocity.scaledBy(this.game.time.physicsElapsed * 1000)
+				this.bullets[k].moveBy(vel.x, vel.y)
 			}
 		}
 

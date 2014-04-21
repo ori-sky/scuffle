@@ -96,8 +96,8 @@ module Scuffle {
 						var angle = this.player.angle// + (Math.random() - 0.5) / 10
 						bullet.velocity.x = Math.cos(angle)
 						bullet.velocity.y = Math.sin(angle)
-						bullet.velocity.scale(5)
-						this.game.io.sockets.in(this.instance.id).emit('instance$bullet$add', bullet)
+						bullet.velocity.scale(0.5)
+						this.game.io.sockets.in(this.instance.id).emit('instance$bullet$add', bullet.compress(4))
 						this.accumBullet = 0
 					}
 		}

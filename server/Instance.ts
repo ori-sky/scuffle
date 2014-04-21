@@ -98,7 +98,7 @@ module Scuffle {
 				client.tick(time)
 			})
 			this.forEachBullet((bullet : Bullet, id : number) => {
-				var newPos = bullet.velocity.addedToPoint(bullet.pos)
+				var newPos = bullet.pos.addedToPoint(bullet.velocity.scaledBy(time))
 				var hitsWall = this.map.lines.some((ln : Line) => {
 					return Line.prototype.intersectsMovingCircleOf.call(ln, bullet.pos, newPos, bullet.radius)
 				})
@@ -121,11 +121,8 @@ module Scuffle {
 							}
 					}
 
-					if(!hitsPlayer) {
+					if(!hitsPlayer)
 						bullet.pos = newPos
-						this.game.io.sockets.in(this.id).volatile.emit('instance$bullet$move',
-										id, Point.prototype.compress.call(bullet.pos, 2))
-					}
 				}
 			})
 		}
