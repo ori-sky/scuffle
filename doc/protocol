@@ -81,10 +81,10 @@ instance$player$kill
 instance$player$you
 	(string) player id
 	tells the client which player they are
-instance$bullet$add
+050 instance$bullet$add
 	(Bullet) bullet
 	tells the client a bullet has been added to the instance
-instance$bullet$remove
+052 instance$bullet$remove
 	(string) bullet id
 	tells the client a bullet has been removed from the instance
 instance$bullet$move
