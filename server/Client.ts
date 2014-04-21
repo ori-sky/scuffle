@@ -115,7 +115,7 @@ module Scuffle {
 
 			if(!moveVector.isZero()) {
 				moveVector.normalize()
-				moveVector.scale(0.025 * time)
+				moveVector.scale(0.0025 * time)
 				if(this.state['key.shift'])
 					moveVector.scale(1 / 2)
 				this.player.velocity.addPoint(moveVector)
@@ -123,18 +123,18 @@ module Scuffle {
 
 			if(!this.player.velocity.isZero()) {
 				this.player.velocity.scale(1 - 0.011 * time)
-				if(this.player.velocity.length() < 0.05)
+				if(this.player.velocity.length() < 0.005)
 					this.player.velocity.zero()
 
 				var newPos : Point
 				var intersects = true
 				for(var i=0; intersects && i<5; ++i) {
-					newPos = this.player.velocity.addedToPoint(this.player.pos)
+					newPos = Point.prototype.addedToPoint.call(this.player.pos, this.player.velocity.scaledBy(time))
 
 					var line : Line
 					intersects = this.instance.map.lines.some((ln : Line) => {
 						line = ln
-						return Line.prototype.intersectsCircleOf.call(ln, newPos, this.player.radius)
+						return Line.prototype.intersectsMovingCircleOf.call(ln, this.player.pos, newPos, this.player.radius)
 					})
 
 					if(intersects) {
