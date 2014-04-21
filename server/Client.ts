@@ -79,7 +79,7 @@ module Scuffle {
 			this.accumBullet += time
 			if(this.player.isAlive())
 				if(this.state['mouse.left'])
-					if(this.accumBullet >= 0) {
+					if(this.accumBullet >= 150) {
 						var bullet = this.instance.newBullet(this.player.id)
 						var colors = [
 							0xff0000,
