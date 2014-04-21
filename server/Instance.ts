@@ -123,7 +123,8 @@ module Scuffle {
 
 					if(!hitsPlayer) {
 						bullet.pos = newPos
-						this.game.io.sockets.in(this.id).volatile.emit('instance$bullet$move', id, bullet.pos)
+						this.game.io.sockets.in(this.id).volatile.emit('instance$bullet$move',
+										id, Point.prototype.compress.call(bullet.pos, 2))
 					}
 				}
 			})

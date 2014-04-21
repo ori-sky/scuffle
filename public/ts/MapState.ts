@@ -64,8 +64,8 @@ module Scuffle {
 					.onComplete.add(() => pl.destroy())
 				delete this.players[id]
 			})
-			this.game.socket.on('instance$player$move', (id : number, pos : Point) => {
-				this.players[id].move(pos)
+			this.game.socket.on('instance$player$move', (id : number, pos : any) => {
+				this.players[id].move(Point.uncompress(pos))
 			})
 			this.game.socket.on('instance$player$spawn', (player : Player) => {
 				var pl = this.players[player.id]
@@ -116,8 +116,8 @@ module Scuffle {
 				this.bullets[id].destroy()
 				delete this.bullets[id]
 			})
-			this.game.socket.on('instance$bullet$move', (id : number, pos : Point) => {
-				this.bullets[id].move(pos)
+			this.game.socket.on('instance$bullet$move', (id : number, pos : any) => {
+				this.bullets[id].move(Point.uncompress(pos))
 			})
 			this.game.socket.emit('instance$ready')
 
