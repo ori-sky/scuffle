@@ -1,4 +1,14 @@
 module Scuffle {
+	export function expectLength(obj : any, length? : number) {
+		if(obj.length === undefined)
+			throw new Error('object length is undefined')
+
+		if(length !== undefined && obj.length !== length)
+			throw new Error('object length expected=' + length + ' actual=' + obj.length)
+
+		return true
+	}
+
 	export function circlesIntersect(p1 : Point, r1 : number, p2 : Point, r2 : number) {
 		var v12 = Point.prototype.subtractedFromPoint.call(p1, p2)
 		return v12.length() < r1 + r2
