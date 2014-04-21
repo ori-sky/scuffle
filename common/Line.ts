@@ -88,8 +88,14 @@ module Scuffle {
 		}
 
 		intersectsMovingCircleOf(a : Point, b : Point, r : number) {
+			// perform initial inaccurate region intersection check
 			var vAB = Point.prototype.subtractedFromPoint.call(a, b)
-			var numSegs = Math.floor(vAB.length() / r)
+			var lenAB = vAB.length()
+			var vHalf = Point.prototype.halfwayToPoint.call(a, b)
+			if(!Line.prototype.intersectsCircleOf.call(this, vHalf, lenAB / 2 + r * 2))
+				return false
+
+			var numSegs = Math.floor(lenAB / r)
 			var vSeg = vAB.normalizedTo(r)
 			var vTmp = Point.prototype.copy.call(a)
 			var intersects = false
