@@ -80,11 +80,10 @@ module Scuffle {
 				return false
 
 			var sqrtDisc = Math.sqrt(disc)
-			var invA = 1 / a
-			var par1 = (-b - sqrtDisc) * invA
-			var par2 = (-b + sqrtDisc) * invA
-			var int1 = !(par1 < 0 || par1 > 1)
-			var int2 = !(par2 < 0 || par2 > 1)
+			var par1 = (-b - sqrtDisc)
+			var par2 = (-b + sqrtDisc)
+			var int1 = !(par1 < 0 || par1 > a)
+			var int2 = !(par2 < 0 || par2 > a)
 			return int1 || int2
 		}
 
