@@ -70,6 +70,10 @@ module Scuffle {
 			return Math.atan2(p.y, p.x) - Math.atan2(this.y, this.x)
 		}
 
+		halfwayToPoint(p : Point) {
+			return new Point((this.x + p.x) / 2, (this.y + p.y) / 2)
+		}
+
 		zero() {
 			this.x = 0
 			this.y = 0
