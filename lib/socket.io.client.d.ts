@@ -5,8 +5,8 @@ declare var io : {
 interface Socket {
 	socket : any
 	disconnect() : Socket
-	on(event : string, callback : Function)
-	once(event : string, callback : Function)
-	emit(event : string, data? : any)
-	removeAllListeners(event? : string)
+	on(event : any, callback : Function)
+	once(event : any, callback : Function)
+	emit(event : any, data? : any)
+	removeAllListeners(event? : any)
 }
