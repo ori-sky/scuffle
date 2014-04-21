@@ -2,6 +2,13 @@ module Scuffle {
 	export class ConnectState extends Phaser.State {
 		game : Game
 
+		options = {
+			'connect timeout': 2000,
+			'reconnection delay': 250,
+			'reconnection limit': 1000,
+			'max reconnection attempts': Infinity
+		}
+
 		create() {
 			var group = this.add.group()
 			group.alpha = 0
@@ -17,7 +24,7 @@ module Scuffle {
 			var tween = this.add.tween(group).to({ alpha: 1 }, 500, Phaser.Easing.Linear.None, true)
 			tween.onComplete.add(() => {
 				if(this.game.socket === undefined)
-					this.game.socket = io.connect('http://yellow.shockk.co.uk:1337')
+					this.game.socket = io.connect('http://yellow.shockk.co.uk:1337', this.options)
 				else
 					this.game.socket.removeAllListeners()
 
