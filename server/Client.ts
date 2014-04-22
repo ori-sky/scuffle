@@ -131,18 +131,19 @@ module Scuffle {
 				for(var i=0; intersects && i<5; ++i) {
 					newPos = Point.prototype.addedToPoint.call(this.player.pos, this.player.velocity.scaledBy(time))
 
-					var line : Line
-					intersects = this.instance.map.lines.some((ln : Line) => {
-						line = ln
-						return Line.prototype.intersectsMovingCircleOf.call(ln, this.player.pos, newPos, this.player.radius)
+					intersects = false
+					this.instance.map.lines.every((ln : Line) => {
+						if(Line.prototype.intersectsMovingCircleOf.call(ln, this.player.pos, newPos, this.player.radius)) {
+							intersects = true
+							var radians = Line.prototype.normal.call(ln).angleTo(this.player.velocity)
+							var len = this.player.velocity.length()
+							this.player.velocity = Line.prototype.vector.call(ln)
+							this.player.velocity.normalizeTo(-Math.sin(radians) * len)
+							return false
+						}
+						else
+							return true
 					})
-
-					if(intersects) {
-						var radians = Line.prototype.normal.call(line).angleTo(this.player.velocity)
-						var length = this.player.velocity.length()
-						this.player.velocity = Line.prototype.vector.call(line)
-						this.player.velocity.normalizeTo(-Math.sin(radians) * length)
-					}
 				}
 
 				if(!intersects) {
