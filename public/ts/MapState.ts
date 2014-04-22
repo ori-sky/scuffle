@@ -81,12 +81,13 @@ module Scuffle {
 			})
 			this.game.socket.on(44, (id : number, pos : any) => {
 				pos = Point.uncompress(pos)
-				if(this.players[id] !== undefined)
+				var me = this.players[id]
+				if(me !== undefined)
 					if(id == this.me) {
-						if(pos.subtractedFromPoint(this.players[id].player.pos).length() >= 3) {
-							this.players[id].move(pos)
-							this.camera.focusOnXY(pos.x * this.group.scale.x, pos.y * this.group.scale.y)
-						}
+						var vDiff = me.player.pos.subtractedFromPoint(pos)
+						vDiff.scale(0.3)
+						me.moveByPoint(vDiff)
+						this.camera.focusOnXY(me.player.pos.x * this.group.scale.x, me.player.pos.y * this.group.scale.y)
 					}
 					else
 						this.players[id].move(pos)
@@ -179,8 +180,7 @@ module Scuffle {
 		}
 
 		update() {
-			var time = this.game.time.physicsElapsed * 1000
-
+			var time = this.game.time.elapsed
 			var me = this.players[this.me]
 			if(me !== undefined) {
 				if(tickPlayerMovement(time, this.game.syncState, me.player, this.map)) {
