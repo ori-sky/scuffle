@@ -12,6 +12,8 @@ module Scuffle {
 
 			this.load.image('crate1', 'img/crate1.png')
 			this.load.image('phaser2logo', 'img/phaser2.png')
+			this.load.image('crosshair1', 'img/crosshair1.png')
+			this.load.image('crosshair2', 'img/crosshair2.png')
 
 			var text = this.add.text(this.world.centerX, this.world.centerY, 'Loading', undefined, this.group)
 			text.anchor.setTo(0.5, 0.5)
