@@ -43,7 +43,7 @@ module Scuffle {
 			if(this.accumulator > 1000)
 				this.accumulator = 1000
 
-			var timestep = 15
+			var timestep = 30
 			while(this.accumulator >= timestep) {
 				this.tick(timestep)
 				this.accumulator -= timestep
