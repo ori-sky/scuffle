@@ -4,7 +4,6 @@ module Scuffle {
 
 		options = {
 			'connect timeout': 2000,
-			'reconnection delay': 250,
 			'reconnection limit': 1000,
 			'max reconnection attempts': Infinity
 		}
