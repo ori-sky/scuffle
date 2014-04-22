@@ -176,6 +176,26 @@ module Scuffle {
 				this.lineOfSight.angle -= 360 * Math.floor(this.lineOfSight.angle / 360)
 				this.game.socket.emit('instance$player$me$look', radians)
 			}
+
+			var tKilled = this.add.text(this.game.width - 10, 10, ' Player 2', undefined)
+			tKilled.fixedToCamera = true
+			tKilled.anchor.x = 1
+			tKilled.font = 'VT323'
+			tKilled.fontSize = 30
+			tKilled.fill = '#bdf'
+			tKilled.alpha = 0.6
+			var arrow = this.add.sprite(this.game.width - 10 - tKilled.width, 10, 'bullet.arrow1')
+			arrow.scale.setTo(0.5, 0.5)
+			arrow.fixedToCamera = true
+			arrow.anchor.x = 1
+			arrow.alpha = 0.6
+			var tKiller = this.add.text(this.game.width - 10 - tKilled.width - arrow.width, 10,
+							'Player 1 ', undefined)
+			tKiller.fixedToCamera = true
+			tKiller.anchor.x = 1
+			tKiller.font = 'VT323'
+			tKiller.fontSize = 30
+			tKiller.fill = '#bdf'
 		}
 
 		update() {
