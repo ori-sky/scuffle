@@ -81,7 +81,8 @@ module Scuffle {
 			})
 			this.game.socket.on(44, (id : number, pos : any) => {
 				pos = Point.uncompress(pos)
-				this.players[id].move(pos)
+				if(this.players[id] !== undefined)
+					this.players[id].move(pos)
 				if(id == this.me)
 					this.camera.focusOnXY(pos.x * this.group.scale.x, pos.y * this.group.scale.y)
 			})
