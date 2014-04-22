@@ -109,7 +109,8 @@ module Scuffle {
 		}
 
 		tickMovement(time : number) {
-			tickPlayerVelocity(time, this.state, this.player)
+			var vel = tickPlayerVelocity(time, this.state, this.player)
+			this.player.velocity = vel
 
 			if(!this.player.velocity.isZero()) {
 				var newPos : Point
