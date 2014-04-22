@@ -84,7 +84,7 @@ module Scuffle {
 				var me = this.players[id]
 				if(me !== undefined)
 					if(id == this.me) {
-						var vDiff = me.player.pos.subtractedFromPoint(pos)
+						var vDiff = Point.prototype.subtractedFromPoint.call(me.player.pos, pos)
 						vDiff.scale(0.3)
 						me.moveByPoint(vDiff)
 						this.camera.focusOnXY(me.player.pos.x * this.group.scale.x, me.player.pos.y * this.group.scale.y)
