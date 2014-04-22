@@ -182,7 +182,7 @@ module Scuffle {
 		update() {
 			var time = this.game.time.elapsed
 			var me = this.players[this.me]
-			if(me !== undefined) {
+			if(me !== undefined && Player.prototype.isAlive.call(me.player)) {
 				if(tickPlayerMovement(time, this.game.syncState, me.player, this.map)) {
 					me.move(me.player.pos)
 					this.camera.focusOnXY(me.player.pos.x * this.group.scale.x, me.player.pos.y * this.group.scale.y)
