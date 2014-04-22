@@ -64,7 +64,6 @@ module Scuffle {
 						this.game.socket.emit('state$on', 'mouse.right')
 						break
 				}
-				this.input.mouse.requestPointerLock()
 			}
 			this.input.mouse.mouseUpCallback = e => {
 				switch(e.button) {

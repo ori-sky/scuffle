@@ -21,6 +21,15 @@ module Scuffle {
 			this.camera.bounds.width = Infinity
 			this.camera.bounds.height = Infinity
 
+			var btnLock = this.add.button(this.game.width - 48, 16, 'crosshair2', () => {
+				this.input.mouse.requestPointerLock()
+			})
+			btnLock.scale.setTo(0.5, 0.5)
+			btnLock.fixedToCamera = true
+			btnLock.inputEnabled = true
+			btnLock.input.useHandCursor = true
+			btnLock.input.consumePointerEvent = true
+
 			this.group = this.add.group()
 			this.group.scale.setTo(2, 2)
 			this.group.alpha = 0
