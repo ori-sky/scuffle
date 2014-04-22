@@ -70,7 +70,7 @@ module Scuffle {
 					.onComplete.add(() => pl.destroy())
 				delete this.players[id]
 			})
-			this.game.socket.on('instance$player$move', (id : number, pos : any) => {
+			this.game.socket.on(44, (id : number, pos : any) => {
 				pos = Point.uncompress(pos)
 				this.players[id].move(pos)
 				if(id == this.me)

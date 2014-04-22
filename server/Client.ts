@@ -147,8 +147,8 @@ module Scuffle {
 
 				if(!intersects) {
 					this.player.pos = newPos
-					this.game.io.sockets.in(this.instance.id).volatile.emit('instance$player$move',
-									this.player.id, Point.prototype.compress.call(this.player.pos, 3))
+					this.game.io.sockets.in(this.instance.id).volatile.emit(44, this.player.id,
+									Point.prototype.compress.call(this.player.pos, 3))
 				}
 			}
 		}
