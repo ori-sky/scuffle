@@ -82,9 +82,14 @@ module Scuffle {
 			this.game.socket.on(44, (id : number, pos : any) => {
 				pos = Point.uncompress(pos)
 				if(this.players[id] !== undefined)
-					this.players[id].move(pos)
-				if(id == this.me)
-					this.camera.focusOnXY(pos.x * this.group.scale.x, pos.y * this.group.scale.y)
+					if(id == this.me) {
+						if(pos.subtractedFromPoint(this.players[id].player.pos).length() >= 3) {
+							this.players[id].move(pos)
+							this.camera.focusOnXY(pos.x * this.group.scale.x, pos.y * this.group.scale.y)
+						}
+					}
+					else
+						this.players[id].move(pos)
 			})
 			this.game.socket.on('instance$player$spawn', (player : Player) => {
 				var pl = this.players[player.id]
@@ -174,13 +179,18 @@ module Scuffle {
 		}
 
 		update() {
-			if(this.players[this.me] !== undefined) {
-				var time = this.game.time.physicsElapsed * 1000
-				tickPlayerMovement(time, this.game.syncState, this.players[this.me].player, this.map)
+			var time = this.game.time.physicsElapsed * 1000
+
+			var me = this.players[this.me]
+			if(me !== undefined) {
+				if(tickPlayerMovement(time, this.game.syncState, me.player, this.map)) {
+					me.move(me.player.pos)
+					this.camera.focusOnXY(me.player.pos.x * this.group.scale.x, me.player.pos.y * this.group.scale.y)
+				}
 			}
 
 			for(var k in this.bullets) {
-				var vel = this.bullets[k].bullet.velocity.scaledBy(this.game.time.physicsElapsed * 1000)
+				var vel = this.bullets[k].bullet.velocity.scaledBy(time)
 				this.bullets[k].moveBy(vel.x, vel.y)
 			}
 		}
