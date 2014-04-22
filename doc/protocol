@@ -32,6 +32,12 @@ batch
 server => client
 ----------------
 
+state$on
+	(string) state name
+	tells the client to enable a state
+state$off
+	(string) state name
+	tells the client to disable a state
 map$get
 	(Map) map
 	sends map data to the client
