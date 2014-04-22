@@ -116,7 +116,6 @@ module Scuffle {
 					var r = this.players[id].player.radius
 					var green = (hp / this.players[id].player.baseHealth) * r * 4
 					var red = r * 4 - green
-					console.log('%d/%d', hp, this.players[id].player.baseHealth)
 					this.ownHealth.clear()
 					this.ownHealth.beginFill(0x52ff52, 0.8)
 					this.ownHealth.drawRect(-r * 2, r + 4, green, 2)
