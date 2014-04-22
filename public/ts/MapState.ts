@@ -173,24 +173,14 @@ module Scuffle {
 		}
 
 		update() {
-			if(this.players[this.me] !== undefined)
-				this.updateMovement()
+			if(this.players[this.me] !== undefined) {
+				var time = this.game.time.physicsElapsed * 1000
+				tickPlayerMovement(time, this.game.syncState, this.players[this.me].player, this.map)
+			}
 
 			for(var k in this.bullets) {
 				var vel = this.bullets[k].bullet.velocity.scaledBy(this.game.time.physicsElapsed * 1000)
 				this.bullets[k].moveBy(vel.x, vel.y)
-			}
-		}
-
-		updateMovement() {
-			var time = this.game.time.physicsElapsed * 1000
-			var me = this.players[this.me]
-			var vel = tickPlayerVelocity(time, this.game.syncState, me.player)
-			me.player.velocity = vel
-
-			if(!vel.isZero()) {
-				me.moveByPoint(vel.scaledBy(time))
-				this.camera.focusOnXY(me.player.pos.x * this.group.scale.x, me.player.pos.y * this.group.scale.y)
 			}
 		}
 
