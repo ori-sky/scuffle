@@ -59,7 +59,7 @@ instance$player$add
 instance$player$remove
 	(string) player id
 	tells the client a player has been removed from the instance
-instance$player$move
+044 instance$player$move
 	(string) player id
 	(Point) new position
 	tells the client a player has moved position
