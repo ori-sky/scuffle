@@ -52,4 +52,34 @@ module Scuffle {
 
 		return vel
 	}
+
+	export function tickPlayerMovement(time : number, state : any, player : Player, map : Map) {
+		var vel = tickPlayerVelocity(time, state, player)
+		player.velocity = vel
+
+		if(!vel.isZero()) {
+			var newPos : Point
+			var intersects = true
+			for(var i=0; intersects && i<5; ++i) {
+				newPos = Point.prototype.addedToPoint.call(player.pos, vel.scaledBy(time))
+
+				intersects = false
+				map.lines.every((ln : Line) => {
+					if(Line.prototype.intersectsMovingCircleOf.call(ln, player.pos, newPos, player.radius)) {
+						intersects = true
+						var radians = Line.prototype.normal.call(ln).angleTo(vel)
+						var len = vel.length()
+						vel = Line.prototype.vector.call(ln)
+						vel.normalizeTo(-Math.sin(radians) * len)
+						return false
+					}
+					return true
+				})
+			}
+			if(!intersects)
+				player.pos = newPos
+			return true
+		}
+		return false
+	}
 }
