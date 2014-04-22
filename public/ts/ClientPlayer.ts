@@ -14,6 +14,17 @@ module Scuffle {
 			this.graphics.position.y = pos.y
 		}
 
+		moveBy(x : number, y : number) {
+			this.player.pos.x += x
+			this.player.pos.y += y
+			this.graphics.position.x = this.player.pos.x
+			this.graphics.position.y = this.player.pos.y
+		}
+
+		moveByPoint(p : Point) {
+			this.moveBy(p.x, p.y)
+		}
+
 		destroy() {
 			this.graphics.destroy()
 		}
