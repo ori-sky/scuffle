@@ -17,6 +17,8 @@ module Scuffle {
 				this.game.destroy()
 				location.reload(true)
 			})
+			this.game.socket.on('state$on', (name : string) => this.game.syncState[name] = true)
+			this.game.socket.on('state$off', (name : string) => this.game.syncState[name] = false)
 
 			this.game.input.keyboard.removeKey(Phaser.Keyboard.LEFT)
 			this.game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT)

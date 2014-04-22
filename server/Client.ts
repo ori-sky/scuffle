@@ -3,8 +3,14 @@ module Scuffle {
 		game : ServerGame
 		socket : any
 		protocol : any = {
-			state$on: (name : string) => this.state[name] = true,
-			state$off: (name : string) => this.state[name] = false,
+			state$on: (name : string) => {
+				this.state[name] = true
+				this.socket.emit('state$on', name)
+			},
+			state$off: (name : string) => {
+				this.state[name] = false
+				this.socket.emit('state$off', name)
+			},
 			map$get: (name : string) => {
 				if(this.game.maps[name] !== undefined)
 					this.socket.emit('map$get', this.game.maps[name])
@@ -103,29 +109,9 @@ module Scuffle {
 		}
 
 		tickMovement(time : number) {
-			var moveVector = new Point(0, 0)
-			if(this.state['key.a'] || this.state['key.left'])
-				moveVector.add(-1,  0)
-			if(this.state['key.d'] || this.state['key.right'])
-				moveVector.add( 1,  0)
-			if(this.state['key.w'] || this.state['key.up'])
-				moveVector.add( 0, -1)
-			if(this.state['key.s'] || this.state['key.down'])
-				moveVector.add( 0,  1)
-
-			if(!moveVector.isZero()) {
-				moveVector.normalize()
-				moveVector.scale(0.0025 * time)
-				if(this.state['key.shift'])
-					moveVector.scale(1 / 2)
-				this.player.velocity.addPoint(moveVector)
-			}
+			tickPlayerVelocity(time, this.state, this.player)
 
 			if(!this.player.velocity.isZero()) {
-				this.player.velocity.scale(1 - 0.011 * time)
-				if(this.player.velocity.length() < 0.005)
-					this.player.velocity.zero()
-
 				var newPos : Point
 				var intersects = true
 				for(var i=0; intersects && i<5; ++i) {

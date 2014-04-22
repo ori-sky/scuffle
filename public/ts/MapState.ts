@@ -173,9 +173,24 @@ module Scuffle {
 		}
 
 		update() {
+			if(this.players[this.me] !== undefined)
+				;//this.updateMovement()
+
 			for(var k in this.bullets) {
 				var vel = this.bullets[k].bullet.velocity.scaledBy(this.game.time.physicsElapsed * 1000)
 				this.bullets[k].moveBy(vel.x, vel.y)
+			}
+		}
+
+		updateMovement() {
+			var time = this.game.time.physicsElapsed * 1000
+			var me = this.players[this.me]
+			var vel = tickPlayerVelocity(time, this.game.syncState, me.player)
+
+			if(!vel.isZero()) {
+				me.player.velocity = vel
+				me.moveByPoint(vel.scaledBy(time))
+				this.camera.focusOnXY(me.player.pos.x * this.group.scale.x, me.player.pos.y * this.group.scale.y)
 			}
 		}
 
