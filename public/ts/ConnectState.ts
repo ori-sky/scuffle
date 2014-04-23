@@ -33,11 +33,16 @@ module Scuffle {
 				})
 				this.game.socket.once('disconnect', () => this.game.state.start('Connect'))
 
-				var tStart = performance.now()
-				this.game.socket.emit('ping')
-				this.game.socket.once('pong', () => {
-					this.game.latency = performance.now() - tStart
-				})
+				if(this.game.latencyInterval !== undefined)
+					clearInterval(this.game.latencyInterval)
+				this.game.latencyInterval = setInterval(() => {
+					var tStart = performance.now()
+					this.game.socket.emit('ping')
+					this.game.socket.once('pong', () => {
+						this.game.latency /= 2
+						this.game.latency = performance.now() - tStart
+					})
+				}, 500)
 			})
 		}
 	}

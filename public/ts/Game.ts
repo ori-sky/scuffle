@@ -2,6 +2,7 @@ module Scuffle {
 	export class Game extends Phaser.Game {
 		socket : Socket
 		latency : number
+		latencyInterval : any
 		localState : { [ k : string] : boolean }
 
 		constructor() {
