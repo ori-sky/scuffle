@@ -3,6 +3,9 @@ module Scuffle {
 		game : ServerGame
 		socket : any
 		protocol : any = {
+			ping: (id : string) => {
+				this.socket.emit('pong', id)
+			},
 			state$on: (name : string) => {
 				this.state[name] = true
 				this.socket.emit('state$on', name)
