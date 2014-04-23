@@ -84,7 +84,7 @@ module Scuffle {
 		tickMouse(time : number) {
 			this.accumBullet += time
 			if(this.player.isAlive())
-				if(this.state['mouse.left'])
+				if(this.state['mouse.left'] || this.state['key.space'])
 					if(this.accumBullet >= 150) {
 						var bullet = this.instance.newBullet(this.player.id)
 						var colors = [
