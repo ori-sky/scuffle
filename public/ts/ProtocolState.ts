@@ -17,8 +17,8 @@ module Scuffle {
 				this.game.destroy()
 				location.reload(true)
 			})
-			this.game.socket.on('state$on', (name : string) => this.game.syncState[name] = true)
-			this.game.socket.on('state$off', (name : string) => this.game.syncState[name] = false)
+			this.game.socket.on('state$on', (name : string) => this.game.localState[name] = true)
+			this.game.socket.on('state$off', (name : string) => this.game.localState[name] = false)
 
 			this.game.input.keyboard.removeKey(Phaser.Keyboard.LEFT)
 			this.game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT)
@@ -33,33 +33,16 @@ module Scuffle {
 			this.input.mouse.mouseDownCallback = undefined
 			this.input.mouse.mouseUpCallback = undefined
 
-			var cursorKeys = this.game.input.keyboard.createCursorKeys()
-			var kShift = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT)
-			var kW = this.game.input.keyboard.addKey(Phaser.Keyboard.W)
-			var kA = this.game.input.keyboard.addKey(Phaser.Keyboard.A)
-			var kS = this.game.input.keyboard.addKey(Phaser.Keyboard.S)
-			var kD = this.game.input.keyboard.addKey(Phaser.Keyboard.D)
-			var kSpace = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
-			cursorKeys.left .onDown.add(() => this.game.socket.emit('state$on', 'key.left'))
-			cursorKeys.right.onDown.add(() => this.game.socket.emit('state$on', 'key.right'))
-			cursorKeys.up   .onDown.add(() => this.game.socket.emit('state$on', 'key.up'))
-			cursorKeys.down .onDown.add(() => this.game.socket.emit('state$on', 'key.down'))
-			kShift.onDown.add(() => this.game.socket.emit('state$on', 'key.shift'))
-			kW.onDown.add(() => this.game.socket.emit('state$on', 'key.w'))
-			kA.onDown.add(() => this.game.socket.emit('state$on', 'key.a'))
-			kS.onDown.add(() => this.game.socket.emit('state$on', 'key.s'))
-			kD.onDown.add(() => this.game.socket.emit('state$on', 'key.d'))
-			kSpace.onDown.add(() => this.game.socket.emit('state$on', 'key.space'))
-			cursorKeys.left .onUp.add(() => this.game.socket.emit('state$off', 'key.left'))
-			cursorKeys.right.onUp.add(() => this.game.socket.emit('state$off', 'key.right'))
-			cursorKeys.up   .onUp.add(() => this.game.socket.emit('state$off', 'key.up'))
-			cursorKeys.down .onUp.add(() => this.game.socket.emit('state$off', 'key.down'))
-			kShift.onUp.add(() => this.game.socket.emit('state$off', 'key.shift'))
-			kW.onUp.add(() => this.game.socket.emit('state$off', 'key.w'))
-			kA.onUp.add(() => this.game.socket.emit('state$off', 'key.a'))
-			kS.onUp.add(() => this.game.socket.emit('state$off', 'key.s'))
-			kD.onUp.add(() => this.game.socket.emit('state$off', 'key.d'))
-			kSpace.onUp.add(() => this.game.socket.emit('state$off', 'key.space'))
+			this.makeKeyState(Phaser.Keyboard.UP,       'key.up')
+			this.makeKeyState(Phaser.Keyboard.DOWN,     'key.down')
+			this.makeKeyState(Phaser.Keyboard.LEFT,     'key.left')
+			this.makeKeyState(Phaser.Keyboard.RIGHT,    'key.right')
+			this.makeKeyState(Phaser.Keyboard.W,        'key.w')
+			this.makeKeyState(Phaser.Keyboard.S,        'key.s')
+			this.makeKeyState(Phaser.Keyboard.A,        'key.a')
+			this.makeKeyState(Phaser.Keyboard.D,        'key.d')
+			this.makeKeyState(Phaser.Keyboard.SHIFT,    'key.shift')
+			this.makeKeyState(Phaser.Keyboard.SPACEBAR, 'key.space')
 
 			this.input.mouse.mouseDownCallback = e => {
 				switch(e.button) {
@@ -83,6 +66,18 @@ module Scuffle {
 			}
 
 			this.game.socket.emit('instance$join', 0)
+		}
+
+		makeKeyState(keycode : number, name : string) {
+			var key = this.game.input.keyboard.addKey(keycode)
+			key.onDown.add(() => {
+				this.game.localState[name] = true
+				this.game.socket.emit('state$on', name)
+			})
+			key.onUp.add(() => {
+				this.game.localState[name] = false
+				this.game.socket.emit('state$off', name)
+			})
 		}
 	}
 }
