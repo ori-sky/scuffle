@@ -108,27 +108,13 @@ module Scuffle {
 				pl.graphics.endFill()
 				pl.graphics.alpha = 0
 				this.add.tween(pl.graphics).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
-				if(player.id == this.me) {
-					this.camera.focusOnXY(player.pos.x * this.group.scale.x, player.pos.y * this.group.scale.y)
-					this.ownHealth.clear()
-					this.ownHealth.beginFill(0x52ff52, 0.8)
-					this.ownHealth.drawRect(-r * 2, r + 4, r * 4, 2)
-					this.ownHealth.endFill()
-				}
+				if(player.id == this.me)
+					this.updateHealth()
 			})
 			this.game.socket.on('instance$player$hurt', (id : number, hp : number) => {
-				if(id == this.me) {
-					var r = this.players[id].player.radius
-					var green = (hp / this.players[id].player.baseHealth) * r * 4
-					var red = r * 4 - green
-					this.ownHealth.clear()
-					this.ownHealth.beginFill(0x52ff52, 0.8)
-					this.ownHealth.drawRect(-r * 2, r + 4, green, 2)
-					this.ownHealth.endFill()
-					this.ownHealth.beginFill(0xff5252, 0.8)
-					this.ownHealth.drawRect(-r * 2 + green, r + 4, red, 2)
-					this.ownHealth.endFill()
-				}
+				this.players[id].player.health = hp
+				if(id == this.me)
+					this.updateHealth()
 			})
 			this.game.socket.on('instance$player$kill', (id : number) => {
 				var pl = this.players[id]
@@ -223,6 +209,19 @@ module Scuffle {
 			this.camera.setBoundsToWorld()
 			this.input.mouse.mouseMoveCallback = undefined
 			this.game.socket.removeAllListeners()
+		}
+
+		updateHealth() {
+			var pl = this.players[this.me].player
+			var green = pl.health / pl.baseHealth * pl.radius * 4
+			var red = pl.radius * 4 - green
+			this.ownHealth.clear()
+			this.ownHealth.beginFill(0x52ff52, 0.8)
+			this.ownHealth.drawRect(-pl.radius * 2, pl.radius + 4, green, 2)
+			this.ownHealth.endFill()
+			this.ownHealth.beginFill(0xff5252, 0.8)
+			this.ownHealth.drawRect(-pl.radius * 2 + green, pl.radius + 4, red, 2)
+			this.ownHealth.endFill()
 		}
 	}
 }
