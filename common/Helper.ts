@@ -58,20 +58,20 @@ module Scuffle {
 		var vel = tickPlayerVelocity(time, state, player)
 		player.velocity = vel
 
-		if(!vel.isZero()) {
+		if(!player.velocity.isZero()) {
 			var newPos : Point
 			var intersects = true
 			for(var i=0; intersects && i<5; ++i) {
-				newPos = Point.prototype.addedToPoint.call(player.pos, vel.scaledBy(time))
+				newPos = Point.prototype.addedToPoint.call(player.pos, player.velocity.scaledBy(time))
 
 				intersects = false
 				map.lines.every((ln : Line) => {
 					if(Line.prototype.intersectsMovingCircleOf.call(ln, player.pos, newPos, player.radius)) {
 						intersects = true
-						var radians = Line.prototype.normal.call(ln).angleTo(vel)
-						var len = vel.length()
-						vel = Line.prototype.vector.call(ln)
-						vel.normalizeTo(-Math.sin(radians) * len)
+						var radians = Line.prototype.normal.call(ln).angleTo(player.velocity)
+						var len = player.velocity.length()
+						player.velocity = Line.prototype.vector.call(ln)
+						player.velocity.normalizeTo(-Math.sin(radians) * len)
 						return false
 					}
 					return true
