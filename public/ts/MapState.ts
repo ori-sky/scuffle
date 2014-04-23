@@ -98,7 +98,7 @@ module Scuffle {
 						cli.move(pos)
 					else {
 						var lenVel = Point.prototype.length.call(cli.player.velocity)
-						vDiff.scale(Math.min(0.3, 0.0015 * lenVel * this.game.latency))
+						vDiff.scale(Math.min(0.01, 0.0015 * lenVel * this.game.latency))
 						Point.prototype.addPoint.call(cli.player.velocity, vDiff)
 					}
 					if(id == this.me)
