@@ -38,15 +38,16 @@ module Scuffle {
 			moveVector.add( 0,  1)
 
 		var vel = Point.prototype.copy.call(player.velocity)
-		if(!moveVector.isZero()) {
-			moveVector.normalize()
-			moveVector.scale(0.0025 * time)
+		var deltaVel = moveVector
+		if(!deltaVel.isZero()) {
+			deltaVel.normalizeTo(0.0025)
 			if(state['key.shift'])
-				moveVector.scale(1 / 2)
-			vel.addPoint(moveVector)
+				deltaVel.scale(1 / 2)
 		}
+		deltaVel.addPoint(vel.scaledBy(-0.011))
+		deltaVel.scale(time)
+		vel.addPoint(deltaVel)
 
-		vel.scale(1 - 0.011 * time)
 		if(vel.length() < 0.005)
 			vel.zero()
 
