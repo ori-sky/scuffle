@@ -127,10 +127,29 @@ module Scuffle {
 				if(id == this.me)
 					this.updateHealth()
 			})
-			this.game.socket.on('instance$player$kill', (id : number) => {
+			this.game.socket.on('instance$player$kill', (id : number, idKiller : number) => {
 				var pl = this.players[id]
 				pl.player.health = 0
 				this.add.tween(pl.graphics).to({ alpha: 0 }, 400, Phaser.Easing.Linear.None, true)
+
+				var grp = this.add.group()
+				grp.fixedToCamera = true
+				var tKilled = this.add.text(this.game.width - 10, 10, ' Player ' + id, undefined, grp)
+				tKilled.anchor.x = 1
+				tKilled.font = 'VT323'
+				tKilled.fontSize = 30
+				tKilled.fill = '#bdf'
+				tKilled.alpha = id == this.me ? 1 : 0.6
+				var arrow = this.add.sprite(tKilled.x - tKilled.width, 10, 'bullet.arrow1', undefined, grp)
+				arrow.scale.setTo(0.5, 0.5)
+				arrow.anchor.x = 1
+				arrow.alpha = idKiller == this.me ? 1 : 0.6
+				var tKiller = this.add.text(arrow.x - arrow.width, 10, 'Player ' + idKiller + ' ', undefined, grp)
+				tKiller.anchor.x = 1
+				tKiller.font = 'VT323'
+				tKiller.fontSize = 30
+				tKiller.fill = '#bdf'
+				tKiller.alpha = idKiller == this.me ? 1 : 0.6
 			})
 			this.game.socket.on(50, (bullet : any) => {
 				bullet = Bullet.uncompress(bullet)
@@ -178,26 +197,6 @@ module Scuffle {
 				this.lineOfSight.angle -= 360 * Math.floor(this.lineOfSight.angle / 360)
 				this.game.socket.emit('instance$player$me$look', radians)
 			}
-
-			var tKilled = this.add.text(this.game.width - 10, 10, ' Player 2', undefined)
-			tKilled.fixedToCamera = true
-			tKilled.anchor.x = 1
-			tKilled.font = 'VT323'
-			tKilled.fontSize = 30
-			tKilled.fill = '#bdf'
-			tKilled.alpha = 0.6
-			var arrow = this.add.sprite(this.game.width - 10 - tKilled.width, 10, 'bullet.arrow1')
-			arrow.scale.setTo(0.5, 0.5)
-			arrow.fixedToCamera = true
-			arrow.anchor.x = 1
-			arrow.alpha = 0.6
-			var tKiller = this.add.text(this.game.width - 10 - tKilled.width - arrow.width, 10,
-							'Player 1 ', undefined)
-			tKiller.fixedToCamera = true
-			tKiller.anchor.x = 1
-			tKiller.font = 'VT323'
-			tKiller.fontSize = 30
-			tKiller.fill = '#bdf'
 		}
 
 		update() {
