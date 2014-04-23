@@ -96,13 +96,10 @@ module Scuffle {
 					var lenDiff = Point.prototype.length.call(vDiff)
 					if(lenDiff > 40)
 						cli.move(pos)
-					else if(lenDiff > 5) {
-						vDiff.scale(0.15)
-						cli.moveByPoint(vDiff)
-					}
-					else if(Point.prototype.length.call(cli.player.velocity) < 2) {
-						vDiff.scale(id == this.me ? 0.2 : 0.5)
-						cli.moveByPoint(vDiff)
+					else {
+						var lenVel = Point.prototype.length.call(cli.player.velocity)
+						vDiff.scale(0.0002 * lenVel * this.game.latency)
+						Point.prototype.addPoint.call(cli.player.velocity, vDiff)
 					}
 					if(id == this.me)
 						this.camera.focusOnXY(cli.player.pos.x * this.group.scale.x, cli.player.pos.y * this.group.scale.y)
@@ -152,18 +149,19 @@ module Scuffle {
 				tKiller.alpha = idKiller == this.me ? 1 : 0.6
 
 				grp.alpha = 0
-				var tw = this.add.tween(grp).to({ alpha: 1 }, 250, Phaser.Easing.Linear.None, true)
+				var tw = this.add.tween(grp).to({ alpha: 1 }, 150, Phaser.Easing.Linear.None, true)
 				tw.onComplete.add(() => {
 					setTimeout(() => {
 						var tw = this.add.tween(grp).to({ alpha: 0 }, 1000, Phaser.Easing.Linear.None, true)
 						tw.onComplete.add(() => {
 							grp.destroy(true)
 						})
-					}, 2000)
+					}, 3000)
 				})
 			})
 			this.game.socket.on(50, (bullet : any) => {
 				bullet = Bullet.uncompress(bullet)
+
 				var g = this.add.graphics(bullet.pos.x, bullet.pos.y, this.group)
 				g.beginFill(bullet.color, bullet.alpha)
 				g.drawCircle(0, 0, bullet.radius)
