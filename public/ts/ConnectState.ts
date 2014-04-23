@@ -32,6 +32,12 @@ module Scuffle {
 					tween.onComplete.add(() => this.game.state.start('Protocol'))
 				})
 				this.game.socket.once('disconnect', () => this.game.state.start('Connect'))
+
+				var tStart = performance.now()
+				this.game.socket.emit('ping')
+				this.game.socket.once('pong', () => {
+					this.game.latency = performance.now() - tStart
+				})
 			})
 		}
 	}
