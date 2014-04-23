@@ -150,6 +150,17 @@ module Scuffle {
 				tKiller.fontSize = 30
 				tKiller.fill = '#bdf'
 				tKiller.alpha = idKiller == this.me ? 1 : 0.6
+
+				grp.alpha = 0
+				var tw = this.add.tween(grp).to({ alpha: 1 }, 250, Phaser.Easing.Linear.None, true)
+				tw.onComplete.add(() => {
+					setTimeout(() => {
+						var tw = this.add.tween(grp).to({ alpha: 0 }, 1000, Phaser.Easing.Linear.None, true)
+						tw.onComplete.add(() => {
+							grp.destroy(true)
+						})
+					}, 2000)
+				})
 			})
 			this.game.socket.on(50, (bullet : any) => {
 				bullet = Bullet.uncompress(bullet)
