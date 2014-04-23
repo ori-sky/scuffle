@@ -6,10 +6,14 @@ module Scuffle {
 			state$on: (name : string) => {
 				this.state[name] = true
 				this.socket.emit('state$on', name)
+				if(this.instance !== undefined)
+					this.socket.broadcast.to(this.instance.id).emit(42, this.player.id, name)
 			},
 			state$off: (name : string) => {
 				this.state[name] = false
 				this.socket.emit('state$off', name)
+				if(this.instance !== undefined)
+					this.socket.broadcast.to(this.instance.id).emit(43, this.player.id, name)
 			},
 			map$get: (name : string) => {
 				if(this.game.maps[name] !== undefined)
