@@ -2,10 +2,12 @@ module Scuffle {
 	export class ClientPlayer {
 		player : Player
 		graphics : Phaser.Graphics
+		state : { [ k : string] : boolean }
 
 		constructor(player : Player, graphics : Phaser.Graphics) {
 			this.player = player
 			this.graphics = graphics
+			this.state = {}
 		}
 
 		move(pos : Point) {
