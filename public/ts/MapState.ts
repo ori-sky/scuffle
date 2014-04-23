@@ -92,6 +92,10 @@ module Scuffle {
 							vDiff.scale(0.15)
 							me.moveByPoint(vDiff)
 						}
+						else if(Point.prototype.length.call(me.player.velocity) < 2) {
+							vDiff.scale(0.2)
+							me.moveByPoint(vDiff)
+						}
 						this.camera.focusOnXY(me.player.pos.x * this.group.scale.x, me.player.pos.y * this.group.scale.y)
 					}
 					else
