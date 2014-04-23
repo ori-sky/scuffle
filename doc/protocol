@@ -24,6 +24,12 @@ instance$ready
 instance$player$me$look
 	(number) direction angle in radians
 	tells the server the player has changed direction
+ping
+	(string) identifier
+	sends a ping to the server
+pong
+	(string) identifier
+	replies to a server ping
 batch
 	(Event[]) events
 	batches several events into one
@@ -105,6 +111,12 @@ instance$bullet$move
 	(string) bullet id
 	(Point) new position
 	tells the client a bullet has moved position
+ping
+	(string) identifier
+	sends a ping to the client
+pong
+	(string) identifier
+	replies to a client ping
 reset
 	(void)
 	tells the client to reset the game
