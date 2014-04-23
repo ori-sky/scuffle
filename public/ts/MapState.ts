@@ -69,6 +69,7 @@ module Scuffle {
 			})
 			this.game.socket.on('instance$player$you', (id : number) => {
 				this.me = id
+				this.players[id].state = this.game.localState
 				this.players[id].graphics.addChild(this.lineOfSight)
 				this.players[id].graphics.addChild(this.ownHealth)
 				this.lineOfSight.alpha = 1
@@ -79,27 +80,33 @@ module Scuffle {
 					.onComplete.add(() => pl.destroy())
 				delete this.players[id]
 			})
+			this.game.socket.on(42, (id : number, name : string) => {
+				if(this.players[id] !== undefined)
+					this.players[id].state[name] = true
+			})
+			this.game.socket.on(43, (id : number, name : string) => {
+				if(this.players[id] !== undefined)
+					this.players[id].state[name] = false
+			})
 			this.game.socket.on(44, (id : number, pos : any) => {
 				pos = Point.uncompress(pos)
-				var me = this.players[id]
-				if(me !== undefined)
-					if(id == this.me) {
-						var vDiff = Point.prototype.subtractedFromPoint.call(me.player.pos, pos)
-						var lenDiff = Point.prototype.length.call(vDiff)
-						if(lenDiff > 40)
-							me.move(pos)
-						else if(lenDiff > 5) {
-							vDiff.scale(0.15)
-							me.moveByPoint(vDiff)
-						}
-						else if(Point.prototype.length.call(me.player.velocity) < 2) {
-							vDiff.scale(0.2)
-							me.moveByPoint(vDiff)
-						}
-						this.camera.focusOnXY(me.player.pos.x * this.group.scale.x, me.player.pos.y * this.group.scale.y)
+				var cli = this.players[id]
+				if(cli !== undefined) {
+					var vDiff = Point.prototype.subtractedFromPoint.call(cli.player.pos, pos)
+					var lenDiff = Point.prototype.length.call(vDiff)
+					if(lenDiff > 40)
+						cli.move(pos)
+					else if(lenDiff > 5) {
+						vDiff.scale(0.15)
+						cli.moveByPoint(vDiff)
 					}
-					else
-						this.players[id].move(pos)
+					else if(Point.prototype.length.call(cli.player.velocity) < 2) {
+						vDiff.scale(id == this.me ? 0.2 : 0.5)
+						cli.moveByPoint(vDiff)
+					}
+					if(id == this.me)
+						this.camera.focusOnXY(cli.player.pos.x * this.group.scale.x, cli.player.pos.y * this.group.scale.y)
+				}
 			})
 			this.game.socket.on('instance$player$spawn', (player : Player) => {
 				var pl = this.players[player.id]
@@ -195,11 +202,14 @@ module Scuffle {
 
 		update() {
 			var time = this.game.time.elapsed
-			var me = this.players[this.me]
-			if(me !== undefined && Player.prototype.isAlive.call(me.player)) {
-				if(tickPlayerMovement(time, this.game.localState, me.player, this.map)) {
-					me.move(me.player.pos)
-					this.camera.focusOnXY(me.player.pos.x * this.group.scale.x, me.player.pos.y * this.group.scale.y)
+			for(var id in this.players) {
+				var cli = this.players[id]
+				if(Player.prototype.isAlive.call(cli.player)) {
+					if(tickPlayerMovement(time, cli.state, cli.player, this.map)) {
+						cli.move(cli.player.pos)
+						if(id == this.me)
+							this.camera.focusOnXY(cli.player.pos.x * this.group.scale.x, cli.player.pos.y * this.group.scale.y)
+					}
 				}
 			}
 
