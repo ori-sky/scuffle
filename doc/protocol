@@ -65,6 +65,14 @@ instance$player$add
 instance$player$remove
 	(string) player id
 	tells the client a player has been removed from the instance
+042 instance$player$state$on
+	(string) player id
+	(string) state name
+	tells the client a player has enabled a state
+043 instance$player$state$off
+	(string) player id
+	(string) state name
+	tells the client a player has disabled a state
 044 instance$player$move
 	(string) player id
 	(Point) new position
