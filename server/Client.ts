@@ -112,7 +112,7 @@ module Scuffle {
 						bullet.pos = Point.prototype.copy.call(this.player.pos)
 						bullet.pos.add(bullet.velocity.x * this.player.radius,
 						               bullet.velocity.y * this.player.radius)
-						bullet.radius = 2
+						bullet.radius = 2.5 / Math.min(1.5, Math.max(1, this.player.streak / 3))
 						this.game.io.sockets.in(this.instance.id).emit(50, bullet.compress(4))
 						this.accumBullet = 0
 					}
