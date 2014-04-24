@@ -8,11 +8,13 @@ module Scuffle {
 		group : Phaser.Group
 		lineOfSight : Phaser.Graphics
 		ownHealth : Phaser.Graphics
+		killMessages : Phaser.Group[]
 
 		init(map : Scuffle.Map) {
 			this.map = map
 			this.players = {}
 			this.bullets = {}
+			this.killMessages = []
 		}
 
 		create() {
@@ -65,7 +67,13 @@ module Scuffle {
 					g.alpha = 0
 					this.add.tween(g).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
 				}
-				this.players[player.id] = new ClientPlayer(player, g)
+				if(this.players[player.id] === undefined)
+					this.players[player.id] = new ClientPlayer(player, g)
+				else {
+					this.players[player.id].graphics.destroy()
+					this.players[player.id].player = player
+					this.players[player.id].graphics = g
+				}
 			})
 			this.game.socket.on('instance$player$you', (id : number) => {
 				this.me = id
@@ -131,22 +139,35 @@ module Scuffle {
 
 				var grp = this.add.group()
 				grp.fixedToCamera = true
-				var tKilled = this.add.text(this.game.width - 10, 10, ' Player ' + id, undefined, grp)
+				var tKilled = this.add.text(this.game.width - 10, 0, ' Player ' + id, undefined, grp)
 				tKilled.anchor.x = 1
 				tKilled.font = 'VT323'
 				tKilled.fontSize = 30
-				tKilled.fill = '#bdf'
+				tKilled.fill = id == this.me ? '#fff' : '#bdf'
 				tKilled.alpha = id == this.me ? 1 : 0.6
-				var arrow = this.add.sprite(tKilled.x - tKilled.width, 10, 'bullet.arrow1', undefined, grp)
+				var arrow = this.add.sprite(tKilled.x - tKilled.width, 0, 'bullet.arrow1', undefined, grp)
 				arrow.scale.setTo(0.5, 0.5)
 				arrow.anchor.x = 1
 				arrow.alpha = idKiller == this.me ? 1 : 0.6
-				var tKiller = this.add.text(arrow.x - arrow.width, 10, 'Player ' + idKiller + ' ', undefined, grp)
+				var tKiller = this.add.text(arrow.x - arrow.width, 0, 'Player ' + idKiller + ' ', undefined, grp)
 				tKiller.anchor.x = 1
 				tKiller.font = 'VT323'
 				tKiller.fontSize = 30
-				tKiller.fill = '#bdf'
+				tKiller.fill = idKiller == this.me ? '#fff' : '#bdf'
 				tKiller.alpha = idKiller == this.me ? 1 : 0.6
+
+				if(this.killMessages.length >= 3) {
+					this.killMessages.shift().destroy(true)
+					for(var i=0; i<this.killMessages.length; ++i) {
+						this.killMessages[i].forEach(child => {
+							child.y -= tKiller.height + 5
+						}, this)
+					}
+				}
+				this.killMessages.push(grp)
+
+				var y = 10 + (tKiller.height + 5) * (this.killMessages.length - 1)
+				grp.forEach(child => { child.y = y }, this)
 
 				grp.alpha = 0
 				var tw = this.add.tween(grp).to({ alpha: 1 }, 150, Phaser.Easing.Linear.None, true)
@@ -155,8 +176,19 @@ module Scuffle {
 						var tw = this.add.tween(grp).to({ alpha: 0 }, 1000, Phaser.Easing.Linear.None, true)
 						tw.onComplete.add(() => {
 							grp.destroy(true)
+							for(var i=0; i<this.killMessages.length; ++i) {
+								if(this.killMessages[i] === grp) {
+									this.killMessages.splice(i, 1)
+									for(var j=i; j<this.killMessages.length; ++j) {
+										this.killMessages[j].forEach(child => {
+											child.y -= tKiller.height + 5
+										}, this)
+									}
+									break
+								}
+							}
 						})
-					}, 3000)
+					}, (id == this.me || idKiller == this.me) ? 6000 : 3000)
 				})
 			})
 			this.game.socket.on(50, (bullet : any) => {
