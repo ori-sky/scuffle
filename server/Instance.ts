@@ -86,7 +86,9 @@ module Scuffle {
 
 		kill(id : number, idKiller : number) {
 			++this.clients[idKiller].player.kills
+			++this.clients[idKiller].player.streak
 			++this.clients[id].player.deaths
+			this.clients[id].player.streak = 0
 			this.game.io.sockets.in(this.id).emit('instance$player$kill', id, idKiller)
 		}
 

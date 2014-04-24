@@ -134,7 +134,9 @@ module Scuffle {
 			})
 			this.game.socket.on('instance$player$kill', (id : number, idKiller : number) => {
 				++this.players[idKiller].player.kills
+				++this.players[idKiller].player.streak
 				++this.players[id].player.deaths
+				this.players[id].player.streak = 0
 				this.players[id].player.health = 0
 				this.add.tween(this.players[id].graphics).to({ alpha: 0 }, 400, Phaser.Easing.Linear.None, true)
 
