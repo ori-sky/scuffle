@@ -92,7 +92,7 @@ module Scuffle {
 			this.accumBullet += time
 			if(this.player.isAlive())
 				if(this.state['mouse.left'] || this.state['key.space'])
-					if(this.accumBullet >= 150) {
+					if(this.accumBullet >= 300) {
 						var bullet = this.instance.newBullet(this.player.id)
 						var colors = [
 							0xff0000,
@@ -108,10 +108,11 @@ module Scuffle {
 						var angle = this.player.angle// + (Math.random() - 0.5) / 10
 						bullet.velocity.x = Math.cos(angle)
 						bullet.velocity.y = Math.sin(angle)
-						bullet.velocity.scale(0.5)
+						bullet.velocity.scale(0.7)
 						bullet.pos = Point.prototype.copy.call(this.player.pos)
 						bullet.pos.add(bullet.velocity.x * this.player.radius,
 						               bullet.velocity.y * this.player.radius)
+						bullet.radius = 2
 						this.game.io.sockets.in(this.instance.id).emit(50, bullet.compress(4))
 						this.accumBullet = 0
 					}
