@@ -133,19 +133,17 @@ module Scuffle {
 					this.updateHealth()
 			})
 			this.game.socket.on('instance$player$kill', (id : number, idKiller : number) => {
-				++this.players[idKiller].player.kills
-				++this.players[idKiller].player.streak
-				++this.players[id].player.deaths
-				this.players[id].player.streak = 0
-				this.players[id].player.health = 0
+				var plKilled = this.players[id].player
+				var plKiller = this.players[idKiller].player
+				++plKiller.kills
+				++plKiller.streak
+				++plKilled.deaths
+				plKilled.streak = 0
+				plKilled.health = 0
 				this.add.tween(this.players[id].graphics).to({ alpha: 0 }, 400, Phaser.Easing.Linear.None, true)
 
-				var nameKilled = this.players[id].player.name
-				var nameKiller = this.players[idKiller].player.name
-
 				var grp = this.add.group()
-				grp.fixedToCamera = true
-				var tKilled = this.add.text(this.game.width - 10, 0, ' ' + nameKilled, undefined, grp)
+				var tKilled = this.add.text(this.game.width - 10, 0, ' ' + plKilled.name, undefined, grp)
 				tKilled.anchor.x = 1
 				tKilled.font = 'VT323'
 				tKilled.fontSize = 30
@@ -155,13 +153,45 @@ module Scuffle {
 				arrow.scale.setTo(0.5, 0.5)
 				arrow.anchor.x = 1
 				arrow.alpha = idKiller == this.me ? 1 : 0.6
-				var tKiller = this.add.text(arrow.x - arrow.width, 0, nameKiller + ' ', undefined, grp)
+				var tKiller = this.add.text(arrow.x - arrow.width, 0, plKiller.name + ' ', undefined, grp)
 				tKiller.anchor.x = 1
 				tKiller.font = 'VT323'
 				tKiller.fontSize = 30
 				tKiller.fill = idKiller == this.me ? '#fff' : '#bdf'
 				tKiller.alpha = idKiller == this.me ? 1 : 0.6
 				this.addNotice(grp, (id == this.me || idKiller == this.me) ? 6000 : 3000)
+
+				var isSpree = true
+				var spreeMessage : string
+
+				switch(plKiller.streak) {
+					case 3:
+						spreeMessage = ' is on a KILLING SPREE!'
+						break
+					case 5:
+						spreeMessage = ' is DOMINATING!'
+						break
+					case 9:
+						spreeMessage = ' is UNSTOPPABLE!'
+						break
+					case 15:
+						spreeMessage = ' is GODLIKE!'
+						break
+					default:
+						isSpree = false
+						break
+				}
+
+				if(isSpree) {
+					var grp = this.add.group()
+					var t = this.add.text(this.game.width - 10, 0, plKiller.name + spreeMessage, undefined, grp)
+					t.anchor.x = 1
+					t.font = 'VT323'
+					t.fontSize = 30
+					t.fill = idKiller == this.me ? '#fff' : '#bdf'
+					t.alpha = idKiller == this.me ? 1 : 0.6
+					this.addNotice(grp, idKiller == this.me ? 9000 : 4500)
+				}
 			})
 			this.game.socket.on(50, (bullet : any) => {
 				bullet = Bullet.uncompress(bullet)
@@ -239,6 +269,8 @@ module Scuffle {
 
 		addNotice(grp : Phaser.Group, timeout : number) {
 			var lineSpacing = 40
+
+			grp.fixedToCamera = true
 
 			if(this.notices.length >= 3) {
 				this.notices.shift().destroy(true)
