@@ -85,6 +85,8 @@ module Scuffle {
 		}
 
 		kill(id : number, idKiller : number) {
+			++this.clients[idKiller].player.kills
+			++this.clients[id].player.deaths
 			this.game.io.sockets.in(this.id).emit('instance$player$kill', id, idKiller)
 		}
 
