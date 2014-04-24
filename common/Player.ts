@@ -11,6 +11,7 @@ module Scuffle {
 		health : number
 		kills : number
 		deaths : number
+		streak : number
 
 		constructor(id : number) {
 			this.id = id
@@ -24,6 +25,7 @@ module Scuffle {
 			this.health = 0
 			this.kills = 0
 			this.deaths = 0
+			this.streak = 0
 		}
 
 		isAlive() {
