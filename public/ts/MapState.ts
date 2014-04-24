@@ -41,7 +41,7 @@ module Scuffle {
 			this.lineOfSight.alpha = 0
 			this.lineOfSight.lineStyle(1, 0xaa0000, 1)
 			this.lineOfSight.moveTo(0, 0)
-			this.lineOfSight.lineTo(80, 0)
+			this.lineOfSight.lineTo(60, 0)
 
 			this.ownHealth = this.add.graphics(0, 0, this.group)
 
