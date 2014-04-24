@@ -133,9 +133,10 @@ module Scuffle {
 					this.updateHealth()
 			})
 			this.game.socket.on('instance$player$kill', (id : number, idKiller : number) => {
-				var pl = this.players[id]
-				pl.player.health = 0
-				this.add.tween(pl.graphics).to({ alpha: 0 }, 400, Phaser.Easing.Linear.None, true)
+				++this.players[idKiller].player.kills
+				++this.players[id].player.deaths
+				this.players[id].player.health = 0
+				this.add.tween(this.players[id].graphics).to({ alpha: 0 }, 400, Phaser.Easing.Linear.None, true)
 
 				var grp = this.add.group()
 				grp.fixedToCamera = true
