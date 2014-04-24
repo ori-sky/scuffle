@@ -137,10 +137,6 @@ module Scuffle {
 				var plKiller = this.players[idKiller].player
 				++plKiller.kills
 				++plKiller.streak
-				++plKilled.deaths
-				plKilled.streak = 0
-				plKilled.health = 0
-				this.add.tween(this.players[id].graphics).to({ alpha: 0 }, 400, Phaser.Easing.Linear.None, true)
 
 				var grp = this.add.group()
 				var tKilled = this.add.text(this.game.width - 10, 0, ' ' + plKilled.name, undefined, grp)
@@ -160,6 +156,18 @@ module Scuffle {
 				tKiller.fill = idKiller == this.me ? '#fff' : '#bdf'
 				tKiller.alpha = idKiller == this.me ? 1 : 0.6
 				this.addNotice(grp, (id == this.me || idKiller == this.me) ? 6000 : 3000)
+
+				if(plKilled.streak >= 3) {
+					var grp = this.add.group()
+					var t = this.add.text(this.game.width - 10, 0,
+									plKilled.name + ' was DESTROYED by ' + plKiller.name + '!', undefined, grp)
+					t.anchor.x = 1
+					t.font = 'VT323'
+					t.fontSize = 30
+					t.fill = (id == this.me || idKiller == this.me) ? '#fff' : '#bdf'
+					t.alpha = (id == this.me || idKiller == this.me) ? 1 : 0.6
+					this.addNotice(grp, (id == this.me || idKiller == this.me) ? 6000 : 3000)
+				}
 
 				var isSpree = true
 				var spreeMessage : string
@@ -192,6 +200,11 @@ module Scuffle {
 					t.alpha = idKiller == this.me ? 1 : 0.6
 					this.addNotice(grp, idKiller == this.me ? 9000 : 4500)
 				}
+
+				++plKilled.deaths
+				plKilled.streak = 0
+				plKilled.health = 0
+				this.add.tween(this.players[id].graphics).to({ alpha: 0 }, 400, Phaser.Easing.Linear.None, true)
 			})
 			this.game.socket.on(50, (bullet : any) => {
 				bullet = Bullet.uncompress(bullet)
