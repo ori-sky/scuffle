@@ -1,6 +1,7 @@
 module Scuffle {
 	export class Player {
 		id : number
+		name : string
 		color : number
 		alpha : number
 		radius : number
@@ -15,6 +16,7 @@ module Scuffle {
 
 		constructor(id : number) {
 			this.id = id
+			this.name = 'Player ' + id
 			this.color = 0xffffff
 			this.alpha = 1
 			this.radius = 7

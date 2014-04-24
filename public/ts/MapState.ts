@@ -140,9 +140,12 @@ module Scuffle {
 				this.players[id].player.health = 0
 				this.add.tween(this.players[id].graphics).to({ alpha: 0 }, 400, Phaser.Easing.Linear.None, true)
 
+				var nameKilled = this.players[id].player.name
+				var nameKiller = this.players[idKiller].player.name
+
 				var grp = this.add.group()
 				grp.fixedToCamera = true
-				var tKilled = this.add.text(this.game.width - 10, 0, ' Player ' + id, undefined, grp)
+				var tKilled = this.add.text(this.game.width - 10, 0, ' ' + nameKilled, undefined, grp)
 				tKilled.anchor.x = 1
 				tKilled.font = 'VT323'
 				tKilled.fontSize = 30
@@ -152,7 +155,7 @@ module Scuffle {
 				arrow.scale.setTo(0.5, 0.5)
 				arrow.anchor.x = 1
 				arrow.alpha = idKiller == this.me ? 1 : 0.6
-				var tKiller = this.add.text(arrow.x - arrow.width, 0, 'Player ' + idKiller + ' ', undefined, grp)
+				var tKiller = this.add.text(arrow.x - arrow.width, 0, nameKiller + ' ', undefined, grp)
 				tKiller.anchor.x = 1
 				tKiller.font = 'VT323'
 				tKiller.fontSize = 30
