@@ -285,7 +285,7 @@ module Scuffle {
 
 			grp.fixedToCamera = true
 
-			if(this.notices.length >= 3) {
+			if(this.notices.length >= 5) {
 				this.notices.shift().destroy(true)
 				for(var i=0; i<this.notices.length; ++i) {
 					this.notices[i].forEach(child => {
