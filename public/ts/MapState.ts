@@ -8,13 +8,13 @@ module Scuffle {
 		group : Phaser.Group
 		lineOfSight : Phaser.Graphics
 		ownHealth : Phaser.Graphics
-		killMessages : Phaser.Group[]
+		notices : Phaser.Group[]
 
 		init(map : Scuffle.Map) {
 			this.map = map
 			this.players = {}
 			this.bullets = {}
-			this.killMessages = []
+			this.notices = []
 		}
 
 		create() {
@@ -161,41 +161,7 @@ module Scuffle {
 				tKiller.fontSize = 30
 				tKiller.fill = idKiller == this.me ? '#fff' : '#bdf'
 				tKiller.alpha = idKiller == this.me ? 1 : 0.6
-
-				if(this.killMessages.length >= 3) {
-					this.killMessages.shift().destroy(true)
-					for(var i=0; i<this.killMessages.length; ++i) {
-						this.killMessages[i].forEach(child => {
-							child.y -= tKiller.height + 5
-						}, this)
-					}
-				}
-				this.killMessages.push(grp)
-
-				var y = 10 + (tKiller.height + 5) * (this.killMessages.length - 1)
-				grp.forEach(child => { child.y = y }, this)
-
-				grp.alpha = 0
-				var tw = this.add.tween(grp).to({ alpha: 1 }, 150, Phaser.Easing.Linear.None, true)
-				tw.onComplete.add(() => {
-					setTimeout(() => {
-						var tw = this.add.tween(grp).to({ alpha: 0 }, 1000, Phaser.Easing.Linear.None, true)
-						tw.onComplete.add(() => {
-							grp.destroy(true)
-							for(var i=0; i<this.killMessages.length; ++i) {
-								if(this.killMessages[i] === grp) {
-									this.killMessages.splice(i, 1)
-									for(var j=i; j<this.killMessages.length; ++j) {
-										this.killMessages[j].forEach(child => {
-											child.y -= tKiller.height + 5
-										}, this)
-									}
-									break
-								}
-							}
-						})
-					}, (id == this.me || idKiller == this.me) ? 6000 : 3000)
-				})
+				this.addNotice(grp, (id == this.me || idKiller == this.me) ? 6000 : 3000)
 			})
 			this.game.socket.on(50, (bullet : any) => {
 				bullet = Bullet.uncompress(bullet)
@@ -269,6 +235,45 @@ module Scuffle {
 			this.camera.setBoundsToWorld()
 			this.input.mouse.mouseMoveCallback = undefined
 			this.game.socket.removeAllListeners()
+		}
+
+		addNotice(grp : Phaser.Group, timeout : number) {
+			var lineSpacing = 40
+
+			if(this.notices.length >= 3) {
+				this.notices.shift().destroy(true)
+				for(var i=0; i<this.notices.length; ++i) {
+					this.notices[i].forEach(child => {
+						child.y -= lineSpacing
+					}, this)
+				}
+			}
+			this.notices.push(grp)
+
+			var y = 10 + lineSpacing * (this.notices.length - 1)
+			grp.forEach(child => { child.y = y }, this)
+
+			grp.alpha = 0
+			var tw = this.add.tween(grp).to({ alpha: 1 }, 150, Phaser.Easing.Linear.None, true)
+			tw.onComplete.add(() => {
+				setTimeout(() => {
+					var tw = this.add.tween(grp).to({ alpha: 0 }, 1000, Phaser.Easing.Linear.None, true)
+					tw.onComplete.add(() => {
+						grp.destroy(true)
+						for(var i=0; i<this.notices.length; ++i) {
+							if(this.notices[i] === grp) {
+								this.notices.splice(i, 1)
+								for(var j=i; j<this.notices.length; ++j) {
+									this.notices[j].forEach(child => {
+										child.y -= lineSpacing
+									}, this)
+								}
+								break
+							}
+						}
+					})
+				}, timeout)
+			})
 		}
 
 		updateHealth() {
