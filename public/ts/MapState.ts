@@ -232,8 +232,8 @@ module Scuffle {
 
 				var mx = e.movementX || e.mozMovementX || e.webkitMovementX || (px ? e.layerX - px : 0)
 				var my = e.movementY || e.mozMovementY || e.webkitMovementY || (py ? e.layerY - py : 0)
-				pmx = mx + pmx / 1.5
-				pmy = my + pmy / 1.5
+				pmx = mx + pmx / 1.35
+				pmy = my + pmy / 1.35
 				px = e.layerX
 				py = e.layerY
 
@@ -241,7 +241,7 @@ module Scuffle {
 					var rad = this.lineOfSight.angle * Math.PI / 180
 					var compX = -Math.sin(rad)
 					var compY = Math.cos(rad)
-					this.lineOfSight.angle += (pmx * compX + pmy * compY) / 3
+					this.lineOfSight.angle += (pmx * compX + pmy * compY) / 6
 					var radians = this.lineOfSight.angle * Math.PI / 180
 				}
 				else {
