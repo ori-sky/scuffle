@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
 <todo version="0.1.20">
+    <note priority="veryhigh" time="1398417741">
+        Fix nginx https socket.io proxy
+    </note>
     <note priority="medium" time="1398230652">
         Decrease Socket.IO heartbeat interval on both client and server
     </note>
