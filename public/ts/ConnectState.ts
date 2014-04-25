@@ -23,7 +23,7 @@ module Scuffle {
 			var tween = this.add.tween(group).to({ alpha: 1 }, 500, Phaser.Easing.Linear.None, true)
 			tween.onComplete.add(() => {
 				if(this.game.socket === undefined)
-					this.game.socket = io.connect('//yellow.shockk.co.uk', this.options)
+					this.game.socket = io.connect('http://yellow.shockk.co.uk', this.options)
 				else
 					this.game.socket.removeAllListeners()
 
