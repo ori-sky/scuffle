@@ -77,10 +77,13 @@ module Scuffle {
 			})
 			this.game.socket.on('instance$player$you', (id : number) => {
 				this.me = id
+				var cli = this.players[id]
 				this.players[id].state = this.game.localState
 				this.players[id].graphics.addChild(this.lineOfSight)
 				this.players[id].graphics.addChild(this.ownHealth)
 				this.lineOfSight.alpha = 1
+				if(Player.prototype.isAlive.call(cli.player))
+					this.camera.focusOnXY(cli.player.pos.x * this.group.scale.x, cli.player.pos.y * this.group.scale.y)
 			})
 			this.game.socket.on('instance$player$remove', (id : number) => {
 				var pl = this.players[id]
@@ -114,18 +117,20 @@ module Scuffle {
 				}
 			})
 			this.game.socket.on('instance$player$spawn', (player : Player) => {
-				var pl = this.players[player.id]
+				var cli = this.players[player.id]
 				var r = player.radius
-				pl.player = player
-				pl.move(player.pos)
-				pl.graphics.clear()
-				pl.graphics.beginFill(player.color, player.alpha)
-				pl.graphics.drawCircle(0, 0, r)
-				pl.graphics.endFill()
-				pl.graphics.alpha = 0
-				this.add.tween(pl.graphics).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
-				if(player.id == this.me)
+				cli.player = player
+				cli.move(player.pos)
+				cli.graphics.clear()
+				cli.graphics.beginFill(player.color, player.alpha)
+				cli.graphics.drawCircle(0, 0, r)
+				cli.graphics.endFill()
+				cli.graphics.alpha = 0
+				this.add.tween(cli.graphics).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
+				if(player.id == this.me) {
 					this.updateHealth()
+					this.camera.focusOnXY(cli.player.pos.x * this.group.scale.x, cli.player.pos.y * this.group.scale.y)
+				}
 			})
 			this.game.socket.on('instance$player$hurt', (id : number, hp : number) => {
 				this.players[id].player.health = hp
