@@ -4,6 +4,9 @@ var net = require('net')
 var app = require('http').createServer()
 var io = require('socket.io').listen(app)
 io.set('log level', 2)
+io.set('close timeout', 5)
+io.set('heartbeat timeout', 10)
+io.set('heartbeat interval', 5)
 app.listen(1337)
 
 var opts = {
