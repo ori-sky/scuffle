@@ -284,7 +284,10 @@ module Scuffle {
 				stroke: '#fff',
 				fill: '#191f23'
 			}
-			var t = this.add.text(sbx + 50, sby + 6, 'Name', style, this.gScoreboard)
+			this.add.text(sbx + 10 + 40, sby + 6, 'Name', style, this.gScoreboard)
+			this.add.text(sbx + sbwidth - 10 - 100, sby + 6, 'Deaths', style, this.gScoreboard)
+			this.add.text(sbx + sbwidth - 10 - 220, sby + 6, 'Streak', style, this.gScoreboard)
+			this.add.text(sbx + sbwidth - 10 - 315, sby + 6, 'Kills', style, this.gScoreboard)
 
 			var kTab = this.game.input.keyboard.addKey(Phaser.Keyboard.TAB)
 			kTab.onDown.add(() => {
