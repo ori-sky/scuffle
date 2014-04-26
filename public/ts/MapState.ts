@@ -264,14 +264,32 @@ module Scuffle {
 			this.gScoreboard = this.add.group()
 			this.gScoreboard.fixedToCamera = true
 			this.gScoreboard.alpha = 0
+			var sbwidth = 800
+			var sbheight = this.game.height - 100
+			var sbx = this.game.width / 2 - sbwidth / 2
+			var sby = this.game.height / 2 - sbheight / 2
 			var g = this.add.graphics(0, 0, this.gScoreboard)
-			g.beginFill(0x191f27, 0.4)
-			var w = 500
-			g.drawRect(this.game.width / 2 - w / 2, 50, w, this.game.height - 100)
+			// base
+			g.beginFill(0x191f23, 1)
+			g.drawRect(sbx, sby, sbwidth, sbheight)
 			g.endFill()
+			// header
+			g.beginFill(0x7d8091, 1)
+			g.drawRect(sbx, sby, sbwidth, 48)
+			g.endFill()
+
+			var style = {
+				font: '32px Iceland',
+				strokeThickness: 3,
+				stroke: '#fff',
+				fill: '#191f23'
+			}
+			var t = this.add.text(sbx + 50, sby + 27, 'Name', style, this.gScoreboard)
+			t.anchor.y = 0.5
+
 			var kTab = this.game.input.keyboard.addKey(Phaser.Keyboard.TAB)
 			kTab.onDown.add(() => {
-				var tw = this.add.tween(this.gScoreboard).to({ alpha: 1 }, 100, Phaser.Easing.Linear.None, true)
+				var tw = this.add.tween(this.gScoreboard).to({ alpha: 0.4 }, 100, Phaser.Easing.Linear.None, true)
 			})
 			kTab.onUp.add(() => {
 				var tw = this.add.tween(this.gScoreboard).to({ alpha: 0 }, 150, Phaser.Easing.Linear.None, true)
