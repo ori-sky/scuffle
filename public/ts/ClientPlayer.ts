@@ -1,8 +1,13 @@
 module Scuffle {
 	export class ClientPlayer {
 		player : Player
-		graphics : Phaser.Graphics
 		state : { [ k : string] : boolean }
+		graphics : Phaser.Graphics
+		gScores : Phaser.Group
+		tName : Phaser.Text
+		tKills : Phaser.Text
+		tStreak : Phaser.Text
+		tDeaths : Phaser.Text
 
 		constructor(player : Player, graphics : Phaser.Graphics) {
 			this.player = player

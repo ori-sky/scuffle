@@ -9,7 +9,7 @@ module Scuffle {
 		lineOfSight : Phaser.Graphics
 		ownHealth : Phaser.Graphics
 		notices : Phaser.Group[]
-		gScoreboard : Phaser.Group
+		scoreboard : Scoreboard
 
 		init(map : Scuffle.Map) {
 			this.map = map
@@ -69,12 +69,23 @@ module Scuffle {
 					g.alpha = 0
 					this.add.tween(g).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
 				}
-				if(this.players[player.id] === undefined)
-					this.players[player.id] = new ClientPlayer(player, g)
+				var cli = this.players[player.id]
+				if(cli === undefined) {
+					cli = new ClientPlayer(player, g)
+					this.players[player.id] = cli
+					cli.gScores = this.add.group(this.scoreboard.group)
+					var style = {
+						font: '32px VT323',
+						strokeThickness: 2,
+						stroke: '#fff',
+						fill: '#356'
+					}
+					cli.tName = this.add.text(0, 0, player.name, style, cli.gScores)
+				}
 				else {
-					this.players[player.id].graphics.destroy()
-					this.players[player.id].player = player
-					this.players[player.id].graphics = g
+					cli.graphics.destroy()
+					cli.player = player
+					cli.graphics = g
 				}
 			})
 			this.game.socket.on('instance$player$you', (id : number) => {
@@ -261,41 +272,11 @@ module Scuffle {
 				this.game.socket.emit('instance$player$me$look', radians)
 			}
 
-			this.gScoreboard = this.add.group()
-			this.gScoreboard.fixedToCamera = true
-			this.gScoreboard.alpha = 0
-			var sbwidth = 800
-			var sbheight = this.game.height - 100
-			var sbx = this.game.width / 2 - sbwidth / 2
-			var sby = this.game.height / 2 - sbheight / 2
-			var g = this.add.graphics(0, 0, this.gScoreboard)
-			// base
-			g.beginFill(0x191f23, 1)
-			g.drawRect(sbx, sby, sbwidth, sbheight)
-			g.endFill()
-			// header
-			g.beginFill(0x7d8091, 1)
-			g.drawRect(sbx, sby, sbwidth, 48)
-			g.endFill()
-
-			var style = {
-				font: '32px Iceland',
-				strokeThickness: 3,
-				stroke: '#fff',
-				fill: '#191f23'
-			}
-			this.add.text(sbx + 10 + 40, sby + 6, 'Name', style, this.gScoreboard)
-			this.add.text(sbx + sbwidth - 10 - 100, sby + 6, 'Deaths', style, this.gScoreboard)
-			this.add.text(sbx + sbwidth - 10 - 220, sby + 6, 'Streak', style, this.gScoreboard)
-			this.add.text(sbx + sbwidth - 10 - 315, sby + 6, 'Kills', style, this.gScoreboard)
+			this.scoreboard = new Scoreboard(this.game)
 
 			var kTab = this.game.input.keyboard.addKey(Phaser.Keyboard.TAB)
-			kTab.onDown.add(() => {
-				var tw = this.add.tween(this.gScoreboard).to({ alpha: 0.4 }, 100, Phaser.Easing.Linear.None, true)
-			})
-			kTab.onUp.add(() => {
-				var tw = this.add.tween(this.gScoreboard).to({ alpha: 0 }, 150, Phaser.Easing.Linear.None, true)
-			})
+			kTab.onDown.add(() => this.scoreboard.show())
+			kTab.onUp.add(() => this.scoreboard.hide())
 		}
 
 		update() {
