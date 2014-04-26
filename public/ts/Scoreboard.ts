@@ -7,6 +7,25 @@ module Scuffle {
 		tStreak : Phaser.Text
 		tDeaths : Phaser.Text
 
+		static compare(a : Row, b : Row) {
+			if(a.cli.player.kills > b.cli.player.kills)
+				return 1
+			else if(a.cli.player.kills < b.cli.player.kills)
+				return -1
+			else
+				if(a.cli.player.deaths < b.cli.player.deaths)
+					return 1
+				else if(a.cli.player.deaths > b.cli.player.deaths)
+					return -1
+				else
+					if(a.cli.player.streak > b.cli.player.streak)
+						return 1
+					else if(a.cli.player.streak < b.cli.player.streak)
+						return -1
+					else
+						return 0
+		}
+
 		constructor(sb : Scoreboard, cli : ClientPlayer) {
 			this.cli = cli
 
@@ -72,7 +91,7 @@ module Scuffle {
 		}
 
 		show() {
-			this.game.add.tween(this.group).to({ alpha: 0.4 }, 100, Phaser.Easing.Linear.None, true)
+			this.game.add.tween(this.group).to({ alpha: 0.5 }, 100, Phaser.Easing.Linear.None, true)
 		}
 
 		hide() {
@@ -95,23 +114,10 @@ module Scuffle {
 		}
 
 		update() {
-			this.rows.sort((a : Row, b : Row) => {
-				if(a.cli.player.kills > b.cli.player.kills)
-					return 1
-				else if(a.cli.player.kills < b.cli.player.kills)
-					return -1
-				else
-					if(a.cli.player.deaths < b.cli.player.deaths)
-						return 1
-					else if(a.cli.player.deaths > b.cli.player.deaths)
-						return -1
-					else
-						if(a.cli.player.streak > b.cli.player.streak)
-							return 1
-						else if(a.cli.player.streak < b.cli.player.streak)
-							return -1
-						else
-							return 0
+			this.rows.sort(Row.compare)
+
+			this.rows.forEach((row : Row, i : number) => {
+
 			})
 		}
 	}
