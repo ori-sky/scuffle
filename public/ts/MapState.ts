@@ -9,6 +9,7 @@ module Scuffle {
 		lineOfSight : Phaser.Graphics
 		ownHealth : Phaser.Graphics
 		notices : Phaser.Group[]
+		gScoreboard : Phaser.Group
 
 		init(map : Scuffle.Map) {
 			this.map = map
@@ -18,6 +19,7 @@ module Scuffle {
 		}
 
 		create() {
+			this.stage.backgroundColor = 0x0e0e0c
 			this.camera.bounds.x = -Infinity
 			this.camera.bounds.y = -Infinity
 			this.camera.bounds.width = Infinity
@@ -258,6 +260,22 @@ module Scuffle {
 				this.lineOfSight.angle -= 360 * Math.floor(this.lineOfSight.angle / 360)
 				this.game.socket.emit('instance$player$me$look', radians)
 			}
+
+			this.gScoreboard = this.add.group()
+			this.gScoreboard.fixedToCamera = true
+			this.gScoreboard.alpha = 0
+			var g = this.add.graphics(0, 0, this.gScoreboard)
+			g.beginFill(0x191f27, 0.4)
+			var w = 500
+			g.drawRect(this.game.width / 2 - w / 2, 50, w, this.game.height - 100)
+			g.endFill()
+			var kTab = this.game.input.keyboard.addKey(Phaser.Keyboard.TAB)
+			kTab.onDown.add(() => {
+				var tw = this.add.tween(this.gScoreboard).to({ alpha: 1 }, 100, Phaser.Easing.Linear.None, true)
+			})
+			kTab.onUp.add(() => {
+				var tw = this.add.tween(this.gScoreboard).to({ alpha: 0 }, 150, Phaser.Easing.Linear.None, true)
+			})
 		}
 
 		update() {
@@ -280,6 +298,7 @@ module Scuffle {
 		}
 
 		shutdown() {
+			this.stage.backgroundColor = 0
 			this.camera.setBoundsToWorld()
 			this.input.mouse.mouseMoveCallback = undefined
 			this.game.socket.removeAllListeners()
