@@ -73,14 +73,7 @@ module Scuffle {
 				if(cli === undefined) {
 					cli = new ClientPlayer(player, g)
 					this.players[player.id] = cli
-					cli.gScores = this.add.group(this.scoreboard.group)
-					var style = {
-						font: '32px VT323',
-						strokeThickness: 2,
-						stroke: '#fff',
-						fill: '#356'
-					}
-					cli.tName = this.add.text(0, 0, player.name, style, cli.gScores)
+					this.scoreboard.addRowFor(cli)
 				}
 				else {
 					cli.graphics.destroy()
@@ -99,9 +92,10 @@ module Scuffle {
 					this.camera.focusOnXY(cli.player.pos.x * this.group.scale.x, cli.player.pos.y * this.group.scale.y)
 			})
 			this.game.socket.on('instance$player$remove', (id : number) => {
-				var pl = this.players[id]
-				this.add.tween(pl.graphics).to({ alpha: 0 }, 400, Phaser.Easing.Linear.None, true)
-					.onComplete.add(() => pl.destroy())
+				var cli = this.players[id]
+				this.scoreboard.removeRowFor(cli)
+				this.add.tween(cli.graphics).to({ alpha: 0 }, 400, Phaser.Easing.Linear.None, true)
+					.onComplete.add(() => cli.destroy())
 				delete this.players[id]
 			})
 			this.game.socket.on(42, (id : number, name : string) => {
