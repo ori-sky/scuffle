@@ -1,7 +1,8 @@
 module Scuffle {
 	export class MapState extends Phaser.State {
 		game : Game
-		map : Scuffle.Map
+		map : Map
+		music : Phaser.Sound
 		players : { [k : number] : ClientPlayer }
 		bullets : { [k : number] : ClientBullet }
 		me : number
@@ -24,6 +25,17 @@ module Scuffle {
 			this.camera.bounds.y = -Infinity
 			this.camera.bounds.width = Infinity
 			this.camera.bounds.height = Infinity
+
+			this.music = this.add.audio(this.map.name)
+			this.music.addMarker('start', 0, 1.79375)
+			this.music.addMarker('main', 1.79375, 1.79375 * 24, 1, true)
+			this.music.onMarkerComplete.add((marker : string) => {
+				if(marker === 'start')
+					setTimeout(() => {
+						this.music.play('main', 0, 1, true)
+					}, 0)
+			})
+			this.music.play('start')
 
 			var btnLock = this.add.button(this.game.width - 48, this.game.height - 48, 'crosshair2', () => {
 				this.input.mouse.requestPointerLock()

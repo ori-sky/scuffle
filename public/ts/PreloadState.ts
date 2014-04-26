@@ -15,6 +15,7 @@ module Scuffle {
 			this.load.image('crosshair1', 'img/crosshair1.png')
 			this.load.image('crosshair2', 'img/crosshair2.png')
 			this.load.image('bullet.arrow1', 'img/bullet.arrow1.png')
+			this.load.audio('warehouse', 'audio/warehouse.ogg', true)
 
 			var text = this.add.text(this.world.centerX, this.world.centerY, 'Loading', undefined, this.group)
 			text.anchor.setTo(0.5, 0.5)
