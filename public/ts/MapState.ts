@@ -217,6 +217,8 @@ module Scuffle {
 				plKilled.streak = 0
 				plKilled.health = 0
 				this.add.tween(this.players[id].graphics).to({ alpha: 0 }, 400, Phaser.Easing.Linear.None, true)
+
+				this.scoreboard.update()
 			})
 			this.game.socket.on(50, (bullet : any) => {
 				bullet = Bullet.uncompress(bullet)

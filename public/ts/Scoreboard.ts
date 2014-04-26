@@ -1,6 +1,7 @@
 module Scuffle {
 	export class Row {
 		cli : ClientPlayer
+		y : number
 		group : Phaser.Group
 		tName : Phaser.Text
 		tKills : Phaser.Text
@@ -28,15 +29,34 @@ module Scuffle {
 
 		constructor(sb : Scoreboard, cli : ClientPlayer) {
 			this.cli = cli
+			this.y = 0
 
 			this.group = sb.game.add.group(sb.group)
 			var style = {
-				font: '32px VT323',
+				font: '32px Iceland',
 				strokeThickness: 2,
-				stroke: '#fff',
-				fill: '#356'
+				stroke: '#191f23',
+				//fill: '#9b9481' // TODO: use this for dead players
+				fill: '#cdc8ba'
 			}
-			this.tName = sb.game.add.text(0, 0, cli.player.name, style, this.group)
+			this.tName = sb.game.add.text(sb.x + 20, 0, cli.player.name, style, this.group)
+			this.tDeaths = sb.game.add.text(sb.x + sb.width - 30, 0, cli.player.deaths.toString(), style, this.group)
+			this.tStreak = sb.game.add.text(sb.x + sb.width - 150, 0,
+							cli.player.streak > 0 ? cli.player.streak.toString() : '', style, this.group)
+			this.tKills = sb.game.add.text(sb.x + sb.width - 275, 0, cli.player.kills.toString(), style, this.group)
+			this.tDeaths.anchor.x = 1
+			this.tStreak.anchor.x = 1
+			this.tKills.anchor.x = 1
+		}
+
+		update() {
+			this.group.forEach(child => {
+				child.y = this.y
+			}, this)
+
+			this.tKills.setText(this.cli.player.kills.toString())
+			this.tStreak.setText(this.cli.player.streak > 0 ? this.cli.player.streak.toString() : '')
+			this.tDeaths.setText(this.cli.player.deaths.toString())
 		}
 
 		destroy() {
@@ -91,7 +111,7 @@ module Scuffle {
 		}
 
 		show() {
-			this.game.add.tween(this.group).to({ alpha: 0.5 }, 100, Phaser.Easing.Linear.None, true)
+			this.game.add.tween(this.group).to({ alpha: 0.65 }, 100, Phaser.Easing.Linear.None, true)
 		}
 
 		hide() {
@@ -106,7 +126,7 @@ module Scuffle {
 		removeRowFor(cli : ClientPlayer) {
 			for(var i=0; i<this.rows.length; ++i) {
 				if(this.rows[i].cli === cli) {
-					this.rows.splice(i)[0].destroy()
+					this.rows.splice(i, 1)[0].destroy()
 					break
 				}
 			}
@@ -115,9 +135,11 @@ module Scuffle {
 
 		update() {
 			this.rows.sort(Row.compare)
+			this.rows.reverse()
 
 			this.rows.forEach((row : Row, i : number) => {
-
+				row.y = this.y + 55 + 38 * i
+				row.update()
 			})
 		}
 	}
