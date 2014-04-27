@@ -93,7 +93,7 @@ module Scuffle {
 				cli.graphics.addChild(this.lineOfSight)
 				cli.graphics.addChild(this.ownHealth)
 				this.lineOfSight.alpha = 1
-				if(Player.prototype.isAlive.call(cli.player))
+				if(cli.player.isAlive())
 					this.focusOn(cli)
 				this.scoreboard.update()
 			})
@@ -114,14 +114,12 @@ module Scuffle {
 				pos = Point.uncompress(pos)
 				var cli = this.players[id]
 				if(cli !== undefined) {
-					var vDiff = Point.prototype.subtractedFromPoint.call(cli.player.pos, pos)
-					var lenDiff = Point.prototype.length.call(vDiff)
-					if(lenDiff > 40)
+					var vDiff = cli.player.pos.subtractedFromPoint(pos)
+					if(vDiff.length() > 40)
 						cli.move(pos)
 					else {
-						var lenVel = Point.prototype.length.call(cli.player.velocity)
-						vDiff.scale(Math.min(0.005, lenVel * this.game.latency))
-						Point.prototype.addPoint.call(cli.player.velocity, vDiff)
+						vDiff.scale(Math.min(0.005, cli.player.velocity.length() * this.game.latency))
+						cli.player.velocity.addPoint(vDiff)
 					}
 					if(id == this.me)
 						this.focusOn(cli)
@@ -280,7 +278,7 @@ module Scuffle {
 			var time = this.game.time.elapsed
 			for(var id in this.players) {
 				var cli = this.players[id]
-				if(Player.prototype.isAlive.call(cli.player)) {
+				if(cli.player.isAlive()) {
 					if(tickPlayerMovement(time, cli.state, cli.player, this.map)) {
 						cli.move(cli.player.pos)
 						if(id == this.me)

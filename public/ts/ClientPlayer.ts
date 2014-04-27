@@ -37,7 +37,7 @@ module Scuffle {
 
 		redraw() {
 			this.graphics.clear()
-			if(Player.prototype.isAlive.call(this.player)) {
+			if(this.player.isAlive()) {
 				this.graphics.beginFill(this.player.color, this.player.alpha)
 				this.graphics.drawCircle(0, 0, this.player.radius)
 				this.graphics.endFill()
