@@ -51,6 +51,13 @@ module Scuffle {
 			this.addButton('screen1', 1, () => this.scale.startFullScreen(false))
 			this.addButton('crosshair2', 2, () => this.input.mouse.requestPointerLock())
 
+			this.input.mouse.pointerLock.add((state : boolean) => {
+				if(state === true)
+					this.add.tween(this.gButtons).to({ alpha: 0 }, 500, Phaser.Easing.Linear.None, true)
+				else
+					this.add.tween(this.gButtons).to({ alpha: 1 }, 500, Phaser.Easing.Linear.None, true)
+			})
+
 			this.lineOfSight = this.add.graphics(0, 0, this.group)
 			this.lineOfSight.alpha = 0
 			this.lineOfSight.lineStyle(1, 0xaa0000, 1)
