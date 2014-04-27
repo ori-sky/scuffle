@@ -38,7 +38,16 @@ module Scuffle {
 			})
 			this.music.play('start')
 
-			var btnLock = this.add.button(this.game.width - 48, this.game.height - 48, 'crosshair2', () => {
+			var btnMute = this.add.button(this.game.width - 48, this.game.height - 48, 'audio.button', () => {
+				this.sound.mute = !this.sound.mute
+			})
+			btnMute.scale.setTo(0.5, 0.5)
+			btnMute.fixedToCamera = true
+			btnMute.inputEnabled = true
+			btnMute.input.useHandCursor = true
+			btnMute.input.consumePointerEvent = true
+
+			var btnLock = this.add.button(this.game.width - 48 - 40, this.game.height - 48, 'crosshair2', () => {
 				this.input.mouse.requestPointerLock()
 			})
 			btnLock.scale.setTo(0.5, 0.5)
