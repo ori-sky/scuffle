@@ -27,12 +27,13 @@ module Scuffle {
 			this.camera.bounds.height = Infinity
 
 			this.music = this.add.audio(this.map.name)
-			this.music.addMarker('start', 0, 1.79375)
-			this.music.addMarker('main', 1.79375, 1.79375 * 24, 1, true)
+			var patternDuration = 1.79332
+			this.music.addMarker('start', 0, patternDuration)
+			this.music.addMarker('main', patternDuration, patternDuration * 24, undefined, true)
 			this.music.onMarkerComplete.add((marker : string) => {
 				if(marker === 'start')
 					setTimeout(() => {
-						this.music.play('main', 0, 1, true)
+						this.music.play('main', 0, undefined, true)
 					}, 0)
 			})
 			this.music.play('start')
