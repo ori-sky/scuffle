@@ -151,13 +151,7 @@ module Scuffle {
 			})
 			this.game.socket.on('instance$player$spawn', (player : Player) => {
 				var cli = this.players[player.id]
-				var r = player.radius
-				cli.player = player
-				cli.move(player.pos)
-				cli.graphics.clear()
-				cli.graphics.beginFill(player.color, player.alpha)
-				cli.graphics.drawCircle(0, 0, r)
-				cli.graphics.endFill()
+				cli.setPlayer(player)
 				cli.graphics.alpha = 0
 				this.add.tween(cli.graphics).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
 				if(player.id == this.me) {

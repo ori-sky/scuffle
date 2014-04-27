@@ -12,6 +12,12 @@ module Scuffle {
 			this.isMe = false
 		}
 
+		setPlayer(player : Player) {
+			this.player = player
+			this.move(player.pos)
+			this.redraw()
+		}
+
 		move(pos : Point) {
 			this.player.pos = pos
 			this.graphics.position.x = pos.x
@@ -27,6 +33,13 @@ module Scuffle {
 
 		moveByPoint(p : Point) {
 			this.moveBy(p.x, p.y)
+		}
+
+		redraw() {
+			this.graphics.clear()
+			this.graphics.beginFill(this.player.color, this.player.alpha)
+			this.graphics.drawCircle(0, 0, this.player.radius)
+			this.graphics.endFill()
 		}
 
 		destroy() {
