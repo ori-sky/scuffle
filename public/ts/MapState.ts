@@ -69,7 +69,8 @@ module Scuffle {
 				graphics.lineTo(line.b.x, line.b.y)
 			})
 
-			this.game.socket.on('instance$player$add', (player : Player) => {
+			this.game.socket.on('instance$player$add', (player : any) => {
+				player = Player.uncompress(player)
 				var cli = this.players[player.id]
 				if(cli === undefined) {
 					var g = this.add.graphics(player.pos.x, player.pos.y, this.group)
@@ -126,7 +127,8 @@ module Scuffle {
 						this.focusOn(cli)
 				}
 			})
-			this.game.socket.on('instance$player$spawn', (player : Player) => {
+			this.game.socket.on('instance$player$spawn', (player : any) => {
+				player = Player.uncompress(player)
 				var cli = this.players[player.id]
 				cli.setPlayer(player)
 				cli.graphics.alpha = 0
