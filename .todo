@@ -9,6 +9,12 @@
             Decreased on server
         </comment>
     </note>
+    <note priority="high" time="1398607114">
+        Make generic weapon system
+    </note>
+    <note priority="high" time="1398607254">
+        Add weapons - shotgun, machine gun, grenade launcher?, rocket launcher?
+    </note>
     <note priority="medium" time="1398599821">
         Add fullscreen button
     </note>
