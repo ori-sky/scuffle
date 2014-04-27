@@ -3886,7 +3886,7 @@ declare module Phaser {
         forcePortrait: boolean;
         forceLandscape: boolean;
         fullScreenTarget: any;
-        funnScreenScaleMode: number;
+        fullScreenScaleMode: number;
         game: Phaser.Game;
         hasResized: Phaser.Signal;
         incorrectOrientation: boolean;
