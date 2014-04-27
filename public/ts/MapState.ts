@@ -47,7 +47,6 @@ module Scuffle {
 			this.add.tween(this.group).to({alpha: 1}, 400, Phaser.Easing.Linear.None, true)
 
 			this.gButtons = this.add.group()
-			this.gButtons.alpha = 0.5
 			this.addButton('audio.button', 0, () => this.sound.mute = !this.sound.mute)
 			this.addButton('screen1', 1, () => this.scale.startFullScreen(false))
 			this.addButton('crosshair2', 2, () => this.input.mouse.requestPointerLock())
@@ -339,6 +338,13 @@ module Scuffle {
 			btn.inputEnabled = true
 			btn.input.useHandCursor = true
 			btn.input.consumePointerEvent = true
+			btn.alpha = 0.3
+			btn.onInputOver.add(() => {
+				this.add.tween(btn).to({ alpha: 0.8 }, 100, Phaser.Easing.Linear.None, true)
+			})
+			btn.onInputOut.add(() => {
+				this.add.tween(btn).to({ alpha: 0.3 }, 100, Phaser.Easing.Linear.None, true)
+			})
 		}
 
 		focusOn(cli : ClientPlayer) {
