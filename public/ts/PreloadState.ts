@@ -15,6 +15,7 @@ module Scuffle {
 			this.load.image('crosshair1', 'img/crosshair1.png')
 			this.load.image('crosshair2', 'img/crosshair2.png')
 			this.load.image('audio.button', 'img/audio.button.png')
+			this.load.image('screen1', 'img/screen1.png')
 			this.load.image('bullet.arrow1', 'img/bullet.arrow1.png')
 			this.load.audio('warehouse', 'audio/warehouse.ogg', true)
 			this.load.audio('beep1', 'audio/beep1.ogg', true)

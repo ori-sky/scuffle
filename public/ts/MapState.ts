@@ -7,6 +7,7 @@ module Scuffle {
 		bullets : { [k : number] : ClientBullet }
 		me : number
 		group : Phaser.Group
+		gButtons : Phaser.Group
 		lineOfSight : Phaser.Graphics
 		ownHealth : Phaser.Graphics
 		notices : Phaser.Group[]
@@ -40,13 +41,16 @@ module Scuffle {
 			var sndBullet = this.add.audio('beep2')
 			sndBullet.addMarker('main', 0, 0.02)
 
-			this.addButton('audio.button', 0, () => this.sound.mute = !this.sound.mute)
-			this.addButton('crosshair2', 1, () => this.input.mouse.requestPointerLock())
-
 			this.group = this.add.group()
 			this.group.scale.setTo(2, 2)
 			this.group.alpha = 0
 			this.add.tween(this.group).to({alpha: 1}, 400, Phaser.Easing.Linear.None, true)
+
+			this.gButtons = this.add.group()
+			this.gButtons.alpha = 0.5
+			this.addButton('audio.button', 0, () => this.sound.mute = !this.sound.mute)
+			this.addButton('screen1', 1, () => this.scale.startFullScreen(false))
+			this.addButton('crosshair2', 2, () => this.input.mouse.requestPointerLock())
 
 			this.lineOfSight = this.add.graphics(0, 0, this.group)
 			this.lineOfSight.alpha = 0
@@ -328,7 +332,8 @@ module Scuffle {
 		}
 
 		addButton(key : string, index : number, fn : Function) {
-			var btn = this.add.button(this.game.width - 48 - index * 40, this.game.height - 48, key, fn)
+			var btn = this.add.button(8 + index * 40, 8, key, fn, this,
+							undefined, undefined, undefined, undefined, this.gButtons)
 			btn.scale.setTo(0.5, 0.5)
 			btn.fixedToCamera = true
 			btn.inputEnabled = true
