@@ -173,28 +173,20 @@ module Scuffle {
 					this.addNotice(grp, (id == this.me || idKiller == this.me) ? 6000 : 3000)
 				}
 
-				var isSpree = true
-				var spreeMessage : string
+				var spreeMessage = (() => {
+					switch(plKiller.streak) {
+						case 3:
+							return ' is on a KILLING SPREE!'
+						case 5:
+							return ' is DOMINATING!'
+						case 9:
+							return ' is UNSTOPPABLE!'
+						case 15:
+							return ' is GODLIKE!'
+					}
+				})()
 
-				switch(plKiller.streak) {
-					case 3:
-						spreeMessage = ' is on a KILLING SPREE!'
-						break
-					case 5:
-						spreeMessage = ' is DOMINATING!'
-						break
-					case 9:
-						spreeMessage = ' is UNSTOPPABLE!'
-						break
-					case 15:
-						spreeMessage = ' is GODLIKE!'
-						break
-					default:
-						isSpree = false
-						break
-				}
-
-				if(isSpree) {
+				if(spreeMessage !== undefined) {
 					var grp = this.add.group()
 					var t = this.add.text(this.game.width - 10, 0, plKiller.name + spreeMessage, style, grp)
 					t.anchor.x = 1
