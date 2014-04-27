@@ -103,13 +103,13 @@ module Scuffle {
 				this.me = id
 				var cli = this.players[id]
 				cli.isMe = true
-				this.scoreboard.update()
-				this.players[id].state = this.game.localState
-				this.players[id].graphics.addChild(this.lineOfSight)
-				this.players[id].graphics.addChild(this.ownHealth)
+				cli.state = this.game.localState
+				cli.graphics.addChild(this.lineOfSight)
+				cli.graphics.addChild(this.ownHealth)
 				this.lineOfSight.alpha = 1
 				if(Player.prototype.isAlive.call(cli.player))
-					this.camera.focusOnXY(cli.player.pos.x * this.group.scale.x, cli.player.pos.y * this.group.scale.y)
+					this.focusOn(cli)
+				this.scoreboard.update()
 			})
 			this.game.socket.on('instance$player$remove', (id : number) => {
 				var cli = this.players[id]
@@ -119,12 +119,10 @@ module Scuffle {
 				delete this.players[id]
 			})
 			this.game.socket.on(42, (id : number, name : string) => {
-				if(this.players[id] !== undefined)
-					this.players[id].state[name] = true
+				this.players[id].state[name] = true
 			})
 			this.game.socket.on(43, (id : number, name : string) => {
-				if(this.players[id] !== undefined)
-					this.players[id].state[name] = false
+				this.players[id].state[name] = false
 			})
 			this.game.socket.on(44, (id : number, pos : any) => {
 				pos = Point.uncompress(pos)
@@ -140,7 +138,7 @@ module Scuffle {
 						Point.prototype.addPoint.call(cli.player.velocity, vDiff)
 					}
 					if(id == this.me)
-						this.camera.focusOnXY(cli.player.pos.x * this.group.scale.x, cli.player.pos.y * this.group.scale.y)
+						focusOn(cli)
 				}
 			})
 			this.game.socket.on('instance$player$spawn', (player : Player) => {
@@ -150,7 +148,7 @@ module Scuffle {
 				this.add.tween(cli.graphics).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
 				if(player.id == this.me) {
 					this.updateHealth()
-					this.camera.focusOnXY(cli.player.pos.x * this.group.scale.x, cli.player.pos.y * this.group.scale.y)
+					this.focusOn(cli)
 				}
 			})
 			this.game.socket.on('instance$player$hurt', (id : number, hp : number) => {
@@ -299,7 +297,7 @@ module Scuffle {
 					if(tickPlayerMovement(time, cli.state, cli.player, this.map)) {
 						cli.move(cli.player.pos)
 						if(id == this.me)
-							this.camera.focusOnXY(cli.player.pos.x * this.group.scale.x, cli.player.pos.y * this.group.scale.y)
+							this.focusOn(cli)
 					}
 				}
 			}
@@ -357,6 +355,10 @@ module Scuffle {
 					})
 				}, timeout)
 			})
+		}
+
+		focusOn(cli : ClientPlayer) {
+			this.camera.focusOnXY(cli.player.pos.x * this.group.scale.x, cli.player.pos.y * this.group.scale.y)
 		}
 
 		updateHealth() {
