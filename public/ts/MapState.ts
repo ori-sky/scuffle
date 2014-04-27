@@ -167,6 +167,7 @@ module Scuffle {
 				arrow.scale.setTo(0.5, 0.5)
 				arrow.anchor.x = 1
 				arrow.alpha = idKiller == this.me ? 1 : 0.6
+				var style = { font: '30px VT323' }
 				var tKiller = this.add.text(arrow.x - arrow.width, 0, plKiller.name + ' ', style, grp)
 				tKiller.anchor.x = 1
 				tKiller.fill = idKiller == this.me ? '#fff' : '#bdf'
@@ -175,6 +176,7 @@ module Scuffle {
 
 				if(plKilled.streak >= 3) {
 					var grp = this.add.group()
+					var style = { font: '30px VT323' }
 					var t = this.add.text(this.game.width - 10, 0,
 									plKilled.name + ' was DESTROYED by ' + plKiller.name + '!', style, grp)
 					t.anchor.x = 1
@@ -198,6 +200,7 @@ module Scuffle {
 
 				if(spreeMessage !== undefined) {
 					var grp = this.add.group()
+					var style = { font: '30px VT323' }
 					var t = this.add.text(this.game.width - 10, 0, plKiller.name + spreeMessage, style, grp)
 					t.anchor.x = 1
 					t.fill = idKiller == this.me ? '#fff' : '#bdf'
