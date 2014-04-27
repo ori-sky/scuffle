@@ -85,25 +85,19 @@ module Scuffle {
 			})
 
 			this.game.socket.on('instance$player$add', (player : Player) => {
-				var g = this.add.graphics(player.pos.x, player.pos.y, this.group)
-				if(Player.prototype.isAlive.call(player)) {
-					g.beginFill(player.color, player.alpha)
-					g.drawCircle(0, 0, player.radius)
-					g.endFill()
-					g.alpha = 0
-					this.add.tween(g).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
-				}
 				var cli = this.players[player.id]
 				if(cli === undefined) {
+					var g = this.add.graphics(player.pos.x, player.pos.y, this.group)
+					g.alpha = 0
+					this.add.tween(g).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
+
 					cli = new ClientPlayer(player, g)
+					cli.redraw()
 					this.players[player.id] = cli
 					this.scoreboard.addRowFor(cli)
 				}
-				else {
-					cli.graphics.destroy()
-					cli.player = player
-					cli.graphics = g
-				}
+				else
+					cli.setPlayer(player)
 			})
 			this.game.socket.on('instance$player$you', (id : number) => {
 				this.me = id
