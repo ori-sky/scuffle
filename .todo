@@ -9,4 +9,10 @@
             Decreased on server
         </comment>
     </note>
+    <note priority="medium" time="1398599821">
+        Add fullscreen button
+    </note>
+    <note priority="medium" time="1398599850">
+        Make buttons hide on pointer lock (add to common group)
+    </note>
 </todo>
