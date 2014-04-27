@@ -148,20 +148,17 @@ module Scuffle {
 				++plKiller.streak
 
 				var grp = this.add.group()
-				var tKilled = this.add.text(this.game.width - 10, 0, ' ' + plKilled.name, undefined, grp)
+				var style = { font: '30px VT323' }
+				var tKilled = this.add.text(this.game.width - 10, 0, ' ' + plKilled.name, style, grp)
 				tKilled.anchor.x = 1
-				tKilled.font = 'VT323'
-				tKilled.fontSize = 30
 				tKilled.fill = id == this.me ? '#fff' : '#bdf'
 				tKilled.alpha = id == this.me ? 1 : 0.6
 				var arrow = this.add.sprite(tKilled.x - tKilled.width, 0, 'bullet.arrow1', undefined, grp)
 				arrow.scale.setTo(0.5, 0.5)
 				arrow.anchor.x = 1
 				arrow.alpha = idKiller == this.me ? 1 : 0.6
-				var tKiller = this.add.text(arrow.x - arrow.width, 0, plKiller.name + ' ', undefined, grp)
+				var tKiller = this.add.text(arrow.x - arrow.width, 0, plKiller.name + ' ', style, grp)
 				tKiller.anchor.x = 1
-				tKiller.font = 'VT323'
-				tKiller.fontSize = 30
 				tKiller.fill = idKiller == this.me ? '#fff' : '#bdf'
 				tKiller.alpha = idKiller == this.me ? 1 : 0.6
 				this.addNotice(grp, (id == this.me || idKiller == this.me) ? 6000 : 3000)
@@ -169,10 +166,8 @@ module Scuffle {
 				if(plKilled.streak >= 3) {
 					var grp = this.add.group()
 					var t = this.add.text(this.game.width - 10, 0,
-									plKilled.name + ' was DESTROYED by ' + plKiller.name + '!', undefined, grp)
+									plKilled.name + ' was DESTROYED by ' + plKiller.name + '!', style, grp)
 					t.anchor.x = 1
-					t.font = 'VT323'
-					t.fontSize = 30
 					t.fill = (id == this.me || idKiller == this.me) ? '#fff' : '#bdf'
 					t.alpha = (id == this.me || idKiller == this.me) ? 1 : 0.6
 					this.addNotice(grp, (id == this.me || idKiller == this.me) ? 6000 : 3000)
@@ -201,10 +196,8 @@ module Scuffle {
 
 				if(isSpree) {
 					var grp = this.add.group()
-					var t = this.add.text(this.game.width - 10, 0, plKiller.name + spreeMessage, undefined, grp)
+					var t = this.add.text(this.game.width - 10, 0, plKiller.name + spreeMessage, style, grp)
 					t.anchor.x = 1
-					t.font = 'VT323'
-					t.fontSize = 30
 					t.fill = idKiller == this.me ? '#fff' : '#bdf'
 					t.alpha = idKiller == this.me ? 1 : 0.6
 					this.addNotice(grp, idKiller == this.me ? 9000 : 4500)
