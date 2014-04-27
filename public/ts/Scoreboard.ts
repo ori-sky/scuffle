@@ -1,7 +1,9 @@
 module Scuffle {
 	export class Row {
+		sb : Scoreboard
 		cli : ClientPlayer
 		y : number
+		isMe : boolean
 		group : Phaser.Group
 		tName : Phaser.Text
 		tKills : Phaser.Text
@@ -28,8 +30,10 @@ module Scuffle {
 		}
 
 		constructor(sb : Scoreboard, cli : ClientPlayer) {
+			this.sb = sb
 			this.cli = cli
 			this.y = 0
+			this.isMe = false
 
 			this.group = sb.game.add.group(sb.group)
 			var style = {
@@ -57,6 +61,14 @@ module Scuffle {
 			this.tKills.setText(this.cli.player.kills.toString())
 			this.tStreak.setText(this.cli.player.streak > 0 ? this.cli.player.streak.toString() : '')
 			this.tDeaths.setText(this.cli.player.deaths.toString())
+
+			if(!this.isMe && this.cli.isMe) {
+				this.isMe = true
+				var g = this.sb.game.add.graphics(0, this.y, this.group)
+				g.beginFill(0xffffff, 0.5)
+				g.drawRect(this.sb.x, 0, this.sb.width, 38)
+				g.endFill()
+			}
 		}
 
 		destroy() {

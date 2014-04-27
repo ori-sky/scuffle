@@ -3,11 +3,13 @@ module Scuffle {
 		player : Player
 		state : { [ k : string] : boolean }
 		graphics : Phaser.Graphics
+		isMe : boolean
 
 		constructor(player : Player, graphics : Phaser.Graphics) {
 			this.player = player
 			this.graphics = graphics
 			this.state = {}
+			this.isMe = false
 		}
 
 		move(pos : Point) {

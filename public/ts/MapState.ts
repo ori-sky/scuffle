@@ -106,6 +106,8 @@ module Scuffle {
 			this.game.socket.on('instance$player$you', (id : number) => {
 				this.me = id
 				var cli = this.players[id]
+				cli.isMe = true
+				this.scoreboard.update()
 				this.players[id].state = this.game.localState
 				this.players[id].graphics.addChild(this.lineOfSight)
 				this.players[id].graphics.addChild(this.ownHealth)
