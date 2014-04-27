@@ -40,23 +40,8 @@ module Scuffle {
 			var sndBullet = this.add.audio('beep2')
 			sndBullet.addMarker('main', 0, 0.02)
 
-			var btnMute = this.add.button(this.game.width - 48, this.game.height - 48, 'audio.button', () => {
-				this.sound.mute = !this.sound.mute
-			})
-			btnMute.scale.setTo(0.5, 0.5)
-			btnMute.fixedToCamera = true
-			btnMute.inputEnabled = true
-			btnMute.input.useHandCursor = true
-			btnMute.input.consumePointerEvent = true
-
-			var btnLock = this.add.button(this.game.width - 48 - 40, this.game.height - 48, 'crosshair2', () => {
-				this.input.mouse.requestPointerLock()
-			})
-			btnLock.scale.setTo(0.5, 0.5)
-			btnLock.fixedToCamera = true
-			btnLock.inputEnabled = true
-			btnLock.input.useHandCursor = true
-			btnLock.input.consumePointerEvent = true
+			this.addButton('audio.button', 0, () => this.sound.mute = !this.sound.mute)
+			this.addButton('crosshair2', 1, () => this.input.mouse.requestPointerLock())
 
 			this.group = this.add.group()
 			this.group.scale.setTo(2, 2)
@@ -138,7 +123,7 @@ module Scuffle {
 						Point.prototype.addPoint.call(cli.player.velocity, vDiff)
 					}
 					if(id == this.me)
-						focusOn(cli)
+						this.focusOn(cli)
 				}
 			})
 			this.game.socket.on('instance$player$spawn', (player : Player) => {
@@ -355,6 +340,15 @@ module Scuffle {
 					})
 				}, timeout)
 			})
+		}
+
+		addButton(key : string, index : number, fn : Function) {
+			var btn = this.add.button(this.game.width - 48 - index * 40, this.game.height - 48, key, fn)
+			btn.scale.setTo(0.5, 0.5)
+			btn.fixedToCamera = true
+			btn.inputEnabled = true
+			btn.input.useHandCursor = true
+			btn.input.consumePointerEvent = true
 		}
 
 		focusOn(cli : ClientPlayer) {
