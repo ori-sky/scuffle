@@ -26,7 +26,12 @@ module Scuffle {
 					else if(a.cli.player.streak < b.cli.player.streak)
 						return -1
 					else
-						return 0
+						if(a.cli.player.name > b.cli.player.name)
+							return -1
+						else if(a.cli.player.name < b.cli.player.name)
+							return 1
+						else
+							return 0
 		}
 
 		constructor(sb : Scoreboard, cli : ClientPlayer) {
