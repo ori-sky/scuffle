@@ -255,7 +255,7 @@ module Scuffle {
 				g.endFill()
 				this.bullets[bullet.id] = new ClientBullet(bullet, g)
 
-				sndBullet.play('main', 0, 1, false, true)
+				sndBullet.play('main', 0, 0.8, false, true)
 			})
 			this.game.socket.on(52, (id : number) => {
 				this.bullets[id].destroy()
