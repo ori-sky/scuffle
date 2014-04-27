@@ -17,6 +17,8 @@ module Scuffle {
 			this.load.image('audio.button', 'img/audio.button.png')
 			this.load.image('bullet.arrow1', 'img/bullet.arrow1.png')
 			this.load.audio('warehouse', 'audio/warehouse.ogg', true)
+			this.load.audio('beep1', 'audio/beep1.ogg', true)
+			this.load.audio('beep2', 'audio/beep2.ogg', true)
 
 			var text = this.add.text(this.world.centerX, this.world.centerY, 'Loading', undefined, this.group)
 			text.anchor.setTo(0.5, 0.5)

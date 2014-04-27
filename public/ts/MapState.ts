@@ -37,6 +37,8 @@ module Scuffle {
 					}, 0)
 			})
 			this.music.play('start')
+			var sndBullet = this.add.audio('beep2')
+			sndBullet.addMarker('main', 0, 0.02)
 
 			var btnMute = this.add.button(this.game.width - 48, this.game.height - 48, 'audio.button', () => {
 				this.sound.mute = !this.sound.mute
@@ -252,6 +254,8 @@ module Scuffle {
 				g.drawCircle(0, 0, bullet.radius)
 				g.endFill()
 				this.bullets[bullet.id] = new ClientBullet(bullet, g)
+
+				sndBullet.play('main', 0, 1, false, true)
 			})
 			this.game.socket.on(52, (id : number) => {
 				this.bullets[id].destroy()
