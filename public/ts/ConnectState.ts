@@ -37,7 +37,7 @@ module Scuffle {
 					clearInterval(this.game.latencyInterval)
 				this.game.latencyInterval = setInterval(() => {
 					var tStart = performance.now()
-					this.game.socket.emit('ping')
+					this.game.socket.emit(Protocol.Client.Ping)
 					this.game.socket.once('pong', () => {
 						var newLatency = performance.now() - tStart
 						this.game.latency += (newLatency - this.game.latency) / 3

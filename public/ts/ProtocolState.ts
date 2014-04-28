@@ -7,7 +7,7 @@ module Scuffle {
 				this.game.socket.once('map$get', (map : Map) => {
 					this.game.state.start('Map', true, false, map)
 				})
-				this.game.socket.emit('map$get', mapName)
+				this.game.socket.emit(Protocol.Client.MapGet, mapName)
 			})
 			this.game.socket.on('reset', () => {
 				this.game.socket.disconnect()
@@ -47,36 +47,36 @@ module Scuffle {
 			this.input.mouse.mouseDownCallback = e => {
 				switch(e.button) {
 					case Phaser.Mouse.LEFT_BUTTON:
-						this.game.socket.emit('state$on', 'mouse.left')
+						this.game.socket.emit(Protocol.Client.StateOn, 'mouse.left')
 						break
 					case Phaser.Mouse.RIGHT_BUTTON:
-						this.game.socket.emit('state$on', 'mouse.right')
+						this.game.socket.emit(Protocol.Client.StateOn, 'mouse.right')
 						break
 				}
 			}
 			this.input.mouse.mouseUpCallback = e => {
 				switch(e.button) {
 					case Phaser.Mouse.LEFT_BUTTON:
-						this.game.socket.emit('state$off', 'mouse.left')
+						this.game.socket.emit(Protocol.Client.StateOff, 'mouse.left')
 						break
 					case Phaser.Mouse.RIGHT_BUTTON:
-						this.game.socket.emit('state$off', 'mouse.right')
+						this.game.socket.emit(Protocol.Client.StateOff, 'mouse.right')
 						break
 				}
 			}
 
-			this.game.socket.emit('instance$join', 0)
+			this.game.socket.emit(Protocol.Client.InstanceJoin, 0)
 		}
 
 		makeKeyState(keycode : number, name : string) {
 			var key = this.game.input.keyboard.addKey(keycode)
 			key.onDown.add(() => {
 				this.game.localState[name] = true
-				this.game.socket.emit('state$on', name)
+				this.game.socket.emit(Protocol.Client.StateOn, name)
 			})
 			key.onUp.add(() => {
 				this.game.localState[name] = false
-				this.game.socket.emit('state$off', name)
+				this.game.socket.emit(Protocol.Client.StateOff, name)
 			})
 		}
 	}

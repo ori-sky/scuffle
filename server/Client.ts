@@ -2,29 +2,34 @@ module Scuffle {
 	export class Client {
 		game : ServerGame
 		socket : any
-		protocol : any = {
-			ping: (id : string) => {
-				this.socket.emit('pong', id)
-			},
-			state$on: (name : string) => {
+		protocol : any
+		instance : Instance
+		player : Player
+		state : { [ k : string] : boolean }
+		accumBullet : number
+
+		makeProtocol() {
+			var proto : any = {}
+			proto[Protocol.Client.Ping] = (id : string) => this.socket.emit('pong', id)
+			proto[Protocol.Client.StateOn] = (name : string) => {
 				this.state[name] = true
 				this.socket.emit('state$on', name)
 				if(this.instance !== undefined && this.player !== undefined)
 					this.game.io.sockets.in(this.instance.id).emit(42, this.player.id, name)
-			},
-			state$off: (name : string) => {
+			}
+			proto[Protocol.Client.StateOff] = (name : string) => {
 				this.state[name] = false
 				this.socket.emit('state$off', name)
 				if(this.instance !== undefined && this.player !== undefined)
 					this.game.io.sockets.in(this.instance.id).emit(43, this.player.id, name)
-			},
-			map$get: (name : string) => {
+			}
+			proto[Protocol.Client.MapGet] = (name : string) => {
 				if(this.game.maps[name] !== undefined)
 					this.socket.emit('map$get', this.game.maps[name])
 				else
 					this.socket.emit('map$notfound', name)
-			},
-			instance$join: (id : number) => {
+			}
+			proto[Protocol.Client.InstanceJoin] = (id : number) => {
 				if(this.instance === undefined)
 					if(this.game.instances[id] !== undefined) {
 						this.instance = this.game.instances[id]
@@ -36,8 +41,8 @@ module Scuffle {
 						this.socket.emit('instance$notfound', id)
 				else
 					this.socket.emit('instance$in', this.instance.id)
-			},
-			instance$ready: () => {
+			}
+			proto[Protocol.Client.InstanceReady] = () => {
 				if(this.instance !== undefined) {
 					this.instance.newPlayer(this)
 					this.socket.broadcast.to(this.instance.id).emit('instance$player$add', this.player.compress(3))
@@ -49,14 +54,14 @@ module Scuffle {
 				}
 				else
 					this.socket.emit('instance$none')
-			},
-			instance$player$me$look: (angle : number) => {
+			}
+			proto[Protocol.Client.InstanceMeLook] = (angle : number) => {
 				if(this.instance !== undefined)
 					this.player.angle = angle
 				else
 					this.socket.emit('instance$none')
-			},
-			disconnect: () => {
+			}
+			proto.disconnect = () => {
 				if(this.instance !== undefined && this.player !== undefined) {
 					this.socket.broadcast.to(this.instance.id).emit('instance$player$remove', this.player.id)
 					this.instance.removePlayer(this.player.id)
@@ -64,15 +69,13 @@ module Scuffle {
 					this.player = undefined
 				}
 			}
+			return proto
 		}
-		instance : Instance
-		player : Player
-		state : { [ k : string] : boolean }
-		accumBullet : number
 
 		constructor(game : ServerGame, socket) {
 			this.game = game
 			this.socket = socket
+			this.protocol = this.makeProtocol()
 			this.state = {}
 			this.accumBullet = 0
 

@@ -233,7 +233,7 @@ module Scuffle {
 			this.game.socket.on('instance$bullet$move', (id : number, pos : any) => {
 				this.bullets[id].move(Point.uncompress(pos))
 			})
-			this.game.socket.emit('instance$ready')
+			this.game.socket.emit(Protocol.Client.InstanceReady)
 
 			var px = 0, py = 0
 			var pmx = 0, pmy = 0
@@ -262,7 +262,7 @@ module Scuffle {
 
 				// clamp angle to range 0:360
 				this.lineOfSight.angle -= 360 * Math.floor(this.lineOfSight.angle / 360)
-				this.game.socket.emit('instance$player$me$look', radians)
+				this.game.socket.emit(Protocol.Client.InstanceMeLook, radians)
 			}
 
 			this.scoreboard = new Scoreboard(this.game)
