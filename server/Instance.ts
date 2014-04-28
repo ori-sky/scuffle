@@ -97,38 +97,45 @@ module Scuffle {
 			setTimeout(() => { this.spawn(id) }, 2000)
 		}
 
+		accum_bullet : number = 0
 		tick(time : number) {
 			this.forEachClient((client : Client) => {
 				client.tick(time)
 			})
-			this.forEachBullet((bullet : Bullet, id : number) => {
-				var newPos = bullet.pos.addedToPoint(bullet.velocity.scaledBy(time))
-				var hitsWall = this.map.lines.some((ln : Line) => {
-					return Line.prototype.intersectsMovingCircleOf.call(ln, bullet.pos, newPos, bullet.radius)
-				})
-				if(hitsWall)
-					this.removeBullet(id)
-				else {
-					var hitsPlayer = false
-					for(var idPl in this.clients) {
-						var pl = this.clients[idPl].player
-						// != used to coerce string and number
-						if(idPl != bullet.owner && pl.isAlive())
-							if(movingCirclesIntersect(bullet.pos, newPos, bullet.radius, pl.pos, pl.radius)) {
-								pl.health -= bullet.damage
-								this.game.io.sockets.in(this.id).emit(Protocol.Server.InstancePlayerHurt, idPl, pl.health)
-								if(!pl.isAlive())
-									this.respawn(idPl, bullet.owner)
-								this.removeBullet(id)
-								hitsPlayer = true
-								break
-							}
-					}
 
-					if(!hitsPlayer)
-						bullet.pos = newPos
-				}
-			})
+			this.accum_bullet += time
+			var timestep = 5
+			while(this.accum_bullet >= timestep) {
+				this.forEachBullet((bullet : Bullet, id : number) => {
+					var newPos = bullet.pos.addedToPoint(bullet.velocity.scaledBy(timestep))
+					var hitsWall = this.map.lines.some((ln : Line) => {
+						return Line.prototype.intersectsMovingCircleOf.call(ln, bullet.pos, newPos, bullet.radius)
+					})
+					if(hitsWall)
+						this.removeBullet(id)
+					else {
+						var hitsPlayer = false
+						for(var idPl in this.clients) {
+							var pl = this.clients[idPl].player
+							// != used to coerce string and number
+							if(idPl != bullet.owner && pl.isAlive())
+								if(movingCirclesIntersect(bullet.pos, newPos, bullet.radius, pl.pos, pl.radius)) {
+									pl.health -= bullet.damage
+									this.game.io.sockets.in(this.id).emit(Protocol.Server.InstancePlayerHurt, idPl, pl.health)
+									if(!pl.isAlive())
+										this.respawn(idPl, bullet.owner)
+									this.removeBullet(id)
+									hitsPlayer = true
+									break
+								}
+						}
+
+						if(!hitsPlayer)
+							bullet.pos = newPos
+					}
+				})
+				this.accum_bullet -= timestep
+			}
 		}
 	}
 }
