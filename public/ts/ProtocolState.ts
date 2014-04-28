@@ -3,22 +3,22 @@ module Scuffle {
 		game : Game
 
 		create() {
-			this.game.socket.on('instance$map$change', (mapName : string) => {
-				this.game.socket.once('map$get', (map : Map) => {
+			this.game.socket.on(Protocol.Server.InstanceMapChange, (mapName : string) => {
+				this.game.socket.once(Protocol.Server.MapGet, (map : Map) => {
 					this.game.state.start('Map', true, false, map)
 				})
 				this.game.socket.emit(Protocol.Client.MapGet, mapName)
 			})
-			this.game.socket.on('reset', () => {
+			this.game.socket.on(Protocol.Server.Reset, () => {
 				this.game.socket.disconnect()
 				this.game.socket.socket.reconnect()
 			})
-			this.game.socket.on('refresh', () => {
+			this.game.socket.on(Protocol.Server.Refresh, () => {
 				this.game.destroy()
 				location.reload(true)
 			})
-			this.game.socket.on('state$on', (name : string) => this.game.localState[name] = true)
-			this.game.socket.on('state$off', (name : string) => this.game.localState[name] = false)
+			this.game.socket.on(Protocol.Server.StateOn, (name : string) => this.game.localState[name] = true)
+			this.game.socket.on(Protocol.Server.StateOff, (name : string) => this.game.localState[name] = false)
 
 			this.game.input.keyboard.removeKey(Phaser.Keyboard.LEFT)
 			this.game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT)

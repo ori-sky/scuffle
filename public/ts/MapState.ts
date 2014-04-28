@@ -79,7 +79,7 @@ module Scuffle {
 				graphics.lineTo(line.b.x, line.b.y)
 			})
 
-			this.game.socket.on('instance$player$add', (player : any) => {
+			this.game.socket.on(Protocol.Server.InstancePlayerAdd, (player : any) => {
 				player = Player.uncompress(player)
 				var cli = this.players[player.id]
 				if(cli === undefined) {
@@ -95,7 +95,7 @@ module Scuffle {
 				else
 					cli.setPlayer(player)
 			})
-			this.game.socket.on('instance$player$you', (id : number) => {
+			this.game.socket.on(Protocol.Server.InstanceYou, (id : number) => {
 				this.me = id
 				var cli = this.players[id]
 				cli.isMe = true
@@ -107,20 +107,20 @@ module Scuffle {
 					this.focusOn(cli)
 				this.scoreboard.update()
 			})
-			this.game.socket.on('instance$player$remove', (id : number) => {
+			this.game.socket.on(Protocol.Server.InstancePlayerRemove, (id : number) => {
 				var cli = this.players[id]
 				this.scoreboard.removeRowFor(cli)
 				this.add.tween(cli.graphics).to({ alpha: 0 }, 400, Phaser.Easing.Linear.None, true)
 					.onComplete.add(() => cli.destroy())
 				delete this.players[id]
 			})
-			this.game.socket.on(42, (id : number, name : string) => {
+			this.game.socket.on(Protocol.Server.InstancePlayerStateOn, (id : number, name : string) => {
 				this.players[id].state[name] = true
 			})
-			this.game.socket.on(43, (id : number, name : string) => {
+			this.game.socket.on(Protocol.Server.InstancePlayerStateOff, (id : number, name : string) => {
 				this.players[id].state[name] = false
 			})
-			this.game.socket.on(44, (id : number, pos : any) => {
+			this.game.socket.on(Protocol.Server.InstancePlayerMove, (id : number, pos : any) => {
 				pos = Point.uncompress(pos)
 				var cli = this.players[id]
 				if(cli !== undefined) {
@@ -135,7 +135,7 @@ module Scuffle {
 						this.focusOn(cli)
 				}
 			})
-			this.game.socket.on('instance$player$spawn', (player : any) => {
+			this.game.socket.on(Protocol.Server.InstancePlayerSpawn, (player : any) => {
 				player = Player.uncompress(player)
 				var cli = this.players[player.id]
 				cli.setPlayer(player)
@@ -146,12 +146,12 @@ module Scuffle {
 					this.focusOn(cli)
 				}
 			})
-			this.game.socket.on('instance$player$hurt', (id : number, hp : number) => {
+			this.game.socket.on(Protocol.Server.InstancePlayerHurt, (id : number, hp : number) => {
 				this.players[id].player.health = hp
 				if(id == this.me)
 					this.updateHealth()
 			})
-			this.game.socket.on('instance$player$kill', (id : number, idKiller : number) => {
+			this.game.socket.on(Protocol.Server.InstancePlayerKill, (id : number, idKiller : number) => {
 				var plKilled = this.players[id].player
 				var plKiller = this.players[idKiller].player
 				++plKiller.kills
@@ -215,7 +215,7 @@ module Scuffle {
 
 				this.scoreboard.update()
 			})
-			this.game.socket.on(50, (bullet : any) => {
+			this.game.socket.on(Protocol.Server.InstanceBulletAdd, (bullet : any) => {
 				bullet = Bullet.uncompress(bullet)
 
 				var g = this.add.graphics(bullet.pos.x, bullet.pos.y, this.group)
@@ -226,11 +226,11 @@ module Scuffle {
 
 				sndBullet.play('main', 0, 0.8, false, true)
 			})
-			this.game.socket.on(52, (id : number) => {
+			this.game.socket.on(Protocol.Server.InstanceBulletRemove, (id : number) => {
 				this.bullets[id].destroy()
 				delete this.bullets[id]
 			})
-			this.game.socket.on('instance$bullet$move', (id : number, pos : any) => {
+			this.game.socket.on(Protocol.Server.InstanceBulletMove, (id : number, pos : any) => {
 				this.bullets[id].move(Point.uncompress(pos))
 			})
 			this.game.socket.emit(Protocol.Client.InstanceReady)

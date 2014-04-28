@@ -71,7 +71,7 @@ module Scuffle {
 		}
 
 		removeBullet(id : number) {
-			this.game.io.sockets.in(this.id).emit(52, id)
+			this.game.io.sockets.in(this.id).emit(Protocol.Server.InstanceBulletRemove, id)
 			delete this.bullets[id]
 		}
 
@@ -80,7 +80,7 @@ module Scuffle {
 				var spawnIndex = Math.floor(Math.random() * this.map.spawns.length)
 				this.clients[id].player.pos = this.map.spawns[spawnIndex]
 				this.clients[id].player.health = this.clients[id].player.baseHealth
-				this.game.io.sockets.in(this.id).emit('instance$player$spawn', this.clients[id].player.compress(3))
+				this.game.io.sockets.in(this.id).emit(Protocol.Server.InstancePlayerSpawn, this.clients[id].player.compress(3))
 			}
 		}
 
@@ -89,7 +89,7 @@ module Scuffle {
 			++this.clients[idKiller].player.streak
 			++this.clients[id].player.deaths
 			this.clients[id].player.streak = 0
-			this.game.io.sockets.in(this.id).emit('instance$player$kill', id, idKiller)
+			this.game.io.sockets.in(this.id).emit(Protocol.Server.InstancePlayerKill, id, idKiller)
 		}
 
 		respawn(id : number, idKiller : number) {
@@ -116,7 +116,7 @@ module Scuffle {
 						if(idPl != bullet.owner && pl.isAlive())
 							if(movingCirclesIntersect(bullet.pos, newPos, bullet.radius, pl.pos, pl.radius)) {
 								pl.health -= bullet.damage
-								this.game.io.sockets.in(this.id).emit('instance$player$hurt', idPl, pl.health)
+								this.game.io.sockets.in(this.id).emit(Protocol.Server.InstancePlayerHurt, idPl, pl.health)
 								if(!pl.isAlive())
 									this.respawn(idPl, bullet.owner)
 								this.removeBullet(id)
