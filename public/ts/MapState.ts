@@ -125,7 +125,7 @@ module Scuffle {
 				var cli = this.players[id]
 				if(cli !== undefined) {
 					var vDiff = cli.player.pos.subtractedFromPoint(pos)
-					if(vDiff.length() > 40)
+					if(vDiff.length() > 40 || this.game.paused)
 						cli.move(pos)
 					else {
 						vDiff.scale(Math.max(0.001, Math.min(0.005, cli.player.velocity.length() * this.game.latency)))
@@ -273,7 +273,7 @@ module Scuffle {
 		}
 
 		update() {
-			var time = Math.min(500, this.game.time.elapsed)
+			var time = this.game.time.elapsed
 			for(var id in this.players) {
 				var cli = this.players[id]
 				if(cli.player.isAlive()) {
