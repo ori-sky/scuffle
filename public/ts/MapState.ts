@@ -125,18 +125,11 @@ module Scuffle {
 				var cli = this.players[id]
 				if(cli !== undefined) {
 					var vDiff = cli.player.pos.subtractedFromPoint(pos)
-					if(vDiff.length() > 30)
+					if(vDiff.length() > 40)
 						cli.move(pos)
 					else {
-						var lenVel = cli.player.velocity.length()
-						if(lenVel > 0.15) {
-							vDiff.scale(lenVel / 50)
-							cli.player.velocity.addPoint(vDiff)
-						}
-						else {
-							vDiff.scale(0.25)
-							cli.moveByPoint(vDiff)
-						}
+						vDiff.scale(Math.min(0.005, cli.player.velocity.length() * this.game.latency))
+						cli.player.velocity.addPoint(vDiff)
 					}
 					if(id == this.me)
 						this.focusOn(cli)
