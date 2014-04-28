@@ -64,7 +64,7 @@ server => client
 45 instance none
 	(void)
 	tells the client they are not in an instance
-48 instance in
+46 instance in
 	(string) instance id
 	tells the client which instance they are in
 55 instance map change
