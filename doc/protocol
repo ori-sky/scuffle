@@ -2,127 +2,123 @@
 client => server
 ----------------
 
-state$on
-	(string) state name
-	tells the server to enable a state
-state$off
-	(string) state name
-	tells the server to disable a state
-map$get
-	(string) map name
-	requests a map from the server
-		map$get
-instance$join
-	(string) instance id
-	asks the server to join an instance
-		instance$join
-instance$ready
-	(void)
-	tells the server we are ready to receive instance events
-		instance$player$add
-		instance$you
-instance$player$me$look
-	(number) direction angle in radians
-	tells the server the player has changed direction
-ping
-	(string) identifier
-	sends a ping to the server
-pong
-	(string) identifier
-	replies to a server ping
-batch
+1 batch
 	(Event[]) events
 	batches several events into one
+5 ping
+	(string) identifier
+	sends a ping to the server
+6 pong
+	(string) identifier
+	replies to a server ping
+10 state on
+	(string) state name
+	tells the server to enable a state
+11 state off
+	(string) state name
+	tells the server to disable a state
+25 map get
+	(string) map name
+	requests a map from the server
+45 instance join
+	(string) instance id
+	asks the server to join an instance
+46 instance ready
+	(void)
+	tells the server we are ready to receive instance events
+75 instance me look
+	(number) direction angle in radians
+	tells the server the player has changed direction
 
 ----------------
 server => client
 ----------------
 
-state$on
+1 batch
+	(Event[]) events
+	batches several events into one
+5 ping
+	(string) identifier
+	sends a ping to the client
+6 pong
+	(string) identifier
+	replies to a client ping
+10 state on
 	(string) state name
 	tells the client to enable a state
-state$off
+11 state off
 	(string) state name
 	tells the client to disable a state
-map$get
+25 map get
 	(Map) map
 	sends map data to the client
-map$notfound
+26 map not found
 	(string) map name
 	tells the client a map does not exist
-instance$join
+43 instance join
 	(string) instance id
 	tells the client they have joined an instance
-instance$notfound
+44 instance notfound
 	(string) instance id
 	tells the client an instance does not exist
-instance$none
+45 instance none
 	(void)
 	tells the client they are not in an instance
-instance$in
+48 instance in
 	(string) instance id
 	tells the client which instance they are in
-instance$map$change
+55 instance map change
 	(string) map name
 	tells the client the instance has changed map
-instance$player$add
+60 instance player add
 	(Player) player
 	tells the client a player has been added to the instance
-instance$player$remove
+61 instance player remove
 	(string) player id
 	tells the client a player has been removed from the instance
-042 instance$player$state$on
+62 instance player state on
 	(string) player id
 	(string) state name
 	tells the client a player has enabled a state
-043 instance$player$state$off
+63 instance player state off
 	(string) player id
 	(string) state name
 	tells the client a player has disabled a state
-044 instance$player$move
+65 instance player move
 	(string) player id
 	(Point) new position
 	tells the client a player has moved position
-instance$player$spawn
+66 instance player spawn
 	(Player) player
 	tells the client a player has spawned
-instance$player$heal
+67 instance player heal
 	(string) player id
 	(number) new health
 	tells the client a player has gained health
-instance$player$hurt
+68 instance player hurt
 	(string) player id
 	(number) new health
 	tells the client a player has lost health
-instance$player$kill
+69 instance player kill
 	(string) player id
 	(string) killer player id
 	tells the client a player has been killed
-instance$player$you
+70 instance you
 	(string) player id
 	tells the client which player they are
-050 instance$bullet$add
+80 instance bullet add
 	(Bullet) bullet
 	tells the client a bullet has been added to the instance
-052 instance$bullet$remove
+81 instance bullet remove
 	(string) bullet id
 	tells the client a bullet has been removed from the instance
-instance$bullet$move
+85 instance bullet move
 	(string) bullet id
 	(Point) new position
 	tells the client a bullet has moved position
-ping
-	(string) identifier
-	sends a ping to the client
-pong
-	(string) identifier
-	replies to a client ping
-reset
+92 reset
 	(void)
 	tells the client to reset the game
-refresh
+93 refresh
 	(void)
 	tells the client to refresh the page
-batch
-	(Event[]) events
-	batches several events into one
