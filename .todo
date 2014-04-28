@@ -9,6 +9,9 @@
             Decreased on server
         </comment>
     </note>
+    <note priority="medium" time="1398599821" done="1398652273">
+        Add fullscreen button
+    </note>
     <note priority="veryhigh" time="1398615384">
         Fix infinite loop of doom caused by lag spike on client
     </note>
@@ -24,10 +27,7 @@
     <note priority="high" time="1398634095">
         Write circle-rect intersection code for rect-based walls
     </note>
-    <note priority="medium" time="1398599821">
-        Add fullscreen button
-    </note>
-    <note priority="medium" time="1398599850">
+    <note priority="medium" time="1398599850" done="1398652277">
         Make buttons hide on pointer lock (add to common group)
     </note>
 </todo>
