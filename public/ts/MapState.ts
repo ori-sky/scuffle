@@ -273,7 +273,7 @@ module Scuffle {
 		}
 
 		update() {
-			var time = this.game.time.elapsed
+			var time = Math.min(1000, this.game.time.elapsed)
 			for(var id in this.players) {
 				var cli = this.players[id]
 				if(cli.player.isAlive()) {
