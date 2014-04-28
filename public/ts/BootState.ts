@@ -5,7 +5,6 @@ module Scuffle {
 		}
 
 		create() {
-			this.stage.disableVisibilityChange = true
 			this.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL
 			this.game.state.start('Preload')
 		}
