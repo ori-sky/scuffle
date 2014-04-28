@@ -54,6 +54,17 @@ module Scuffle {
 		return vel
 	}
 
+	var accum_tickPlayerMovement = 0
+	export function _tickPlayerMovement(time : number, state : any, player : Player, map : Map) {
+		accum_tickPlayerMovement += time
+		var ret : any
+		var timestep = 15
+		while(accum_tickPlayerMovement >= timestep) {
+			ret = _tickPlayerMovement(timestep, state, player, map)
+			accum_tickPlayerMovement -= timestep
+		}
+		return ret
+	}
 	export function tickPlayerMovement(time : number, state : any, player : Player, map : Map) {
 		var vel = tickPlayerVelocity(time, state, player)
 		player.velocity = vel
