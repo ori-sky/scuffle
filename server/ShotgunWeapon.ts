@@ -27,7 +27,6 @@ module Scuffle {
 					bullet.pos = Point.prototype.copy.call(context.player.pos)
 					bullet.pos.add(bullet.velocity.x * context.player.radius,
 					bullet.velocity.y * context.player.radius)
-					bullet.radius = 2.5 / Math.min(1.5, Math.max(1, context.player.streak / 3))
 					bullet.radius = 1
 					bullet.damage = 10
 					context.game.io.sockets.in(context.instance.id).emit(Protocol.Server.InstanceBulletAdd, bullet.compress(4))
