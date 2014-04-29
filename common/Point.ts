@@ -9,18 +9,20 @@ module Scuffle {
 		}
 
 		static _pool = new Array(1024)
+		static _poolLength = 0
 		static create(x : number, y : number) {
 			if(Point._pool[0] === undefined)
 				return new Point(x, y)
 			else {
-				var obj = Point._pool.pop()
+				var obj = Point._pool[--Point._poolLength]
+				Point._pool[Point._poolLength] = undefined
 				obj.x = x
 				obj.y = y
 				return obj
 			}
 		}
 		pool() {
-			Point._pool.push(this)
+			Point._pool[Point._poolLength++] = this
 		}
 
 		compress(quality? : number) {
