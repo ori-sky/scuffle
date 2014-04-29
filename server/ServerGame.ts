@@ -60,7 +60,7 @@ module Scuffle {
 			this.preload()
 			this.protocol(io)
 			this.init()
-			setInterval(this.iterate.bind(this), 10)
+			setInterval(this.iterate.bind(this), 25)
 
 			this.instances[0] = new Instance(this, 0)
 			this.instances[0].map = this.maps['warehouse']
