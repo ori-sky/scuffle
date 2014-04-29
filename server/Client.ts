@@ -75,7 +75,6 @@ module Scuffle {
 		constructor(game : ServerGame, socket) {
 			this.game = game
 			this.socket = socket
-			this.protocol = this.makeProtocol()
 			this.state = {}
 			switch(Math.floor(Math.random() * 4)) {
 				case 0:
@@ -92,8 +91,9 @@ module Scuffle {
 					break
 			}
 
+			this.protocol = this.makeProtocol()
 			for(var fk in this.protocol) {
-				var fv= this.protocol[fk]
+				var fv = this.protocol[fk]
 				this.socket.on(fk, fv)
 			}
 		}
