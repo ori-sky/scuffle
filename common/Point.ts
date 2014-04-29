@@ -8,6 +8,21 @@ module Scuffle {
 			this.y = y
 		}
 
+		static _pool = new Array(1024)
+		static create(x : number, y : number) {
+			if(Point._pool[0] === undefined)
+				return new Point(x, y)
+			else {
+				var obj = Point._pool.pop()
+				obj.x = x
+				obj.y = y
+				return obj
+			}
+		}
+		pool() {
+			Point._pool.push(this)
+		}
+
 		compress(quality? : number) {
 			if(quality !== undefined)
 				return [+this.x.toFixed(quality), +this.y.toFixed(quality)]
@@ -17,11 +32,11 @@ module Scuffle {
 
 		static uncompress(obj : any) {
 			expectLength(obj, 2)
-			return new Point(obj[0], obj[1])
+			return Point.create(obj[0], obj[1])
 		}
 
 		copy() {
-			return new Point(this.x, this.y)
+			return Point.create(this.x, this.y)
 		}
 
 		isZero() {
@@ -34,12 +49,12 @@ module Scuffle {
 
 		normalizedTo(n : number) {
 			var factor = n / Point.prototype.length.call(this)
-			return new Point(this.x * factor, this.y * factor)
+			return Point.create(this.x * factor, this.y * factor)
 		}
 
 		normalized() {
 			var factor = 1 / Point.prototype.length.call(this)
-			return new Point(this.x * factor, this.y * factor)
+			return Point.create(this.x * factor, this.y * factor)
 		}
 
 		dot(x : number, y : number) {
@@ -51,23 +66,23 @@ module Scuffle {
 		}
 
 		addedTo(x : number, y : number) {
-			return new Point(x + this.x, y + this.y)
+			return Point.create(x + this.x, y + this.y)
 		}
 
 		addedToPoint(p : Point) {
-			return new Point(p.x + this.x, p.y + this.y)
+			return Point.create(p.x + this.x, p.y + this.y)
 		}
 
 		subtractedFrom(x : number, y : number) {
-			return new Point(x - this.x, y - this.y)
+			return Point.create(x - this.x, y - this.y)
 		}
 
 		subtractedFromPoint(p : Point) {
-			return new Point(p.x - this.x, p.y - this.y)
+			return Point.create(p.x - this.x, p.y - this.y)
 		}
 
 		scaledBy(s : number) {
-			return new Point(this.x * s, this.y * s)
+			return Point.create(this.x * s, this.y * s)
 		}
 
 		angleTo(p : Point) {
@@ -75,7 +90,7 @@ module Scuffle {
 		}
 
 		halfwayToPoint(p : Point) {
-			return new Point((this.x + p.x) / 2, (this.y + p.y) / 2)
+			return Point.create((this.x + p.x) / 2, (this.y + p.y) / 2)
 		}
 
 		zero() {
