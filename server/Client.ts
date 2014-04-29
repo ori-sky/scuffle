@@ -5,8 +5,8 @@ module Scuffle {
 		protocol : any
 		instance : Instance
 		player : Player
+		weapon : Activator
 		state : { [ k : string] : boolean }
-		accumBullet : number
 
 		makeProtocol() {
 			var proto : any = {}
@@ -77,7 +77,36 @@ module Scuffle {
 			this.socket = socket
 			this.protocol = this.makeProtocol()
 			this.state = {}
-			this.accumBullet = 0
+			this.weapon = new Activator(300)
+
+			this.weapon.predicate = () => {
+				return this.player.isAlive() &&
+				      (this.state['mouse.left'] || this.state['key.space'])
+			}
+
+			this.weapon.callback = () => {
+				var bullet = this.instance.newBullet(this.player.id)
+				var colors = [
+					0xff0000,
+					0xff8800,
+					0xffff00,
+					0x00ff00,
+					0x55aaff,
+					0xff00ff,
+					0x5500ff,
+					0xaaccff
+				]
+				bullet.color = colors[Math.floor(Math.random() * colors.length)]
+				var angle = this.player.angle// + (Math.random() - 0.5) / 10
+				bullet.velocity.x = Math.cos(angle)
+				bullet.velocity.y = Math.sin(angle)
+				bullet.velocity.scale(0.7)
+				bullet.pos = Point.prototype.copy.call(this.player.pos)
+				bullet.pos.add(bullet.velocity.x * this.player.radius,
+				               bullet.velocity.y * this.player.radius)
+				bullet.radius = 2.5 / Math.min(1.5, Math.max(1, this.player.streak / 3))
+				this.game.io.sockets.in(this.instance.id).emit(Protocol.Server.InstanceBulletAdd, bullet.compress(4))
+			}
 
 			for(var fk in this.protocol) {
 				var fv= this.protocol[fk]
@@ -86,39 +115,9 @@ module Scuffle {
 		}
 
 		tick(time : number) {
-			this.tickMouse(time)
+			this.weapon.tick(time)
 			if(this.player.isAlive())
 				this.tickMovement(time)
-		}
-
-		tickMouse(time : number) {
-			this.accumBullet += time
-			if(this.player.isAlive())
-				if(this.state['mouse.left'] || this.state['key.space'])
-					if(this.accumBullet >= 300) {
-						var bullet = this.instance.newBullet(this.player.id)
-						var colors = [
-							0xff0000,
-							0xff8800,
-							0xffff00,
-							0x00ff00,
-							0x55aaff,
-							0xff00ff,
-							0x5500ff,
-							0xaaccff
-						]
-						bullet.color = colors[Math.floor(Math.random() * colors.length)]
-						var angle = this.player.angle// + (Math.random() - 0.5) / 10
-						bullet.velocity.x = Math.cos(angle)
-						bullet.velocity.y = Math.sin(angle)
-						bullet.velocity.scale(0.7)
-						bullet.pos = Point.prototype.copy.call(this.player.pos)
-						bullet.pos.add(bullet.velocity.x * this.player.radius,
-						               bullet.velocity.y * this.player.radius)
-						bullet.radius = 2.5 / Math.min(1.5, Math.max(1, this.player.streak / 3))
-						this.game.io.sockets.in(this.instance.id).emit(Protocol.Server.InstanceBulletAdd, bullet.compress(4))
-						this.accumBullet = 0
-					}
 		}
 
 		tickMovement(time : number) {
