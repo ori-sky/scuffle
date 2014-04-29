@@ -3,7 +3,7 @@ client => server
 ----------------
 
 1 batch
-	(Event[]) events
+	([number, [], ...]) [event id, args, event id, args, ...]
 	batches several events into one
 2 repeat
 	(number) event id
@@ -39,7 +39,7 @@ server => client
 ----------------
 
 1 batch
-	(Event[]) events
+	([number, [], ...]) [event id, args, event id, args, ...]
 	batches several events into one
 2 repeat
 	(number) event id
