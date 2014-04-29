@@ -67,11 +67,12 @@ module Scuffle {
 
 		newBullet(owner : number) {
 			var id = this.firstAvailableBulletID()
-			return (this.bullets[id] = new Bullet(id, owner))
+			return (this.bullets[id] = Bullet.create(id, owner))
 		}
 
 		removeBullet(id : number) {
 			this.game.io.sockets.in(this.id).emit(Protocol.Server.InstanceBulletRemove, id)
+			this.bullets[id].pool()
 			delete this.bullets[id]
 		}
 

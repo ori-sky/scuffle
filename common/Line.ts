@@ -11,17 +11,17 @@ module Scuffle {
 		}
 
 		vector() {
-			return new Point(this.b.x - this.a.x, this.b.y - this.a.y)
+			return Point.create(this.b.x - this.a.x, this.b.y - this.a.y)
 		}
 
 		normal() {
-			var p = new Point(this.a.y - this.b.y, this.b.x - this.a.x)
+			var p = Point.create(this.a.y - this.b.y, this.b.x - this.a.x)
 			p.normalize()
 			return p
 		}
 
 		oppositeNormal() {
-			var p = new Point(this.b.y - this.a.y, this.a.x - this.b.x)
+			var p = Point.create(this.b.y - this.a.y, this.a.x - this.b.x)
 			p.normalize()
 			return p
 		}

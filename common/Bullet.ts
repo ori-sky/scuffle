@@ -20,6 +20,25 @@ module Scuffle {
 			this.damage = 20
 		}
 
+		static _pool = new Array(1024)
+		static _poolLength = 0
+		static create(id : number, owner : number) {
+			if(Bullet._pool[0] === undefined)
+				return new Bullet(id, owner)
+			else {
+				var obj = Bullet._pool[--Bullet._poolLength]
+				Bullet._pool[Bullet._poolLength] = undefined
+				obj.id = id
+				obj.owner = owner
+				return obj
+			}
+		}
+		pool() {
+			Bullet._pool[Bullet._poolLength++] = this
+			if(Bullet._poolLength === Bullet._pool.length)
+				Bullet._pool.length *= 2
+		}
+
 		compress(quality? : number) {
 			var obj = [this.id, this.owner, this.color]
 			if(quality !== undefined)
@@ -37,7 +56,7 @@ module Scuffle {
 
 		static uncompress(obj : any) {
 			expectLength(obj, 8)
-			var bullet = new Bullet(obj[0], obj[1])
+			var bullet = Bullet.create(obj[0], obj[1])
 			bullet.color = obj[2]
 			bullet.alpha = obj[3]
 			bullet.radius = obj[4]

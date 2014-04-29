@@ -27,7 +27,7 @@ module Scuffle {
 	}
 
 	export function tickPlayerVelocity(time : number, state : any, player : Player) {
-		var moveVector = new Point(0, 0)
+		var moveVector = Point.create(0, 0)
 		if(state['key.a'] || state['key.left'])
 			moveVector.add(-1,  0)
 		if(state['key.d'] || state['key.right'])

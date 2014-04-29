@@ -23,6 +23,8 @@ module Scuffle {
 		}
 		pool() {
 			Point._pool[Point._poolLength++] = this
+			if(Point._poolLength === Point._pool.length)
+				Point._pool.length *= 2
 		}
 
 		compress(quality? : number) {
