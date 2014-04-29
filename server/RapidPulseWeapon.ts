@@ -12,7 +12,7 @@ module Scuffle {
 					Color.BrightBlue, Color.Magenta, Color.PurpleBlue, Color.PaleCyan
 				]
 				bullet.color = colors[Math.floor(Math.random() * colors.length)]
-				var angle = context.player.angle + (Math.random() - 0.5) / 10
+				var angle = context.player.angle + (Math.random() - 0.5) / 2
 				bullet.velocity.x = Math.cos(angle)
 				bullet.velocity.y = Math.sin(angle)
 				bullet.velocity.scale(0.45)
