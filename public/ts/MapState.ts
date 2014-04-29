@@ -2,10 +2,12 @@ module Scuffle {
 	export class MapState extends Phaser.State {
 		game : Game
 		map : Map
-		music : Phaser.Sound
+		protocol : any
 		players : { [k : number] : ClientPlayer }
 		bullets : { [k : number] : ClientBullet }
 		me : number
+		music : Phaser.Sound
+		sndBullet : Phaser.Sound
 		group : Phaser.Group
 		gButtons : Phaser.Group
 		lineOfSight : Phaser.Graphics
@@ -20,66 +22,9 @@ module Scuffle {
 			this.notices = []
 		}
 
-		create() {
-			this.stage.backgroundColor = 0x0e0e0c
-			this.camera.bounds.x = -Infinity
-			this.camera.bounds.y = -Infinity
-			this.camera.bounds.width = Infinity
-			this.camera.bounds.height = Infinity
-
-			this.music = this.add.audio(this.map.name)
-			var patternDuration = 1.79332
-			this.music.addMarker('start', 0, patternDuration)
-			this.music.addMarker('main', patternDuration, patternDuration * 24, undefined, true)
-			this.music.onMarkerComplete.add((marker : string) => {
-				if(marker === 'start')
-					setTimeout(() => {
-						this.music.play('main', 0, undefined, true)
-					}, 0)
-			})
-			//this.music.play('start')
-			var sndBullet = this.add.audio('beep2')
-			sndBullet.addMarker('main', 0, 0.02)
-
-			this.group = this.add.group()
-			this.group.scale.setTo(2, 2)
-			this.group.alpha = 0
-			this.add.tween(this.group).to({alpha: 1}, 400, Phaser.Easing.Linear.None, true)
-
-			this.gButtons = this.add.group()
-			this.addButton('audio.button', 0, () => this.sound.mute = !this.sound.mute)
-			this.addButton('screen1', 1, () => this.scale.startFullScreen(false))
-			this.addButton('crosshair2', 2, () => this.input.mouse.requestPointerLock())
-
-			this.input.mouse.pointerLock.add((state : boolean) => {
-				if(state === true)
-					this.add.tween(this.gButtons).to({ alpha: 0 }, 500, Phaser.Easing.Linear.None, true)
-				else
-					this.add.tween(this.gButtons).to({ alpha: 1 }, 500, Phaser.Easing.Linear.None, true)
-			})
-
-			this.lineOfSight = this.add.graphics(0, 0, this.group)
-			this.lineOfSight.alpha = 0
-			this.lineOfSight.lineStyle(1, 0xaa0000, 1)
-			this.lineOfSight.moveTo(0, 0)
-			this.lineOfSight.lineTo(60, 0)
-
-			this.ownHealth = this.add.graphics(0, 0, this.group)
-
-			this.map.sprites.forEach(sprite => {
-				var image : any = this.cache.getImage(sprite.source)
-				var s = this.add.sprite(sprite.pos.x, sprite.pos.y, sprite.source, 0, this.group)
-				s.scale.setTo(sprite.size.x / image.width, sprite.size.y / image.height)
-			})
-			this.map.lines.forEach(line => {
-				var graphics = this.add.graphics(0, 0, this.group)
-				graphics.lineStyle(line.width || this.map.lineWidth || 2,
-				                   parseInt(line.color) || parseInt(this.map.lineColor) || 0xffffff, 1)
-				graphics.moveTo(line.a.x, line.a.y)
-				graphics.lineTo(line.b.x, line.b.y)
-			})
-
-			this.game.socket.on(Protocol.Server.InstancePlayerAdd, (player : any) => {
+		makeProtocol() {
+			var proto : any = {}
+			proto[Protocol.Server.InstancePlayerAdd] = (player : any) => {
 				player = Player.uncompress(player)
 				var cli = this.players[player.id]
 				if(cli === undefined) {
@@ -94,8 +39,8 @@ module Scuffle {
 				}
 				else
 					cli.setPlayer(player)
-			})
-			this.game.socket.on(Protocol.Server.InstanceYou, (id : number) => {
+			}
+			proto[Protocol.Server.InstanceYou] = (id : number) => {
 				this.me = id
 				var cli = this.players[id]
 				cli.isMe = true
@@ -106,21 +51,21 @@ module Scuffle {
 				if(cli.player.isAlive())
 					this.focusOn(cli)
 				this.scoreboard.update()
-			})
-			this.game.socket.on(Protocol.Server.InstancePlayerRemove, (id : number) => {
+			}
+			proto[Protocol.Server.InstancePlayerRemove] = (id : number) => {
 				var cli = this.players[id]
 				this.scoreboard.removeRowFor(cli)
 				this.add.tween(cli.graphics).to({ alpha: 0 }, 400, Phaser.Easing.Linear.None, true)
 					.onComplete.add(() => cli.destroy())
 				delete this.players[id]
-			})
-			this.game.socket.on(Protocol.Server.InstancePlayerStateOn, (id : number, name : string) => {
+			}
+			proto[Protocol.Server.InstancePlayerStateOn] = (id : number, name : string) => {
 				this.players[id].state[name] = true
-			})
-			this.game.socket.on(Protocol.Server.InstancePlayerStateOff, (id : number, name : string) => {
+			}
+			proto[Protocol.Server.InstancePlayerStateOff] = (id : number, name : string) => {
 				this.players[id].state[name] = false
-			})
-			this.game.socket.on(Protocol.Server.InstancePlayerMove, (id : number, pos : any) => {
+			}
+			proto[Protocol.Server.InstancePlayerMove] = (id : number, pos : any) => {
 				pos = Point.uncompress(pos)
 				var cli = this.players[id]
 				if(cli !== undefined) {
@@ -134,8 +79,8 @@ module Scuffle {
 					if(id == this.me)
 						this.focusOn(cli)
 				}
-			})
-			this.game.socket.on(Protocol.Server.InstancePlayerSpawn, (player : any) => {
+			}
+			proto[Protocol.Server.InstancePlayerSpawn] = (player : any) => {
 				player = Player.uncompress(player)
 				var cli = this.players[player.id]
 				cli.setPlayer(player)
@@ -145,13 +90,13 @@ module Scuffle {
 					this.updateHealth()
 					this.focusOn(cli)
 				}
-			})
-			this.game.socket.on(Protocol.Server.InstancePlayerHurt, (id : number, hp : number) => {
+			}
+			proto[Protocol.Server.InstancePlayerHurt] = (id : number, hp : number) => {
 				this.players[id].player.health = hp
 				if(id == this.me)
 					this.updateHealth()
-			})
-			this.game.socket.on(Protocol.Server.InstancePlayerKill, (id : number, idKiller : number) => {
+			}
+			proto[Protocol.Server.InstancePlayerKill] = (id : number, idKiller : number) => {
 				var plKilled = this.players[id].player
 				var plKiller = this.players[idKiller].player
 				++plKiller.kills
@@ -214,8 +159,8 @@ module Scuffle {
 				this.add.tween(this.players[id].graphics).to({ alpha: 0 }, 400, Phaser.Easing.Linear.None, true)
 
 				this.scoreboard.update()
-			})
-			this.game.socket.on(Protocol.Server.InstanceBulletAdd, (bullet : any) => {
+			}
+			proto[Protocol.Server.InstanceBulletAdd] = (bullet : any) => {
 				bullet = Bullet.uncompress(bullet)
 
 				var g = this.add.graphics(bullet.pos.x, bullet.pos.y, this.group)
@@ -224,16 +169,77 @@ module Scuffle {
 				g.endFill()
 				this.bullets[bullet.id] = new ClientBullet(bullet, g)
 
-				sndBullet.play('main', 0, 0.8, false, true)
-			})
-			this.game.socket.on(Protocol.Server.InstanceBulletRemove, (id : number) => {
+				this.sndBullet.play('main', 0, 0.8, false, true)
+			}
+			proto[Protocol.Server.InstanceBulletRemove] = (id : number) => {
 				this.bullets[id].destroy()
 				delete this.bullets[id]
-			})
-			this.game.socket.on(Protocol.Server.InstanceBulletMove, (id : number, pos : any) => {
+			}
+			proto[Protocol.Server.InstanceBulletMove] = (id : number, pos : any) => {
 				this.bullets[id].move(Point.uncompress(pos))
+			}
+			return proto
+		}
+
+		create() {
+			this.stage.backgroundColor = 0x0e0e0c
+			this.camera.bounds.x = -Infinity
+			this.camera.bounds.y = -Infinity
+			this.camera.bounds.width = Infinity
+			this.camera.bounds.height = Infinity
+
+			this.music = this.add.audio(this.map.name)
+			var patternDuration = 1.79332
+			this.music.addMarker('start', 0, patternDuration)
+			this.music.addMarker('main', patternDuration, patternDuration * 24, undefined, true)
+			this.music.onMarkerComplete.add((marker : string) => {
+				if(marker === 'start')
+					setTimeout(() => {
+						this.music.play('main', 0, undefined, true)
+					}, 0)
 			})
-			this.game.socket.emit(Protocol.Client.InstanceReady)
+			//this.music.play('start')
+			this.sndBullet = this.add.audio('beep2')
+			this.sndBullet.addMarker('main', 0, 0.02)
+
+			this.group = this.add.group()
+			this.group.scale.setTo(2, 2)
+			this.group.alpha = 0
+			this.add.tween(this.group).to({alpha: 1}, 400, Phaser.Easing.Linear.None, true)
+
+			this.gButtons = this.add.group()
+			this.addButton('audio.button', 0, () => this.sound.mute = !this.sound.mute)
+			this.addButton('screen1', 1, () => this.scale.startFullScreen(false))
+			this.addButton('crosshair2', 2, () => this.input.mouse.requestPointerLock())
+
+			this.map.sprites.forEach(sprite => {
+				var image : any = this.cache.getImage(sprite.source)
+				var s = this.add.sprite(sprite.pos.x, sprite.pos.y, sprite.source, 0, this.group)
+				s.scale.setTo(sprite.size.x / image.width, sprite.size.y / image.height)
+			})
+			this.map.lines.forEach(line => {
+				var graphics = this.add.graphics(0, 0, this.group)
+				graphics.lineStyle(line.width || this.map.lineWidth || 2,
+				                   parseInt(line.color) || parseInt(this.map.lineColor) || 0xffffff, 1)
+				graphics.moveTo(line.a.x, line.a.y)
+				graphics.lineTo(line.b.x, line.b.y)
+			})
+
+			this.lineOfSight = this.add.graphics(0, 0, this.group)
+			this.lineOfSight.alpha = 0
+			this.lineOfSight.lineStyle(1, 0xaa0000, 1)
+			this.lineOfSight.moveTo(0, 0)
+			this.lineOfSight.lineTo(60, 0)
+			this.ownHealth = this.add.graphics(0, 0, this.group)
+
+			this.scoreboard = new Scoreboard(this.game)
+			var kTab = this.game.input.keyboard.addKey(Phaser.Keyboard.TAB)
+			kTab.onDown.add(() => this.scoreboard.show())
+			kTab.onUp.add(() => this.scoreboard.hide())
+
+			this.input.mouse.pointerLock.add((state : boolean) => {
+				this.add.tween(this.gButtons).to({ alpha: state ? 1 : 0 }, 500, Phaser.Easing.Linear.None, true)
+			})
 
 			var px = 0, py = 0
 			var pmx = 0, pmy = 0
@@ -250,26 +256,24 @@ module Scuffle {
 
 				if(this.input.mouse.locked) {
 					var rad = this.lineOfSight.angle * Math.PI / 180
-					var compX = -Math.sin(rad)
-					var compY = Math.cos(rad)
-					this.lineOfSight.angle += (pmx * compX + pmy * compY) / 6
+					this.lineOfSight.angle += (pmx * -Math.sin(rad) + pmy * Math.cos(rad)) / 6
 					var radians = this.lineOfSight.angle * Math.PI / 180
 				}
 				else {
 					var radians = Math.atan2(e.layerY - this.game.height / 2, e.layerX - this.game.width / 2)
 					this.lineOfSight.angle = radians * 180 / Math.PI
 				}
-
 				// clamp angle to range 0:360
 				this.lineOfSight.angle -= 360 * Math.floor(this.lineOfSight.angle / 360)
 				this.game.socket.emit(Protocol.Client.InstanceMeLook, radians)
 			}
 
-			this.scoreboard = new Scoreboard(this.game)
-
-			var kTab = this.game.input.keyboard.addKey(Phaser.Keyboard.TAB)
-			kTab.onDown.add(() => this.scoreboard.show())
-			kTab.onUp.add(() => this.scoreboard.hide())
+			this.protocol = this.makeProtocol()
+			for(var fk in this.protocol) {
+				var fv = this.protocol[fk]
+				this.game.socket.on(fk, fv)
+			}
+			this.game.socket.emit(Protocol.Client.InstanceReady)
 		}
 
 		update() {
