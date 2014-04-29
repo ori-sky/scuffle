@@ -9,6 +9,9 @@
             Completeness not accurately tested, mark as incomplete if issue surfaces again
         </comment>
     </note>
+    <note priority="veryhigh" time="1398634165" done="1398675057">
+        Fix issues caused by checking with-wall collisions before with-player collisions (use a timestep)
+    </note>
     <note priority="medium" time="1398230652" done="1398565822">
         Decrease Socket.IO heartbeat interval on both client and server
         <comment>
@@ -21,11 +24,11 @@
     <note priority="medium" time="1398599850" done="1398652277">
         Make buttons hide on pointer lock (add to common group)
     </note>
-    <note priority="veryhigh" time="1398634165" done="1398675057">
-        Fix issues caused by checking with-wall collisions before with-player collisions (use a timestep)
-    </note>
-    <note priority="high" time="1398607114">
+    <note priority="high" time="1398607114" done="1398738451">
         Make generic weapon system
+        <comment>
+            Server-side only
+        </comment>
     </note>
     <note priority="high" time="1398607254">
         Add weapons - shotgun, machine gun, grenade launcher?, rocket launcher?
