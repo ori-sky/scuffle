@@ -110,7 +110,10 @@ module Scuffle {
 			var timestep = 5
 			while(this.accum_bullet >= timestep) {
 				this.forEachBullet((bullet : Bullet, id : number) => {
-					var newPos = bullet.pos.addedToPoint(bullet.velocity.scaledBy(timestep))
+					var vTmp = bullet.velocity.scaledBy(timestep)
+					var newPos = bullet.pos.addedToPoint(vTmp)
+					vTmp.pool()
+
 					var hitsWall = this.map.lines.some((ln : Line) => {
 						return Line.prototype.intersectsMovingCircleOf.call(ln, bullet.pos, newPos, bullet.radius)
 					})
@@ -133,8 +136,12 @@ module Scuffle {
 								}
 						}
 
-						if(!hitsPlayer)
+						if(!hitsPlayer) {
+							bullet.pos.pool()
 							bullet.pos = newPos
+						}
+						else
+							newPos.pool()
 					}
 				})
 				this.accum_bullet -= timestep

@@ -10,7 +10,7 @@ module Scuffle {
 	}
 
 	export function circlesIntersect(p1 : Point, r1 : number, p2 : Point, r2 : number) {
-		var v12 = Point.prototype.subtractedFromPoint.call(p1, p2)
+		var v12 = Point.prototype.subtractedFromPoint.call(p1, p2).pool()
 		return v12.length() < r1 + r2
 	}
 
@@ -69,7 +69,9 @@ module Scuffle {
 			var newPos : Point
 			var intersects = true
 			for(var i=0; intersects && i<5; ++i) {
-				newPos = Point.prototype.addedToPoint.call(player.pos, player.velocity.scaledBy(time))
+				var vTmp  = player.velocity.scaledBy(time)
+				newPos = Point.prototype.addedToPoint.call(player.pos, vTmp)
+				vTmp.pool()
 
 				intersects = false
 				map.lines.every((ln : Line) => {
@@ -77,6 +79,7 @@ module Scuffle {
 						intersects = true
 						var radians = Line.prototype.normal.call(ln).angleTo(player.velocity)
 						var len = player.velocity.length()
+						player.velocity.pool()
 						player.velocity = Line.prototype.vector.call(ln)
 						player.velocity.normalizeTo(-Math.sin(radians) * len)
 						newPos.pool()
