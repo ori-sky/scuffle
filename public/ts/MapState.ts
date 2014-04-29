@@ -37,7 +37,7 @@ module Scuffle {
 						this.music.play('main', 0, undefined, true)
 					}, 0)
 			})
-			this.music.play('start')
+			//this.music.play('start')
 			var sndBullet = this.add.audio('beep2')
 			sndBullet.addMarker('main', 0, 0.02)
 
