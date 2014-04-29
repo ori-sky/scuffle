@@ -77,7 +77,14 @@ module Scuffle {
 			this.socket = socket
 			this.protocol = this.makeProtocol()
 			this.state = {}
-			this.weapon = new PulseWeapon(this)
+			switch(Math.floor(Math.random() * 2)) {
+				case 0:
+					this.weapon = new PulseWeapon(this)
+					break
+				case 1:
+					this.weapon = new ShotgunWeapon(this)
+					break
+			}
 
 			for(var fk in this.protocol) {
 				var fv= this.protocol[fk]
