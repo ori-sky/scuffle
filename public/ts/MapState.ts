@@ -296,6 +296,7 @@ module Scuffle {
 			this.camera.setBoundsToWorld()
 			this.input.mouse.mouseMoveCallback = undefined
 			this.game.socket.removeAllListeners()
+			this.music.onMarkerComplete.removeAll()
 			this.music.stop()
 		}
 
