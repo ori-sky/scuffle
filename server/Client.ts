@@ -77,12 +77,15 @@ module Scuffle {
 			this.socket = socket
 			this.protocol = this.makeProtocol()
 			this.state = {}
-			switch(Math.floor(Math.random() * 2)) {
+			switch(Math.floor(Math.random() * 3)) {
 				case 0:
 					this.weapon = new PulseWeapon(this)
 					break
 				case 1:
 					this.weapon = new ShotgunWeapon(this)
+					break
+				case 2:
+					this.weapon = new RapidPulseWeapon(this)
 					break
 			}
 
