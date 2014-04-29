@@ -5,6 +5,10 @@ client => server
 1 batch
 	(Event[]) events
 	batches several events into one
+2 repeat
+	(number) event id
+	(number) count
+	([]) compacted event arguments
 5 ping
 	(string) identifier
 	sends a ping to the server
@@ -37,6 +41,10 @@ server => client
 1 batch
 	(Event[]) events
 	batches several events into one
+2 repeat
+	(number) event id
+	(number) count
+	([]) compacted event arguments
 5 ping
 	(string) identifier
 	sends a ping to the client
