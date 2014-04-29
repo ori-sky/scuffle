@@ -5,7 +5,7 @@ module Scuffle {
 		protocol : any
 		instance : Instance
 		player : Player
-		weapon : Activator
+		weapon : Weapon
 		state : { [ k : string] : boolean }
 
 		makeProtocol() {
@@ -77,29 +77,7 @@ module Scuffle {
 			this.socket = socket
 			this.protocol = this.makeProtocol()
 			this.state = {}
-			this.weapon = new Activator(300, this)
-
-			this.weapon.predicate = () => {
-				return this.player.isAlive() && (this.state['mouse.left'] || this.state['key.space'])
-			}
-
-			this.weapon.callback = () => {
-				var bullet = this.instance.newBullet(this.player.id)
-				var colors = [
-					Color.Red, Color.Orange, Color.Yellow, Color.Green,
-					Color.BrightBlue, Color.Magenta, Color.PurpleBlue, Color.PaleCyan
-				]
-				bullet.color = colors[Math.floor(Math.random() * colors.length)]
-				var angle = this.player.angle// + (Math.random() - 0.5) / 10
-				bullet.velocity.x = Math.cos(angle)
-				bullet.velocity.y = Math.sin(angle)
-				bullet.velocity.scale(0.7)
-				bullet.pos = Point.prototype.copy.call(this.player.pos)
-				bullet.pos.add(bullet.velocity.x * this.player.radius,
-				               bullet.velocity.y * this.player.radius)
-				bullet.radius = 2.5 / Math.min(1.5, Math.max(1, this.player.streak / 3))
-				this.game.io.sockets.in(this.instance.id).emit(Protocol.Server.InstanceBulletAdd, bullet.compress(4))
-			}
+			this.weapon = new PulseWeapon(this)
 
 			for(var fk in this.protocol) {
 				var fv= this.protocol[fk]
