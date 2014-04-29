@@ -23,6 +23,9 @@ module Scuffle {
 		for(var i=0; !intersects && i<numSegs; vTmp.addPoint(vSeg), ++i) {
 			intersects = circlesIntersect(vTmp, r1, p, r2)
 		}
+		vAB.pool()
+		vSeg.pool()
+		vTmp.pool()
 		return intersects ? intersects : circlesIntersect(b, r1, p, r2)
 	}
 
@@ -44,18 +47,22 @@ module Scuffle {
 			if(state['key.shift'])
 				deltaVel.scale(1 / 2)
 		}
-		deltaVel.addPoint(vel.scaledBy(-0.011))
+		var velScaled = vel.scaledBy(-0.011)
+		deltaVel.addPoint(velScaled)
 		deltaVel.scale(time)
 		vel.addPoint(deltaVel)
 
 		if(vel.length() < 0.005)
 			vel.zero()
 
+		deltaVel.pool()
+		velScaled.pool()
 		return vel
 	}
 
 	export function tickPlayerMovement(time : number, state : any, player : Player, map : Map) {
 		var vel = tickPlayerVelocity(time, state, player)
+		player.velocity.pool()
 		player.velocity = vel
 
 		if(!player.velocity.isZero()) {
@@ -72,13 +79,16 @@ module Scuffle {
 						var len = player.velocity.length()
 						player.velocity = Line.prototype.vector.call(ln)
 						player.velocity.normalizeTo(-Math.sin(radians) * len)
+						newPos.pool()
 						return false
 					}
 					return true
 				})
 			}
-			if(!intersects)
+			if(!intersects) {
+				player.pos.pool()
 				player.pos = newPos
+			}
 			return true
 		}
 		return false

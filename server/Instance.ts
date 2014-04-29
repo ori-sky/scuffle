@@ -71,7 +71,9 @@ module Scuffle {
 		}
 
 		removeBullet(id : number) {
-			this.game.io.sockets.in(this.id).emit(Protocol.Server.InstanceBulletRemove, id)
+			this.forEachClient((cli : Client) => {
+				cli.batch.push(Protocol.Server.InstanceBulletRemove, [id])
+			})
 			this.bullets[id].pool()
 			delete this.bullets[id]
 		}
@@ -79,7 +81,7 @@ module Scuffle {
 		spawn(id : number) {
 			if(this.clients[id]) {
 				var spawnIndex = Math.floor(Math.random() * this.map.spawns.length)
-				this.clients[id].player.pos = this.map.spawns[spawnIndex]
+				this.clients[id].player.pos.setToPoint(this.map.spawns[spawnIndex])
 				this.clients[id].player.health = this.clients[id].player.baseHealth
 				this.game.io.sockets.in(this.id).emit(Protocol.Server.InstancePlayerSpawn, this.clients[id].player.compress(3))
 			}

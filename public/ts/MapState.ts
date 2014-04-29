@@ -24,6 +24,13 @@ module Scuffle {
 
 		makeProtocol() {
 			var proto : any = {}
+			proto[Protocol.Server.Batch] = (combined : any[]) => {
+				if(combined.length % 2 === 1)
+					--combined.length
+				for(var i=0; i<combined.length; i+=2)
+					if(proto[combined[i]] !== undefined)
+						proto[combined[i]].apply(undefined, combined[i+1])
+			}
 			proto[Protocol.Server.InstancePlayerAdd] = (player : any) => {
 				player = Player.uncompress(player)
 				var cli = this.players[player.id]

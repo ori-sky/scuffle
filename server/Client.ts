@@ -2,6 +2,7 @@ module Scuffle {
 	export class Client {
 		game : ServerGame
 		socket : any
+		batch : any[]
 		protocol : any
 		instance : Instance
 		player : Player
@@ -75,16 +76,17 @@ module Scuffle {
 		constructor(game : ServerGame, socket) {
 			this.game = game
 			this.socket = socket
+			this.batch = []
 			this.state = {}
 			switch(Math.floor(Math.random() * 4)) {
 				case 0:
 					this.weapon = new PulseWeapon(this)
 					break
 				case 1:
-					this.weapon = new ShotgunWeapon(this)
+					this.weapon = new RapidPulseWeapon(this)
 					break
 				case 2:
-					this.weapon = new RapidPulseWeapon(this)
+					this.weapon = new ShotgunWeapon(this)
 					break
 				case 3:
 					this.weapon = new CannonWeapon(this)
@@ -102,6 +104,9 @@ module Scuffle {
 			this.weapon.tick(time)
 			if(this.player.isAlive())
 				this.tickMovement(time)
+			if(this.batch.length > 0)
+				this.socket.emit(Protocol.Server.Batch, this.batch)
+			this.batch = []
 		}
 
 		tickMovement(time : number) {

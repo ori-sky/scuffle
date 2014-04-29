@@ -24,12 +24,14 @@ module Scuffle {
 					bullet.velocity.y = Math.sin(a)
 					angle += spread / numBullets
 					bullet.velocity.scale(0.6)
-					bullet.pos = Point.prototype.copy.call(context.player.pos)
+					bullet.pos.setToPoint(context.player.pos)
 					bullet.pos.add(bullet.velocity.x * context.player.radius,
-					bullet.velocity.y * context.player.radius)
+					               bullet.velocity.y * context.player.radius)
 					bullet.radius = 1
 					bullet.damage = 10
-					context.game.io.sockets.in(context.instance.id).emit(Protocol.Server.InstanceBulletAdd, bullet.compress(4))
+					context.instance.forEachClient((cli : Client) => {
+						cli.batch.push(Protocol.Server.InstanceBulletAdd, [bullet.compress(4)])
+					})
 				}
 			}
 		}

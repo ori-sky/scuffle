@@ -43,6 +43,11 @@ module Scuffle {
 			return Point.create(this.x, this.y)
 		}
 
+		setToPoint(p : Point) {
+			this.x = p.x
+			this.y = p.y
+		}
+
 		isZero() {
 			return this.x == 0 && this.y == 0
 		}
