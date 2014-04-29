@@ -94,8 +94,11 @@ module Scuffle {
 			var vAB = Point.prototype.subtractedFromPoint.call(a, b)
 			var lenAB = vAB.length()
 			var vHalf = Point.prototype.halfwayToPoint.call(a, b)
-			if(!Line.prototype.intersectsCircleOf.call(this, vHalf, lenAB / 2 + r * 2))
+			if(!Line.prototype.intersectsCircleOf.call(this, vHalf, lenAB / 2 + r * 2)) {
+				vAB.pool()
+				vHalf.pool()
 				return false
+			}
 
 			var numSegs = Math.floor(lenAB / r)
 			var vSeg = vAB.normalizedTo(r)
@@ -104,6 +107,11 @@ module Scuffle {
 			for(var i=0; !intersects && i<numSegs; vTmp.addPoint(vSeg), ++i) {
 				intersects = Line.prototype.intersectsCircleOf.call(this, vTmp, r)
 			}
+
+			vAB.pool()
+			vHalf.pool()
+			vSeg.pool()
+			vTmp.pool()
 			return intersects ? intersects : Line.prototype.intersectsCircleOf.call(this, b, r)
 		}
 	}

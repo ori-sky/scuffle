@@ -15,8 +15,8 @@ module Scuffle {
 			this.color = 0xffffff
 			this.alpha = 1
 			this.radius = 1
-			this.pos = new Point(0, 0)
-			this.velocity = new Point(0, 0)
+			this.pos = Point.create(0, 0)
+			this.velocity = Point.create(0, 0)
 			this.damage = 20
 		}
 
