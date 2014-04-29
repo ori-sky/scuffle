@@ -42,7 +42,11 @@ module Scuffle {
 			return new Point(this.x * factor, this.y * factor)
 		}
 
-		dot(p : Point) {
+		dot(x : number, y : number) {
+			return this.x * x + this.y * y
+		}
+
+		dotPoint(p : Point) {
 			return this.x * p.x + this.y * p.y
 		}
 
