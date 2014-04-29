@@ -77,24 +77,17 @@ module Scuffle {
 			this.socket = socket
 			this.protocol = this.makeProtocol()
 			this.state = {}
-			this.weapon = new Activator(300)
+			this.weapon = new Activator(300, this)
 
 			this.weapon.predicate = () => {
-				return this.player.isAlive() &&
-				      (this.state['mouse.left'] || this.state['key.space'])
+				return this.player.isAlive() && (this.state['mouse.left'] || this.state['key.space'])
 			}
 
 			this.weapon.callback = () => {
 				var bullet = this.instance.newBullet(this.player.id)
 				var colors = [
-					0xff0000,
-					0xff8800,
-					0xffff00,
-					0x00ff00,
-					0x55aaff,
-					0xff00ff,
-					0x5500ff,
-					0xaaccff
+					Color.Red, Color.Orange, Color.Yellow, Color.Green,
+					Color.BrightBlue, Color.Magenta, Color.PurpleBlue, Color.PaleCyan
 				]
 				bullet.color = colors[Math.floor(Math.random() * colors.length)]
 				var angle = this.player.angle// + (Math.random() - 0.5) / 10
