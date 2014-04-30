@@ -105,10 +105,46 @@ module Scuffle {
 			vQ.pool()
 			return intersects
 		}
-		intersectsMovingCircleOf(a : Point, b : Point, radius : number) {
-			return Line.prototype.intersectsCircleOf.call(this, a, radius)
-			    || Line.prototype.intersectsCircleOf.call(this, b, radius)
-			    || Line.prototype._f.call(this, a, b, radius)
+		intersectsMovingCircleOf(a : Point, b : Point, r : number) {
+			return Line.prototype.intersectsCircleOf.call(this, a, r)
+			    || Line.prototype.intersectsCircleOf.call(this, b, r)
+			    || Line.prototype._f.call(this, a, b, r)
+		}
+
+		intersectsTCircleOf(p : Point, r : number) {
+			var vNormal = Line.prototype.normal.call(this)
+			vNormal.normalizeTo(this.width / 2)
+			var vA1 = vNormal.subtractedFromPoint(this.a)
+			var vA2 = vNormal.addedToPoint(this.a)
+			var vB1 = vNormal.subtractedFromPoint(this.b)
+			var vB2 = vNormal.addedToPoint(this.b)
+			var l1 = new Line(vA1, vA2)
+			var l2 = new Line(vA2, vB2)
+			var l3 = new Line(vB2, vB1)
+			var l4 = new Line(vB1, vA1)
+
+			return l1.intersectsCircleOf(p, r)
+			    || l2.intersectsCircleOf(p, r)
+			    || l3.intersectsCircleOf(p, r)
+			    || l4.intersectsCircleOf(p, r)
+		}
+
+		intersectsTMovingCircleOf(a : Point, b : Point, r : number) {
+			var vNormal = Line.prototype.normal.call(this)
+			vNormal.normalizeTo((this.width || 2) / 2)
+			var vA1 = vNormal.subtractedFromPoint(this.a)
+			var vA2 = vNormal.addedToPoint(this.a)
+			var vB1 = vNormal.subtractedFromPoint(this.b)
+			var vB2 = vNormal.addedToPoint(this.b)
+			var l1 = new Line(vA1, vA2)
+			var l2 = new Line(vA2, vB2)
+			var l3 = new Line(vB2, vB1)
+			var l4 = new Line(vB1, vA1)
+
+			return l1.intersectsMovingCircleOf(a, b, r)
+			    || l2.intersectsMovingCircleOf(a, b, r)
+			    || l3.intersectsMovingCircleOf(a, b, r)
+			    || l4.intersectsMovingCircleOf(a, b, r)
 		}
 	}
 }
