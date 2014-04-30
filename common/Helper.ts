@@ -77,11 +77,13 @@ module Scuffle {
 				map.lines.every((ln : Line) => {
 					if(Line.prototype.intersectsMovingCircleOf.call(ln, player.pos, newPos, player.radius)) {
 						intersects = true
-						var radians = Line.prototype.normal.call(ln).angleTo(player.velocity)
+						var normal = Line.prototype.normal.call(ln)
+						var radians = normal.angleTo(player.velocity)
 						var len = player.velocity.length()
 						player.velocity.pool()
 						player.velocity = Line.prototype.vector.call(ln)
 						player.velocity.normalizeTo(-Math.sin(radians) * len)
+						normal.pool()
 						newPos.pool()
 						return false
 					}
