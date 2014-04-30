@@ -83,6 +83,7 @@ module Scuffle {
 						vDiff.scale(Math.max(0.001, Math.min(0.005, cli.player.velocity.length() * this.game.latency)))
 						cli.player.velocity.addPoint(vDiff)
 					}
+					vDiff.pool()
 					if(id == this.me)
 						this.focusOn(cli)
 				}

@@ -45,6 +45,8 @@ module Scuffle {
 		}
 
 		destroy() {
+			this.player.pos.pool()
+			this.player.velocity.pool()
 			this.graphics.destroy()
 		}
 	}
