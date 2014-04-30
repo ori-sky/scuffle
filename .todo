@@ -18,6 +18,12 @@
             Server-side only
         </comment>
     </note>
+    <note priority="high" time="1398607254" done="1398834898">
+        Add weapons - shotgun, machine gun, grenade launcher?, rocket launcher?
+        <comment>
+            No grenade/rocket launchers but did add extra weapons
+        </comment>
+    </note>
     <note priority="medium" time="1398230652" done="1398565822">
         Decrease Socket.IO heartbeat interval on both client and server
         <comment>
@@ -30,13 +36,7 @@
     <note priority="medium" time="1398599850" done="1398652277">
         Make buttons hide on pointer lock (add to common group)
     </note>
-    <note priority="high" time="1398607254" done="1398834898">
-        Add weapons - shotgun, machine gun, grenade launcher?, rocket launcher?
-        <comment>
-            No grenade/rocket launchers but did add extra weapons
-        </comment>
-    </note>
-    <note priority="high" time="1398634095">
+    <note priority="high" time="1398634095" done="1398881505">
         Write circle-rect intersection code for rect-based walls
     </note>
 </todo>
