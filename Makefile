@@ -14,9 +14,11 @@ server: $(SERVER_OUT)
 
 $(CLIENT_OUT): $(CLIENT_LIB) $(COMMON_TS) $(CLIENT_TS)
 	tsc $^ --out $@
+	ccjs $@ > $@.optm
 
 $(SERVER_OUT): $(SERVER_LIB) $(COMMON_TS) $(SERVER_TS)
 	tsc $^ --out $@
+	ccjs $@ --externs=node > $@.optm
 
 deploy:
 	mkdir -p $(DEPLOY_DIR)/scuffle
@@ -33,4 +35,4 @@ deploy:
 	cp -rf public/lib/*    $(DEPLOY_DIR)/scuffle/lib
 
 clean:
-	rm -f $(CLIENT_OUT) $(SERVER_OUT)
+	rm -f $(CLIENT_OUT) $(SERVER_OUT) $(CLIENT_OUT).optm $(SERVER_OUT).optm

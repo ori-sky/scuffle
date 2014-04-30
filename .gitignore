@@ -1,6 +1,8 @@
 .*.swp
 .~lock*#
 public/js/scuffle.js
+public/js/scuffle.js.optm
 server/scuffled.js
+server/scuffled.js.optm
 server/ssl/*
 !server/ssl/.gitkeep
