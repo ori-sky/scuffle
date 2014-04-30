@@ -89,30 +89,26 @@ module Scuffle {
 			return int1 || int2
 		}
 
-		intersectsMovingCircleOf(a : Point, b : Point, r : number) {
-			// perform initial inaccurate region intersection check
-			var vAB = Point.prototype.subtractedFromPoint.call(a, b)
-			var lenAB = vAB.length()
-			var vHalf = Point.prototype.halfwayToPoint.call(a, b)
-			if(!Line.prototype.intersectsCircleOf.call(this, vHalf, lenAB / 2 + r * 2)) {
-				vAB.pool()
-				vHalf.pool()
-				return false
+		_f(vP : Point, vR : Point, radius : number) {
+			var vPR = vP.subtractedFromPoint(vR)
+			vPR.scale(0.5)
+			var lenPQ = vPR.length()
+			var vQ = vPR
+			vQ.addPoint(vP)
+			var intersects = Line.prototype.intersectsCircleOf.call(this, vQ, radius)
+			if(!intersects && lenPQ > radius) {
+				intersects = Line.prototype.intersectsCircleOf.call(this, vQ, lenPQ + radius)
+				if(intersects)
+					intersects = Line.prototype._f.call(this, vP, vQ, radius)
+					          || Line.prototype._f.call(this, vQ, vR, radius)
 			}
-
-			var numSegs = Math.floor(lenAB / r)
-			var vSeg = vAB.normalizedTo(r)
-			var vTmp = Point.prototype.copy.call(a)
-			var intersects = false
-			for(var i=0; !intersects && i<numSegs; vTmp.addPoint(vSeg), ++i) {
-				intersects = Line.prototype.intersectsCircleOf.call(this, vTmp, r)
-			}
-
-			vAB.pool()
-			vHalf.pool()
-			vSeg.pool()
-			vTmp.pool()
-			return intersects ? intersects : Line.prototype.intersectsCircleOf.call(this, b, r)
+			vQ.pool()
+			return intersects
+		}
+		intersectsMovingCircleOf(a : Point, b : Point, radius : number) {
+			return Line.prototype.intersectsCircleOf.call(this, a, radius)
+			    || Line.prototype.intersectsCircleOf.call(this, b, radius)
+			    || Line.prototype._f.call(this, a, b, radius)
 		}
 	}
 }
