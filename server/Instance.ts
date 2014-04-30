@@ -107,7 +107,7 @@ module Scuffle {
 			})
 
 			this.accum_bullet += time
-			var timestep = 5
+			var timestep = 10
 			while(this.accum_bullet >= timestep) {
 				this.forEachBullet((bullet : Bullet, id : number) => {
 					var vTmp = bullet.velocity.scaledBy(timestep)
