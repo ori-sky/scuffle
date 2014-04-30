@@ -3,7 +3,7 @@
 module Scuffle {
 	export class RapidPulseWeapon extends Weapon {
 		constructor(context : Client) {
-			super(100, context)
+			super(80, context)
 
 			this.callback = () => {
 				var bullet = context.instance.newBullet(context.player.id)
@@ -16,12 +16,14 @@ module Scuffle {
 				bullet.velocity.x = Math.cos(angle)
 				bullet.velocity.y = Math.sin(angle)
 				bullet.velocity.scale(0.45)
-				bullet.pos = Point.prototype.copy.call(context.player.pos)
+				bullet.pos.setToPoint(context.player.pos)
 				bullet.pos.add(bullet.velocity.x * context.player.radius,
 				               bullet.velocity.y * context.player.radius)
 				bullet.radius = 1.5
-				bullet.damage = 6
-				context.game.io.sockets.in(context.instance.id).emit(Protocol.Server.InstanceBulletAdd, bullet.compress(4))
+				bullet.damage = 7
+				context.instance.forEachClient((cli : Client) => {
+					cli.batch.push(Protocol.Server.InstanceBulletAdd, [bullet.compress(4)])
+				})
 			}
 		}
 	}
