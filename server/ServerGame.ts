@@ -43,7 +43,7 @@ module Scuffle {
 			if(this.accumulator > 1000)
 				this.accumulator = 1000
 
-			var timestep = 50
+			var timestep = 40
 			while(this.accumulator >= timestep) {
 				this.tick(timestep)
 				this.accumulator -= timestep
@@ -60,7 +60,7 @@ module Scuffle {
 			this.preload()
 			this.protocol(io)
 			this.init()
-			setInterval(this.iterate.bind(this), 25)
+			setInterval(this.iterate.bind(this), 20)
 
 			this.instances[0] = new Instance(this, 0)
 			this.instances[0].map = this.maps['warehouse']
