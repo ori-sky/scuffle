@@ -13,11 +13,11 @@ client: $(CLIENT_OUT)
 server: $(SERVER_OUT)
 
 $(CLIENT_OUT): $(CLIENT_LIB) $(COMMON_TS) $(CLIENT_TS)
-	tsc $^ --out $@
+	tsc $^ --target ES5 --out $@
 	ccjs $@ --language_in=ECMASCRIPT5 > $@.optm
 
 $(SERVER_OUT): $(SERVER_LIB) $(COMMON_TS) $(SERVER_TS)
-	tsc $^ --out $@
+	tsc $^ --target ES5 --out $@
 	ccjs $@ --language_in=ECMASCRIPT5 --externs=node > $@.optm
 
 deploy:
