@@ -14,11 +14,11 @@ server: $(SERVER_OUT)
 
 $(CLIENT_OUT): $(CLIENT_LIB) $(COMMON_TS) $(CLIENT_TS)
 	tsc $^ --out $@
-	ccjs $@ > $@.optm
+	ccjs $@ --language_in=ECMASCRIPT5 > $@.optm
 
 $(SERVER_OUT): $(SERVER_LIB) $(COMMON_TS) $(SERVER_TS)
 	tsc $^ --out $@
-	ccjs $@ --externs=node > $@.optm
+	ccjs $@ --language_in=ECMASCRIPT5 --externs=node > $@.optm
 
 deploy:
 	mkdir -p $(DEPLOY_DIR)/scuffle
