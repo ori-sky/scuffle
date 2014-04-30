@@ -20,6 +20,7 @@ module Scuffle {
 				bullet.pos.add(bullet.velocity.x * context.player.radius,
 				               bullet.velocity.y * context.player.radius)
 				bullet.radius = 2.5 / Math.min(1.5, Math.max(1, context.player.streak / 3))
+				bullet.damage = 20
 				context.instance.forEachClient((cli : Client) => {
 					cli.batch.push(Protocol.Server.InstanceBulletAdd, [bullet.compress(4)])
 				})
