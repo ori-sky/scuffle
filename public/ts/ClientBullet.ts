@@ -22,6 +22,7 @@ module Scuffle {
 		}
 
 		destroy() {
+			this.bullet.pool()
 			this.graphics.destroy()
 		}
 	}

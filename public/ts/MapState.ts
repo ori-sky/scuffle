@@ -299,6 +299,7 @@ module Scuffle {
 			for(var k in this.bullets) {
 				var vel = this.bullets[k].bullet.velocity.scaledBy(time)
 				this.bullets[k].moveBy(vel.x, vel.y)
+				vel.pool()
 			}
 		}
 
