@@ -246,7 +246,7 @@ module Scuffle {
 			kTab.onUp.add(() => this.scoreboard.hide())
 
 			this.input.mouse.pointerLock.add((state : boolean) => {
-				this.add.tween(this.gButtons).to({ alpha: state ? 1 : 0 }, 500, Phaser.Easing.Linear.None, true)
+				this.add.tween(this.gButtons).to({ alpha: state ? 0 : 1 }, 500, Phaser.Easing.Linear.None, true)
 			})
 
 			var px = 0, py = 0
