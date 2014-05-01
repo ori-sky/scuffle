@@ -1,4 +1,4 @@
-require('look').start()
+//require('look').start()
 var fs = require('fs')
 var net = require('net')
 var app = require('http').createServer()
