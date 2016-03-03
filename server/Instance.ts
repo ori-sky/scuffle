@@ -110,9 +110,13 @@ module Scuffle {
 			var timestep = 10
 			while(this.accum_bullet >= timestep) {
 				this.forEachBullet((bullet : Bullet, id : number) => {
-					var vTmp = bullet.velocity.scaledBy(timestep)
+					var vTmp = bullet.velocity.scaledBy(timestep).scaledBy(bullet.dilation)
 					var newPos = bullet.pos.addedToPoint(vTmp)
 					vTmp.pool()
+
+					bullet.dilation *= 0.985
+					if(bullet.dilation < 0.3) bullet.dilation = 0.2
+					this.game.io.sockets.in(this.id).emit(Protocol.Server.InstanceBulletDilate, id, bullet.dilation)
 
 					var hitsWall = this.map.lines.some((ln : Line) => {
 						return Line.prototype.intersectsMovingCircleOf.call(ln, bullet.pos, newPos, bullet.radius)

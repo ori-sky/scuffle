@@ -186,6 +186,9 @@ module Scuffle {
 			proto[Protocol.Server.InstanceBulletMove] = (id : number, pos : any) => {
 				this.bullets[id].move(Point.uncompress(pos))
 			}
+			proto[Protocol.Server.InstanceBulletDilate] = (id : number, dilation : number) => {
+				this.bullets[id].bullet.dilation = dilation
+			}
 			return proto
 		}
 
@@ -198,7 +201,7 @@ module Scuffle {
 
 			this.music = this.add.audio(this.map.name)
 			var patternDuration = 1.79332
-			this.music.addMarker('start', 0, patternDuration)
+			/*this.music.addMarker('start', 0, patternDuration)
 			this.music.addMarker('main', patternDuration, patternDuration * 24, undefined, true)
 			this.music.onMarkerComplete.add((marker : string) => {
 				if(marker === 'start')
@@ -206,7 +209,7 @@ module Scuffle {
 						this.music.play('main', 0, undefined, true)
 					}, 0)
 			})
-			//this.music.play('start')
+			this.music.play('start')*/
 			this.sndBullet = this.add.audio('beep2')
 			this.sndBullet.addMarker('main', 0, 0.02)
 
@@ -298,7 +301,8 @@ module Scuffle {
 			}
 
 			for(var k in this.bullets) {
-				var vel = this.bullets[k].bullet.velocity.scaledBy(time)
+				var bullet = this.bullets[k].bullet
+				var vel = bullet.velocity.scaledBy(time).scaledBy(bullet.dilation)
 				this.bullets[k].moveBy(vel.x, vel.y)
 				vel.pool()
 			}

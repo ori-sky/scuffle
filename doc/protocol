@@ -124,6 +124,10 @@ server => client
 	(string) bullet id
 	(Point) new position
 	tells the client a bullet has moved position
+86 instance bullet dilate
+	(string) bullet id
+	(number) new dilation
+	tells the client a bullet has dilated in time
 92 reset
 	(void)
 	tells the client to reset the game

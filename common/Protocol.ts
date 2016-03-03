@@ -37,6 +37,7 @@ module Scuffle {
 			static InstanceBulletAdd      = 80
 			static InstanceBulletRemove   = 81
 			static InstanceBulletMove     = 85
+			static InstanceBulletDilate   = 86
 			static Reset                  = 92
 			static Refresh                = 93
 		}
