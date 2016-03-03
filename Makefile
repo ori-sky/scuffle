@@ -21,18 +21,18 @@ $(SERVER_OUT): $(SERVER_LIB) $(COMMON_TS) $(SERVER_TS)
 	ccjs $@ --language_in=ECMASCRIPT5 --externs=node > $@.optm
 
 deploy:
-	mkdir -p $(DEPLOY_DIR)/scuffle
-	mkdir -p $(DEPLOY_DIR)/scuffle/css
-	mkdir -p $(DEPLOY_DIR)/scuffle/img
-	mkdir -p $(DEPLOY_DIR)/scuffle/audio
-	mkdir -p $(DEPLOY_DIR)/scuffle/js
-	mkdir -p $(DEPLOY_DIR)/scuffle/lib
-	cp -rf public/html/*   $(DEPLOY_DIR)/scuffle
-	cp -rf public/css/*    $(DEPLOY_DIR)/scuffle/css
-	cp -rf public/img/*    $(DEPLOY_DIR)/scuffle/img
-	cp -rf public/audio/*  $(DEPLOY_DIR)/scuffle/audio
-	cp -rf public/js/*     $(DEPLOY_DIR)/scuffle/js
-	cp -rf public/lib/*    $(DEPLOY_DIR)/scuffle/lib
+	mkdir -pv $(DEPLOY_DIR)/scuffle
+	mkdir -pv $(DEPLOY_DIR)/scuffle/css
+	mkdir -pv $(DEPLOY_DIR)/scuffle/img
+	mkdir -pv $(DEPLOY_DIR)/scuffle/audio
+	mkdir -pv $(DEPLOY_DIR)/scuffle/js
+	mkdir -pv $(DEPLOY_DIR)/scuffle/lib
+	cp -rfv public/html/*   $(DEPLOY_DIR)/scuffle
+	cp -rfv public/css/*    $(DEPLOY_DIR)/scuffle/css
+	cp -rfv public/img/*    $(DEPLOY_DIR)/scuffle/img
+	cp -rfv public/audio/*  $(DEPLOY_DIR)/scuffle/audio
+	cp -rfv public/js/*     $(DEPLOY_DIR)/scuffle/js
+	cp -rfv public/lib/*    $(DEPLOY_DIR)/scuffle/lib
 
 clean:
 	rm -f $(CLIENT_OUT) $(SERVER_OUT) $(CLIENT_OUT).optm $(SERVER_OUT).optm
