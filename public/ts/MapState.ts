@@ -72,6 +72,17 @@ module Scuffle {
 			proto[Protocol.Server.InstancePlayerStateOff] = (id : number, name : string) => {
 				this.players[id].state[name] = false
 			}
+			proto[Protocol.Server.InstancePlayerSpawn] = (player : any) => {
+				player = Player.uncompress(player)
+				var cli = this.players[player.id]
+				cli.setPlayer(player)
+				cli.graphics.alpha = 0
+				this.add.tween(cli.graphics).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
+				if(player.id == this.me) {
+					this.updateHealth()
+					this.focusOn(cli)
+				}
+			}
 			proto[Protocol.Server.InstancePlayerMove] = (id : number, pos : any) => {
 				pos = Point.uncompress(pos)
 				var cli = this.players[id]
@@ -88,16 +99,8 @@ module Scuffle {
 						this.focusOn(cli)
 				}
 			}
-			proto[Protocol.Server.InstancePlayerSpawn] = (player : any) => {
-				player = Player.uncompress(player)
-				var cli = this.players[player.id]
-				cli.setPlayer(player)
-				cli.graphics.alpha = 0
-				this.add.tween(cli.graphics).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true)
-				if(player.id == this.me) {
-					this.updateHealth()
-					this.focusOn(cli)
-				}
+			proto[Protocol.Server.InstancePlayerDilate] = (id : number, dilation : number) => {
+				this.players[id].player.dilation = dilation
 			}
 			proto[Protocol.Server.InstancePlayerHurt] = (id : number, hp : number) => {
 				this.players[id].player.health = hp

@@ -30,6 +30,7 @@ module Scuffle {
 			static InstancePlayerStateOff = 63
 			static InstancePlayerSpawn    = 64
 			static InstancePlayerMove     = 65
+			static InstancePlayerDilate   = 66
 			static InstancePlayerHeal     = 67
 			static InstancePlayerHurt     = 68
 			static InstancePlayerKill     = 69

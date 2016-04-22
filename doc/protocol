@@ -99,6 +99,10 @@ server => client
 	(string) player id
 	(Point) new position
 	tells the client a player has moved position
+66 instance player dilate
+	(string) player id
+	(number) new dilation
+	tells the client a player has dilated in time
 67 instance player heal
 	(string) player id
 	(number) new health
